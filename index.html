@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>Goal To Go</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <header class="header">
+    <h1>GOAL TO GO</h1>
+    <div class="profile-icon"></div>
+  </header>
+
+  <div class="container">
+
+    <section class="welcome">
+      <h2>Ciao Mario</h2>
+      <p>
+        Oggi non hai nessuna partita in programma, puoi prenotarla facendo click su prenota il tuo campo o trova una partita oppure puoi organizzarla direttamente con la tua lega
+      </p>
+    </section>
+
+    <section class="play">
+      <h3>Inizia a giocare</h3>
+      <p>Quando vuoi, dove vuoi, con chi vuoi</p>
+    </section>
+
+    <section class="actions">
+
+      <div class="card" onclick="handleClick('prenota')">
+        <div>
+          <h4>Prenota il tuo campo</h4>
+          <span>Prenota il tuo campo con un click</span>
+        </div>
+        <button class="arrow">→</button>
+      </div>
+
+      <div class="card" onclick="handleClick('trova')">
+        <div>
+          <h4>Trova una partita</h4>
+          <span>Trova una partita con un click</span>
+        </div>
+        <button class="arrow">→</button>
+      </div>
+
+      <div class="card" onclick="handleClick('lega')">
+        <div>
+          <h4>Lega</h4>
+          <span>Unisciti a una lega</span>
+        </div>
+        <button class="arrow">→</button>
+      </div>
+
+    </section>
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
