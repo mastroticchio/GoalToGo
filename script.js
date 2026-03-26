@@ -1,7 +1,7 @@
 function handleClick(action) {
   switch (action) {
     case 'prenota':
-      alert("Vai alla prenotazione campo");
+      window.location.href = "pagina_prenota.html";
       break;
     case 'trova':
       alert("Vai a trovare una partita");
