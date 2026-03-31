@@ -9,6 +9,9 @@ function handleClick(action) {
     case 'lega':
       alert("Vai alle leghe");
       break;
+    case 'inizia':
+      window.location.href = "home_page.html";
+      break;
     default:
       console.log("Azione sconosciuta");
   }
