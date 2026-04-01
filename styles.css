@@ -8,6 +8,7 @@
 body {
   background-color: #4fa36b;
   padding: 20px;
+  /*overflow: hidden;*/
 }
 
 .header {
@@ -124,7 +125,7 @@ body {
 .campo-right {
   display: flex;
   flex-direction: column;
-  align-items: flex-start; /* 👈 tutto a sinistra */
+  align-items: flex-start;
 }
 
 .welcome--center {
@@ -136,7 +137,7 @@ body {
   padding: 20px;
   border-radius: 12px;
   width: 100%;
-  max-width: 400px;
+  max-width: 350px;
   margin: 20px auto;
 }
 
@@ -179,4 +180,36 @@ body {
   text-decoration: underline;
   display: block;
   cursor: pointer;
+}
+
+.toggle {
+  display: flex;
+  background: #3d8f5c;
+  border-radius: 30px;
+  padding: 5px;
+  width: fit-content;
+  margin: 20px auto;
+}
+
+.toggle-btn {
+  border: none;
+  padding: 10px 20px;
+  border-radius: 30px;
+  background: transparent;
+  color: white;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.toggle-btn.active {
+  background: white;
+  color: #2e7d32;
+}
+
+.form {
+  display: none;
+}
+
+.active-form {
+  display: block;
 }

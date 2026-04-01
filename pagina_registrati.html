@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Prenota Campo</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container container--center">
+
+    <section class="welcome welcome--center">
+        <h2>Registrati</h2>
+    </section>
+
+    <div class="toggle">
+        <button class="toggle-btn active" onclick="switchMode('giocatore')">
+            sono un giocatore
+        </button>
+        <button class="toggle-btn" onclick="switchMode('campo')">
+            ho un campo
+        </button>
+    </div>
+
+    <div id="form-giocatore" class="form active-form">
+        <div class="login-box"><input placeholder="email"></div>
+        <div class="login-box"><input placeholder="nome utente"></div>
+        <div class="login-box"><input placeholder="password"></div>
+        <div class="login-box"><input placeholder="conferma password"></div>
+    </div>
+
+    <div id="form-campo" class="form">
+        <div class="login-box"><input placeholder="email"></div>
+        <div class="login-box"><input placeholder="nome circolo"></div>
+        <div class="login-box"><input placeholder="indirizzo"></div>
+        <div class="login-box"><input placeholder="password"></div>
+        <div class="login-box"><input placeholder="conferma password"></div>
+        </div>
+
+        <button class="inizia-btn" onclick="handleClick('inizia-registrazione')">Inizia!</button>
+
+        <p class="registra-link">Hai già un account? Accedi</p>
+
+    </div>
+
+    <script src="script.js"></script>
+</body>
