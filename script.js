@@ -15,6 +15,12 @@ function handleClick(action) {
     case 'inizia-registrazione':
       handleRegister();
       break;
+    case 'schermata-accedi':
+      window.location.href = "pagina_accedi.html"
+      break;
+    case 'schermata-registrati':
+      window.location.href = "pagina_registrati.html"
+      break;
     default:
       console.log("Azione sconosciuta");
   }
