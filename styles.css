@@ -6,7 +6,7 @@
 }
 
 body {
-  background-color: #4fa36b;
+  background-color: black;
   padding: 20px;
   /*overflow: hidden;*/
 }
@@ -16,14 +16,14 @@ body {
   justify-content: space-between;
   align-items: center;
   padding: 15px 20px;
-  background-color: white;
+  background-color: #505050;
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   box-shadow: 0 2px 5px rgba(0,0,0,0.2);
   z-index: 1000;
-  color: #2e7d32;
+  color: #CEFF00;
 }
 
 .container {
@@ -46,7 +46,7 @@ body {
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background-color: #2e7d32;
+  background-color: #CEFF00;
 }
 
 .welcome h2 {
@@ -76,7 +76,7 @@ body {
 
 .card {
   background: #e9ecef;
-  color: #2e7d32;
+  color: black;
   padding: 15px;
   border-radius: 10px;
   display: flex;
@@ -100,8 +100,8 @@ body {
 }
 
 .arrow {
-  background: #2e7d32;
-  color: white;
+  background: #CEFF00;
+  color: black;
   border: none;
   width: 40px;
   height: 40px;
@@ -111,8 +111,8 @@ body {
 }
 
 .prenota-btn {
-  background-color: #2e7d32;
-  color: white;
+  background-color: #CEFF00;
+  color: black;
   border: none;
   padding: 30px 50px;
   border-radius: 20px;
@@ -160,8 +160,8 @@ body {
   padding: 30px;
   width: 100%;
   max-width: 300px;
-  background-color: #2e7d32;
-  color: white;
+  background-color: #CEFF00;
+  color: black;
   border: none;
   border-radius: 25px;
   font-size: 18px;
@@ -176,7 +176,7 @@ body {
   text-align: center;
   margin-top: 15px;
   font-size: 14px;
-  color: white;
+  color:#CEFF00;
   text-decoration: underline;
   display: block;
   cursor: pointer;
@@ -184,7 +184,7 @@ body {
 
 .toggle {
   display: flex;
-  background: #3d8f5c;
+  background: #505050;
   border-radius: 30px;
   padding: 5px;
   width: fit-content;
@@ -203,7 +203,7 @@ body {
 
 .toggle-btn.active {
   background: white;
-  color: #2e7d32;
+  color: black;
 }
 
 .form {
