@@ -6,10 +6,9 @@
 }
 
 body {
-  background-color: #4fa36b;
-  display: flex;
-  justify-content: center;
+  background-color: black;
   padding: 20px;
+  /*overflow: hidden;*/
 }
 
 .header {
@@ -17,21 +16,25 @@ body {
   justify-content: space-between;
   align-items: center;
   padding: 15px 20px;
-  background-color: white;
+  background-color: #505050;
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   box-shadow: 0 2px 5px rgba(0,0,0,0.2);
   z-index: 1000;
-  color: #2e7d32;
+  color: #CEFF00;
 }
 
 .container {
-  max-width: 400px;
-  width: 100%;
+  max-width: 700px;
+  width: 100%; 
   color: white;
   padding: 80px 20px 20px;
+}
+
+.container--center{
+  margin: 0 auto;
 }
 
 .header h1 {
@@ -43,7 +46,7 @@ body {
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background-color: #2e7d32;
+  background-color: #CEFF00;
 }
 
 .welcome h2 {
@@ -72,8 +75,8 @@ body {
 }
 
 .card {
-  background: #e9ecef;
-  color: #2e7d32;
+  background: #505050;
+  color: white;
   padding: 15px;
   border-radius: 10px;
   display: flex;
@@ -97,12 +100,192 @@ body {
 }
 
 .arrow {
-  background: #2e7d32;
-  color: white;
+  background: #CEFF00;
+  color: black;
   border: none;
   width: 40px;
   height: 40px;
   border-radius: 50%;
   font-size: 18px;
+  cursor: pointer;
+}
+
+.prenota-btn {
+  background-color: black;
+  color: white;
+  border: none;
+  padding: 30px 50px;
+  border-radius: 20px;
+  font-size: 22px;
+  cursor: pointer;
+  margin-top: 10px;
+  margin-right: 30px;
+  border: 3px solid #CEFF00;
+}
+
+.titolo {
+  color: #CEFF00;
+}
+
+.campo-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.welcome--center {
+    text-align: center;
+}
+
+.login-box {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 350px;
+  margin: 20px auto;
+}
+
+.login-box input::placeholder {
+  font-size: 18px;
+}
+
+.login-box input {
+  border: none;
+  border-bottom: 2px solid #ccc;
+  font-size: 18px;
+}
+
+.login-box input:focus {
+  outline: none;
+  border-bottom: 2px solid #2e7d32;
+}
+
+.inizia-btn {
+  padding: 30px;
+  width: 100%;
+  max-width: 300px;
+  background-color: #CEFF00;
+  color: black;
+  border: none;
+  border-radius: 25px;
+  font-size: 18px;
+  cursor: pointer;
+  margin: 0 auto;
+  display:block;
+  font-size: 22px;
+  font-weight: bold;
+}
+
+.registra-link {
+  text-align: center;
+  margin-top: 15px;
+  font-size: 14px;
+  color:#CEFF00;
+  text-decoration: underline;
+  display: block;
+  cursor: pointer;
+}
+
+.toggle {
+  display: flex;
+  background: #505050;
+  border-radius: 30px;
+  padding: 5px;
+  width: fit-content;
+  margin: 20px auto;
+}
+
+.toggle-btn {
+  border: none;
+  padding: 10px 20px;
+  border-radius: 30px;
+  background: transparent;
+  color: white;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.toggle-btn.active {
+  background: white;
+  color: black;
+}
+
+.form {
+  display: none;
+}
+
+.active-form {
+  display: block;
+}
+
+.titolo-grande {
+  font-size: 32px;
+  margin-bottom: 20px;
+}
+
+.campo-container {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.campo-left img {
+  width: 100%;
+  max-width: 400px;
+  border-radius: 20px;
+}
+
+.campo-info {
+  background: #505050;
+  padding: 20px;
+  border-radius: 20px;
+  line-height: 1.8;
+}
+
+.fasce {
+  margin-top: 30px;
+  font-size: 26px;
+}
+
+.orari {
+  display: flex;
+  gap: 15px;
+  margin-top: 15px;
+}
+
+.orario-btn {
+  background-color: #CEFF00;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.giocatori {
+  margin-top: 25px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.plus-btn {
+  background-color: #CEFF00;
+  border: none;
+  border-radius: 50%;
+  width: 45px;
+  height: 45px;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.minus-btn {
+  background-color: #CEFF00;
+  border: none;
+  border-radius: 50%;
+  width: 45px;
+  height: 45px;
+  font-size: 24px;
   cursor: pointer;
 }
