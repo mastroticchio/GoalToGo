@@ -218,3 +218,74 @@ body {
 .active-form {
   display: block;
 }
+
+.titolo-grande {
+  font-size: 32px;
+  margin-bottom: 20px;
+}
+
+.campo-container {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.campo-left img {
+  width: 100%;
+  max-width: 400px;
+  border-radius: 20px;
+}
+
+.campo-info {
+  background: #505050;
+  padding: 20px;
+  border-radius: 20px;
+  line-height: 1.8;
+}
+
+.fasce {
+  margin-top: 30px;
+  font-size: 26px;
+}
+
+.orari {
+  display: flex;
+  gap: 15px;
+  margin-top: 15px;
+}
+
+.orario-btn {
+  background-color: #CEFF00;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.giocatori {
+  margin-top: 25px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.plus-btn {
+  background-color: #CEFF00;
+  border: none;
+  border-radius: 50%;
+  width: 45px;
+  height: 45px;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.minus-btn {
+  background-color: #CEFF00;
+  border: none;
+  border-radius: 50%;
+  width: 45px;
+  height: 45px;
+  font-size: 24px;
+  cursor: pointer;
+}

@@ -21,6 +21,14 @@ function handleClick(action) {
     case 'schermata-registrati':
       window.location.href = "pagina_registrati.html"
       break;
+    case 'pagina-prenota-seconda':
+      window.location.href = "pagina_prenota_seconda.html"
+    case 'aggiungi-giocatori':
+      aggiungiGiocatore();
+      break;
+    case 'riduci-giocatori':
+      riduciGiocatore();
+      break;
     default:
       console.log("Azione sconosciuta");
   }
@@ -92,6 +100,28 @@ function switchMode(mode) {
     giocatore.classList.remove("active-form");
     buttons[1].classList.add("active");
   }
+}
+
+function aggiungiGiocatore() {
+  let giocatori = parseInt(document.getElementById("count").textContent);
+  let prezzo = parseInt(document.getElementById("price").textContent);
+
+  giocatori++;
+  prezzo += 5;
+
+  document.getElementById("count").textContent = giocatori;
+  document.getElementById("price").textContent = prezzo;
+}
+
+function riduciGiocatore() {
+  let giocatori = parseInt(document.getElementById("count").textContent);
+  let prezzo = parseInt(document.getElementById("price").textContent);
+
+  giocatori--;
+  prezzo -= 5;
+
+  document.getElementById("count").textContent = giocatori;
+  document.getElementById("price").textContent = prezzo;
 }
 
 /*ovviamente questa va rifatta, ogni click deve portare ad una nuova schermata, per ora ho messo solo delle finestre pop-up per far finta che sia interattivo*/
