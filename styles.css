@@ -75,8 +75,8 @@ body {
 }
 
 .card {
-  background: #e9ecef;
-  color: black;
+  background: #505050;
+  color: white;
   padding: 15px;
   border-radius: 10px;
   display: flex;
@@ -111,8 +111,8 @@ body {
 }
 
 .prenota-btn {
-  background-color: #CEFF00;
-  color: black;
+  background-color: black;
+  color: white;
   border: none;
   padding: 30px 50px;
   border-radius: 20px;
@@ -120,6 +120,11 @@ body {
   cursor: pointer;
   margin-top: 10px;
   margin-right: 30px;
+  border: 3px solid #CEFF00;
+}
+
+.titolo {
+  color: #CEFF00;
 }
 
 .campo-right {
