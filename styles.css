@@ -261,6 +261,7 @@ body {
   border-radius: 20px;
   cursor: pointer;
   font-weight: bold;
+  cursor: pointer;
 }
 
 .giocatori {

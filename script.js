@@ -29,6 +29,9 @@ function handleClick(action) {
     case 'riduci-giocatori':
       riduciGiocatore();
       break;
+    case 'pagamento-trova-partita':
+      window.location.href = "pagina_pagamento.html"
+      break;
     default:
       console.log("Azione sconosciuta");
   }
