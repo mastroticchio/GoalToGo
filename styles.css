@@ -121,6 +121,11 @@ body {
   margin-top: 10px;
   margin-right: 30px;
   border: 3px solid #CEFF00;
+  transition: transform 0.2s;
+}
+
+.prenota-btn:hover {
+  transform: scale(1.1);
 }
 
 .titolo {
@@ -262,6 +267,11 @@ body {
   cursor: pointer;
   font-weight: bold;
   cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.orario-btn:hover {
+  transform: scale(1.1);
 }
 
 .giocatori {

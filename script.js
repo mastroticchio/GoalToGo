@@ -4,13 +4,16 @@ function handleClick(action) {
       window.location.href = "pagina_prenota.html";
       break;
     case 'trova':
-      alert("Vai a trovare una partita");
+      window.location.href = "pagina_trova_partita.html";
       break;
     case 'lega':
       alert("Vai alle leghe");
       break;
     case 'inizia':
       window.location.href = "home_page.html";
+      break;
+    case 'pagina-prenota-seconda-per-partite':
+      window.location.href = "pagina_prenota_seconda_per_partite.html"
       break;
     case 'inizia-registrazione':
       handleRegister();
@@ -21,8 +24,12 @@ function handleClick(action) {
     case 'schermata-registrati':
       window.location.href = "pagina_registrati.html"
       break;
+    case 'crea-partita':
+      window.location.href = "pagina_crea_partita.html"
+      break;
     case 'pagina-prenota-seconda':
-      window.location.href = "pagina_prenota_seconda.html"
+      window.location.href = "pagina_prenota_seconda_per_prenotazione.html"
+      break;
     case 'aggiungi-giocatori':
       aggiungiGiocatore();
       break;
