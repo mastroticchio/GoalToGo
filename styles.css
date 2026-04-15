@@ -290,3 +290,25 @@ body {
   font-size: 24px;
   cursor: pointer;
 }
+
+.search-container {
+  margin-bottom: 20px;
+}
+
+.search-input {
+  flex: 1;
+  padding: 12px;
+  border-radius: 20px;
+  border: none;
+  outline: none;
+  font-size: 14px;
+}
+
+
+.create-btn {
+  white-space: nowrap;
+}
+
+.text-white {
+  color: white !important;
+}
