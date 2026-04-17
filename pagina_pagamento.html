@@ -40,12 +40,26 @@
       </div>
 
       <div class="progress-container">
-        <span>3/10</span>
+        <span id="progress-text"></span>
 
         <div class="progress-bar">
           <div class="progress-fill"></div>
         </div>
       </div>
+
+      <script>
+        const count = localStorage.getItem("count");
+
+        if (count !== null) {
+          const players = parseInt(count);
+
+        document.getElementById("progress-text").textContent = players + "/10";
+
+        const percent = (players / 10) * 100;
+
+        document.querySelector(".progress-fill").style.width = percent + "%";
+        }
+</script>
 
       <p class="progress-text">
         quando la barra sarà completa il campo sarà confermato

@@ -42,6 +42,8 @@ function handleClick(action) {
     case 'pagamento-trova-partita':
       const prezzo = document.getElementById("price").textContent;
       localStorage.setItem("price", prezzo);
+      const numGiocatori = document.getElementById("count").textContent;
+      localStorage.setItem("count", numGiocatori);
       window.location.href = "pagina_pagamento.html"
       break;
     default:
@@ -118,25 +120,33 @@ function switchMode(mode) {
 }
 
 function aggiungiGiocatore() {
-  let giocatori = parseInt(document.getElementById("count").textContent);
-  let prezzo = parseInt(document.getElementById("price").textContent);
+  let giocatori = parseInt(document.getElementById("count").textContent) || 1;
+  let prezzo = parseInt(document.getElementById("price").textContent) || 0;
 
   giocatori++;
   prezzo += 5;
 
   document.getElementById("count").textContent = giocatori;
   document.getElementById("price").textContent = prezzo;
+
+  localStorage.setItem("count", giocatori);
+  localStorage.setItem("price", prezzo);
 }
 
 function riduciGiocatore() {
-  let giocatori = parseInt(document.getElementById("count").textContent);
-  let prezzo = parseInt(document.getElementById("price").textContent);
+  let giocatori = parseInt(document.getElementById("count").textContent) || 1;
+  let prezzo = parseInt(document.getElementById("price").textContent) || 0;
+
+  if (giocatori <= 1) return;
 
   giocatori--;
   prezzo -= 5;
 
   document.getElementById("count").textContent = giocatori;
   document.getElementById("price").textContent = prezzo;
+
+  localStorage.setItem("count", giocatori);
+  localStorage.setItem("price", prezzo);
 }
 
 /*ovviamente questa va rifatta, ogni click deve portare ad una nuova schermata, per ora ho messo solo delle finestre pop-up per far finta che sia interattivo*/
