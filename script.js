@@ -30,6 +30,9 @@ function handleClick(action) {
     case 'pagina-prenota-seconda':
       window.location.href = "pagina_prenota_seconda_per_prenotazione.html"
       break;
+    case 'trova-partita-seconda':
+      window.location.href = "pagina_trova_partita_seconda.html"
+      break;
     case 'aggiungi-giocatori':
       aggiungiGiocatore();
       break;
@@ -37,6 +40,8 @@ function handleClick(action) {
       riduciGiocatore();
       break;
     case 'pagamento-trova-partita':
+      const prezzo = document.getElementById("price").textContent;
+      localStorage.setItem("price", prezzo);
       window.location.href = "pagina_pagamento.html"
       break;
     default:
