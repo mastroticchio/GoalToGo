@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="it">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Campo</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+
+  <body>
+    <header class="header">
+        <h1>GOAL TO GO</h1>
+        <div class="profile-icon"></div>
+    </header>
+    <div class="container container--center">
+      <div class="club-dropdown">
+        <div class="club-header">☰ I miei Club</div>
+
+        <div class="club-content">
+          <div class="club-left">
+            <div class="card club-btn" onclick="handleClick('crea-club')">+ Crea un Club</div>
+            <div class="card club-btn"># Codice Club</div>
+          </div>
+
+          <div class="club-right">
+            <input
+              type="text"
+              class="search-input"
+              placeholder="🔍 Cerca Club"
+            />
+
+            <div class="club-list">
+              <div class="club-item">
+                <div>
+                  <strong>FC MARCO POLO</strong>
+                  <span class="status open">Aperta</span>
+                </div>
+                <div class="club-info">
+                  ⭐ 3.8/5 <br />
+                  👤 8/12
+                </div>
+              </div>
+
+              <div class="club-item">
+                <div>
+                  <strong>FC MARCO POLO</strong>
+                  <span class="status closed">Chiusa</span>
+                </div>
+                <div class="club-info">
+                  ⭐ 3.8/5 <br />
+                  👤 12/12
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="script.js"></script>
+  </body>
+</html>

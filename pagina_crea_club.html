@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>Goal To Go</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <div class="header">
+    <h1>GOAL TO GO</h1>
+    <div class="profile-icon"></div>
+  </div>
+
+  <div class="container container--center">
+
+    <div class="welcome">
+      <h2>Crea il tuo Club</h2>
+      <p>Configura i dettagli e invita i tuoi amici !</p>
+    </div>
+
+    <div class="form-grid">
+
+      <div class="form-left">
+
+        <label>Nome del tuo Club</label>
+        <input class="input" type="text" placeholder="Inserisci un nome ...">
+
+        <label>Inserisci immagine del Club</label>
+        <div class="upload-boxes">
+          <div class="upload-box">+</div>
+          <div class="upload-box"></div>
+          <div class="upload-box"></div>
+        </div>
+
+        <label>Descrizione (opzionale)</label>
+        <textarea class="textarea" rows="3" placeholder="Una breve descrizione della tua lega ..."></textarea>
+
+      </div>
+
+      <div class="form-right">
+
+        <label>Scegli il numero massimo di componenti</label>
+        <div class="counter">
+          <button class="minus-btn" onclick="handleClick('riduci-giocatori-club')">-</button>
+          <div id="club-count" class="counter-value">2</div>
+          <button class="plus-btn" onclick="handleClick('aggiungi-giocatori-club')">+</button>
+        </div>
+
+        <label>Visibilità del Club</label>
+        <div class="visibility">
+          <button class="visibility-btn active" onclick="setVisibility(this)">pubblico</button>
+          <button class="visibility-btn" onclick="setVisibility(this)">privato</button>
+          <button class="visibility-btn" onclick="setVisibility(this)">su invito</button>
+        </div>
+
+      </div>
+
+    </div>
+
+    <button class="create-club-btn">Crea il tuo Club!</button>
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
