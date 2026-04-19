@@ -1,16 +1,22 @@
 function handleClick(action) {
   switch (action) {
+    case 'crea-club':
+      window.location.href = "pagina_crea_club.html";
+      break;
     case 'prenota':
       window.location.href = "pagina_prenota.html";
       break;
     case 'trova':
-      alert("Vai a trovare una partita");
+      window.location.href = "pagina_trova_partita.html";
       break;
-    case 'lega':
-      alert("Vai alle leghe");
+    case 'club':
+      window.location.href = "pagina_club.html";
       break;
     case 'inizia':
       window.location.href = "home_page.html";
+      break;
+    case 'pagina-prenota-seconda-per-partite':
+      window.location.href = "pagina_prenota_seconda_per_partite.html"
       break;
     case 'inizia-registrazione':
       handleRegister();
@@ -21,17 +27,48 @@ function handleClick(action) {
     case 'schermata-registrati':
       window.location.href = "pagina_registrati.html"
       break;
+    case 'crea-partita':
+      window.location.href = "pagina_crea_partita.html"
+      break;
     case 'pagina-prenota-seconda':
-      window.location.href = "pagina_prenota_seconda.html"
+      window.location.href = "pagina_prenota_seconda_per_prenotazione.html"
+      break;
+    case 'trova-partita-seconda':
+      window.location.href = "pagina_trova_partita_seconda.html"
+      break;
     case 'aggiungi-giocatori':
       aggiungiGiocatore();
       break;
     case 'riduci-giocatori':
       riduciGiocatore();
       break;
+    case 'aggiungi-giocatori-club':
+      aggiungiGiocatoreClub();
+      break;
+    case 'riduci-giocatori-club':
+      riduciGiocatoreClub();
+      break;
+    case 'pagamento-trova-partita':
+      const prezzo = document.getElementById("price").textContent;
+      localStorage.setItem("price", prezzo);
+      const numGiocatori = document.getElementById("count").textContent;
+      localStorage.setItem("count", numGiocatori);
+      window.location.href = "pagina_pagamento.html"
+      break;
     default:
       console.log("Azione sconosciuta");
   }
+}
+
+function setVisibility(button) {
+  const buttons = document.querySelectorAll(".visibility-btn");
+
+  buttons.forEach(btn => btn.classList.remove("active"));
+
+  button.classList.add("active");
+
+  const value = button.textContent.trim();
+  localStorage.setItem("clubVisibility", value);
 }
 
 function handleRegister() {
@@ -103,25 +140,57 @@ function switchMode(mode) {
 }
 
 function aggiungiGiocatore() {
-  let giocatori = parseInt(document.getElementById("count").textContent);
-  let prezzo = parseInt(document.getElementById("price").textContent);
+  let giocatori = parseInt(document.getElementById("count").textContent) || 1;
+  let prezzo = parseInt(document.getElementById("price").textContent) || 0;
 
   giocatori++;
   prezzo += 5;
 
   document.getElementById("count").textContent = giocatori;
   document.getElementById("price").textContent = prezzo;
+
+  localStorage.setItem("count", giocatori);
+  localStorage.setItem("price", prezzo);
 }
 
 function riduciGiocatore() {
-  let giocatori = parseInt(document.getElementById("count").textContent);
-  let prezzo = parseInt(document.getElementById("price").textContent);
+  let giocatori = parseInt(document.getElementById("count").textContent) || 1;
+  let prezzo = parseInt(document.getElementById("price").textContent) || 0;
+
+  if (giocatori <= 1) return;
 
   giocatori--;
   prezzo -= 5;
 
   document.getElementById("count").textContent = giocatori;
   document.getElementById("price").textContent = prezzo;
+
+  localStorage.setItem("count", giocatori);
+  localStorage.setItem("price", prezzo);
 }
 
-/*ovviamente questa va rifatta, ogni click deve portare ad una nuova schermata, per ora ho messo solo delle finestre pop-up per far finta che sia interattivo*/
+function aggiungiGiocatoreClub() {
+  let giocatori_club = parseInt(document.getElementById("club-count").textContent) || 1;
+
+  /*const MAX = 30;
+  if (giocatori >= MAX) return;*/
+
+  giocatori_club++;
+
+  document.getElementById("club-count").textContent = giocatori_club;
+
+  localStorage.setItem("clubCount", giocatori_club);
+}
+
+function riduciGiocatoreClub() {
+  let giocatori_club = parseInt(document.getElementById("club-count").textContent) || 1;
+
+  /*const MIN = 2;
+  if (giocatori <= MIN) return;*/
+
+  giocatori_club--;
+
+  document.getElementById("club-count").textContent = giocatori_club;
+
+  localStorage.setItem("clubCount", giocatori_club);
+}

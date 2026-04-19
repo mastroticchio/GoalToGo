@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <title>Prenota Campo</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+  <body>
+    <div class="container container--center">
+      <h2 class="titolo-grande welcome--center">Prenotazione campo</h2>
+
+      <div class="riepilogo card riepilogo--vertical">
+        <h4 class="text-white">RIEPILOGO PRENOTAZIONE</h4>
+
+        <div class="riepilogo-row">
+          <p>Campo</p>
+          <p>Sporting Balduina</p>
+        </div>
+
+        <div class="riepilogo-row">
+          <p>Data</p>
+          <p>22 marzo 2026</p>
+        </div>
+
+        <div class="riepilogo-row">
+          <p>Orario</p>
+          <p>18:00-19:00</p>
+        </div>
+
+        <div class="riepilogo-row">
+          <p>Giocatori</p>
+          <p>5 vs 5</p>
+        </div>
+
+        <div class="riepilogo-total">
+          <strong>Totale</strong>
+          <strong id="total-price"></strong>
+        </div>
+      </div>
+
+      <div class="progress-container">
+        <span id="progress-text"></span>
+
+        <div class="progress-bar">
+          <div class="progress-fill"></div>
+        </div>
+      </div>
+
+      <script>
+        const count = localStorage.getItem("count");
+
+        if (count !== null) {
+          const players = parseInt(count);
+
+        document.getElementById("progress-text").textContent = players + "/10";
+
+        const percent = (players / 10) * 100;
+
+        document.querySelector(".progress-fill").style.width = percent + "%";
+        }
+</script>
+
+      <p class="progress-text">
+        quando la barra sarà completa il campo sarà confermato
+      </p>
+
+      <button class="inizia-btn paga-btn">Paga <span id="button-price"></span></button>
+      <script>
+        const price = localStorage.getItem("price");
+
+        if (price !== null) {
+          document.getElementById("total-price").textContent = price + "€";
+          document.getElementById("button-price").textContent = price + "€";
+        }
+      </script>
+    </div>
+  </body>
+</html>
