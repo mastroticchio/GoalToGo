@@ -26,9 +26,16 @@
       </h3>
 
       <div class="campo-right">
-        <strong>7/10</strong>
+        <strong><span id="count-player" class="text-white"></span>/10</strong>
       </div>
     </div>
+    <script>
+      const count = localStorage.getItem("count-player");
+
+    if (count !== null) {
+      document.getElementById("count-player").textContent = count;
+    }
+    </script>
 
     <div class="campo">
       <img src="campo-alto.jpg" alt="campo da calcio">
@@ -46,9 +53,10 @@
     </div>
 
     <div class="campo-info">
+      <p><strong>Campo :</strong> Balduina Sporting Club</p>
       <p><strong>Indirizzo :</strong> Via del mare 104, Marino</p>
       <p><strong>Orario :</strong> 19:00-20:30</p>
-      <p><strong>Prezzo :</strong> 5$</p>
+      <p><strong>Prezzo :</strong><span id="price">5</span>$</p>
     </div>
 
   </div>
