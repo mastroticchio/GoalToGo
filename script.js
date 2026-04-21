@@ -1,4 +1,4 @@
-function handleClick(action) {
+function handleClick(action, element = null) {
   switch (action) {
     case 'crea-club':
       window.location.href = "pagina_crea_club.html";
@@ -34,7 +34,9 @@ function handleClick(action) {
       window.location.href = "pagina_prenota_seconda_per_prenotazione.html"
       break;
     case 'trova-partita-seconda':
-      window.location.href = "pagina_trova_partita_seconda.html"
+      const count_player = document.getElementById("count-player").textContent;
+      localStorage.setItem("count-player", count_player);
+      window.location.href = "pagina_trova_partita_seconda.html";
       break;
     case 'aggiungi-giocatori':
       aggiungiGiocatore();
@@ -55,6 +57,8 @@ function handleClick(action) {
       localStorage.setItem("count", numGiocatori);
       window.location.href = "pagina_pagamento.html"
       break;
+    case 'pagamento-trova-partita-2':
+      window.location.href = "pagina_pagamento.html"
     default:
       console.log("Azione sconosciuta");
   }
