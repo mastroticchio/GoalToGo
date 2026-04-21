@@ -30,7 +30,7 @@ body {
   max-width: 700px;
   width: 100%;
   color: white;
-  padding: 80px 20px 20px;
+  padding: 120px 40px 40px;
 }
 
 .container--center {
@@ -564,6 +564,8 @@ body {
   justify-content: space-between;
   gap: 40px;
   flex-wrap: wrap;
+  margin-top: 30px
+  
 }
 
 .form-left,
@@ -656,4 +658,27 @@ body {
 
 .create-club-btn:hover {
   transform: scale(1.1);
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.home-btn {
+  background-color: transparent;
+  color: #ceff00;
+  border: 2px solid #ceff00;
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: bold;
+  cursor: pointer;
+  letter-spacing: 1px;
+  transition: transform 0.2s;
+}
+
+.home-btn:hover {
+  transform: scale(1.05);
 }
