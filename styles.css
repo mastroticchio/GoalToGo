@@ -94,7 +94,7 @@ body {
   margin-bottom: 5px;
 }
 
-.card span {
+.card span:not(.titolo) {
   font-size: 12px;
   color: #666;
 }
@@ -372,22 +372,22 @@ body {
 }
 
 .p6 {
-  top: 60%;
-  left: 60%;
+  top: 40%;
+  left: 55%;
   transition: transform 0.2s;
 }
 .p7 {
-  top: 30%;
-  left: 60%;
+  top: 20%;
+  left: 65%;
   transition: transform 0.2s;
 }
 .p8 {
   top: 60%;
-  left: 75%;
+  left: 65%;
   transition: transform 0.2s;
 }
 .p9 {
-  top: 30%;
+  top: 40%;
   left: 75%;
   transition: transform 0.2s;
 }
