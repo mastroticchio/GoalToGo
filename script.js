@@ -100,16 +100,17 @@ function handleRegister() {
 
     console.log("Registrazione giocatore:", { email, username, password });
 
+    window.location.href = "home_page.html";
+
   } else {
     const inputs = document.querySelectorAll("#form-campo input");
 
     const email = inputs[0].value;
     const nome = inputs[1].value;
-    const indirizzo = inputs[2].value;
-    const password = inputs[3].value;
-    const confirm = inputs[4].value;
+    const password = inputs[2].value;
+    const confirm = inputs[3].value;
 
-    if (!email || !nome || !indirizzo || !password || !confirm) {
+    if (!email || !nome || !password || !confirm) {
       alert("Compila tutti i campi");
       return;
     }
@@ -119,9 +120,10 @@ function handleRegister() {
       return;
     }
 
-    console.log("Registrazione campo:", { email, nome, indirizzo, password });
+    console.log("Registrazione campo:", { email, nome, password });
+
+    window.location.href = "pagina_campi_gestore.html";
   }
-  window.location.href = "home_page.html";
 }
 
 function switchMode(mode) {
