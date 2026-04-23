@@ -194,3 +194,37 @@ function riduciGiocatoreClub() {
 
   localStorage.setItem("clubCount", giocatori_club);
 }
+
+function toggleGiorno(btn) {
+  btn.classList.toggle('active');
+}
+
+function toggleOrario(btn) {
+  btn.classList.toggle('active');
+}
+
+function aggiungiImmagine() {
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = 'image/*';
+  input.onchange = function(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function(ev) {
+      const box = document.getElementById('upload-campo');
+      box.style.backgroundImage = `url(${ev.target.result})`;
+      box.style.backgroundSize = 'cover';
+      box.style.backgroundPosition = 'center';
+      box.innerText = '';
+    };
+    reader.readAsDataURL(file);
+  };
+  input.click();
+}
+
+const dataOggi = document.getElementById('data-oggi');
+if (dataOggi) {
+  const options = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
+  dataOggi.textContent = new Date().toLocaleDateString('it-IT', options);
+}

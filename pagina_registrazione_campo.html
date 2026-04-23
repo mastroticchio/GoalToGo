@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>Goal To Go - Il tuo Campo</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <div class="header">
+    <h1>GOAL &nbsp; TO &nbsp; GO</h1>
+    <div class="header-right">
+      <button class="home-btn" onclick="location.href='home_page.html'">
+        🏠 HOME
+      </button>
+      <div class="profile-icon"></div>
+    </div>
+  </div>
+
+  <div class="container container--center">
+
+    <div class="welcome">
+      <h2>IL TUO CAMPO</h2>
+    </div>
+
+    <input class="input input--large" type="text" placeholder="Nome del Campo (es. Campo prato Falcone)">
+
+    <div class="form-grid">
+      <div class="form-left">
+        <input class="input" type="text" placeholder="Indirizzo">
+      </div>
+      <div class="form-right">
+        <input class="input" type="text" placeholder="Città">
+      </div>
+    </div>
+
+    <div class="form-grid">
+      <div class="form-left">
+        <label>Prezzo per ora</label>
+        <div class="prezzo-container">
+          <input class="input input--prezzo" type="number" value="50">
+          <span class="prezzo-label">€ / ora</span>
+        </div>
+      </div>
+      <div class="form-right">
+        <label>Disponibilità settimanale</label>
+        <div class="giorni">
+          <button class="giorno-btn active" onclick="toggleGiorno(this)">Lun</button>
+          <button class="giorno-btn active" onclick="toggleGiorno(this)">Mar</button>
+          <button class="giorno-btn" onclick="toggleGiorno(this)">Mer</button>
+          <button class="giorno-btn" onclick="toggleGiorno(this)">Gio</button>
+          <button class="giorno-btn" onclick="toggleGiorno(this)">Ven</button>
+          <button class="giorno-btn" onclick="toggleGiorno(this)">Sab</button>
+          <button class="giorno-btn" onclick="toggleGiorno(this)">Dom</button>
+        </div>
+      </div>
+    </div>
+
+    <label>Aggiungi foto del campo</label>
+    <div class="upload-box upload-box--large" id="upload-campo" onclick="aggiungiImmagine()">+</div>
+    
+    <div class="orari">
+      <button class="orario-btn active" onclick="toggleOrario(this)">14:00-15:00</button>
+      <button class="orario-btn active" onclick="toggleOrario(this)">15:00-16:00</button>
+      <button class="orario-btn" onclick="toggleOrario(this)">16:00-17:00</button>
+      <button class="orario-btn" onclick="toggleOrario(this)">17:00-18:00</button>
+      <button class="orario-btn" onclick="toggleOrario(this)">18:00-19:00</button>
+      <button class="orario-btn" onclick="toggleOrario(this)">19:00-20:00</button>
+      <button class="orario-btn" onclick="toggleOrario(this)">20:00-21:00</button>
+      <button class="orario-btn" onclick="toggleOrario(this)">21:00-22:00</button>
+      <button class="orario-btn" onclick="toggleOrario(this)">22:00-23:00</button>
+    </div>
+
+    <button class="create-club-btn" onclick="location.href='pagina_campi_gestore.html'">Conferma</button>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
