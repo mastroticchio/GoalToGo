@@ -58,7 +58,10 @@ function handleClick(action, element = null) {
       window.location.href = "pagina_pagamento.html"
       break;
     case 'pagamento-trova-partita-2':
+      const numGiocatori2 = document.getElementById("count-player").textContent;
+      localStorage.setItem("count", numGiocatori2);
       window.location.href = "pagina_pagamento.html"
+      break;
     default:
       console.log("Azione sconosciuta");
   }
