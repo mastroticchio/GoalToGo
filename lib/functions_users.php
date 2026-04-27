@@ -19,7 +19,7 @@ function getUtenteByEmail($conn, $email)    //funzione in fase di login per recu
 function getPartitaByName($conn, $nome)
     {
     
-
+    //ciao
     }
 function getPartitaById($conn, $nome)
     {
