@@ -15,15 +15,18 @@
         <section class="welcome welcome--center">
             <h2> Accedi </h2>
         </section>
+        <form id="formLogin">
+            <div class="login-box">
+                <input type="text" placeholder="Email" id="email" name="email">
+            </div>
 
-        <div class="login-box">
-            <input type="text" placeholder="Username">
-        </div>
-
-        <div class="login-box">
-            <input type="text" placeholder="Password">
-        </div>
-
+            <div class="login-box">
+                <input type="text" placeholder="Password" id="password" name="password">
+            </div>
+            <button type="submit">Iscriviti ora</button>
+        </form>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script src="js_script/scripts.js"></script>
         <button class="inizia-btn" onclick="handleClick('inizia')">Inizia</button>
 
         <p class="registra-link" onclick="handleClick('schermata-registrati')">

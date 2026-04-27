@@ -12,36 +12,37 @@
     </header>
     <div class="container container--center">
 
-    <section class="welcome welcome--center">
-        <h2>Registrati</h2>
-    </section>
+        <section class="welcome welcome--center">
+            <h2>Registrati</h2>
+        </section>
 
-    <div class="toggle">
-        <button class="toggle-btn active" onclick="switchMode('giocatore')">
-            sono un giocatore
-        </button>
-        <button class="toggle-btn" onclick="switchMode('campo')">
-            ho un campo
-        </button>
-    </div>
-
-    <div id="form-giocatore" class="form active-form">
-        <div class="login-box"><input placeholder="email"></div>
-        <div class="login-box"><input placeholder="nome utente"></div>
-        <div class="login-box"><input placeholder="password"></div>
-        <div class="login-box"><input placeholder="conferma password"></div>
-    </div>
-
-    <div id="form-campo" class="form">
-        <div class="login-box"><input placeholder="email"></div>
-        <div class="login-box"><input placeholder="nome utente"></div>
-        <div class="login-box"><input placeholder="password"></div>
-        <div class="login-box"><input placeholder="conferma password"></div>
+        <div class="toggle">
+            <button class="toggle-btn active" onclick="switchMode('giocatore')">sono un giocatore</button>
+            <button class="toggle-btn" onclick="switchMode('campo')">ho un campo</button>
         </div>
 
-        <button class="inizia-btn" onclick="handleClick('inizia-registrazione')">Inizia</button>
+        <div id="form-giocatore" class="form active-form">
+            <form id="formRegistrazione">
+                <div class="login-box"><input placeholder="email" name="email" id="email"></div>
+                <div class="login-box"><input placeholder="nome utente" name="nickname" id="nickname"></div>
+                <div class="login-box"><input placeholder="password" name="password" id="password"></div>
+                <div class="login-box"><input placeholder="conferma password"></div>
+                <button type="submit">Iscriviti ora</button>
+            </form>
+        </div>
+        <div id="feedback"> </div>
+        <script src="js_script/scripts.js"></script>
 
-        <p class="registra-link" onclick="handleClick('schermata-accedi')">Hai già un account? Accedi</p>
+        <div id="form-campo" class="form">
+            <div class="login-box"><input placeholder="email"></div>
+            <div class="login-box"><input placeholder="nome utente"></div>
+            <div class="login-box"><input placeholder="password"></div>
+            <div class="login-box"><input placeholder="conferma password"></div>
+        </div>
+
+            <button class="inizia-btn" type="submit" onclick="handleClick('inizia-registrazione')">Inizia</button>
+
+            <p class="registra-link" onclick="handleClick('schermata-accedi')">Hai già un account? Accedi</p>
 
     </div>
 
