@@ -8,9 +8,14 @@
 <body>
 
   <div class="header">
-    <h1>GOAL TO GO</h1>
+  <h1>GOAL &nbsp; TO &nbsp; GO</h1>
+  <div class="header-right">
+    <button class="home-btn" onclick="location.href='home_page.html'">
+      🏠 HOME
+    </button>
     <div class="profile-icon"></div>
   </div>
+</div>
 
   <div class="container container--center">
 
@@ -42,9 +47,9 @@
 
         <label>Scegli il numero massimo di componenti</label>
         <div class="counter">
-          <button class="minus-btn" onclick="handleClick('riduci-giocatori-club')">-</button>
-          <div id="club-count" class="counter-value">2</div>
           <button class="plus-btn" onclick="handleClick('aggiungi-giocatori-club')">+</button>
+          <div id="club-count" class="counter-value">2</div>
+           <button class="minus-btn" onclick="handleClick('riduci-giocatori-club')">-</button>
         </div>
 
         <label>Visibilità del Club</label>

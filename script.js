@@ -1,4 +1,4 @@
-function handleClick(action) {
+function handleClick(action, element = null) {
   switch (action) {
     case 'crea-club':
       window.location.href = "pagina_crea_club.html";
@@ -34,7 +34,9 @@ function handleClick(action) {
       window.location.href = "pagina_prenota_seconda_per_prenotazione.html"
       break;
     case 'trova-partita-seconda':
-      window.location.href = "pagina_trova_partita_seconda.html"
+      const count_player = document.getElementById("count-player").textContent;
+      localStorage.setItem("count-player", count_player);
+      window.location.href = "pagina_trova_partita_seconda.html";
       break;
     case 'aggiungi-giocatori':
       aggiungiGiocatore();
@@ -55,6 +57,8 @@ function handleClick(action) {
       localStorage.setItem("count", numGiocatori);
       window.location.href = "pagina_pagamento.html"
       break;
+    case 'pagamento-trova-partita-2':
+      window.location.href = "pagina_pagamento.html"
     default:
       console.log("Azione sconosciuta");
   }
@@ -96,16 +100,17 @@ function handleRegister() {
 
     console.log("Registrazione giocatore:", { email, username, password });
 
+    window.location.href = "home_page.html";
+
   } else {
     const inputs = document.querySelectorAll("#form-campo input");
 
     const email = inputs[0].value;
     const nome = inputs[1].value;
-    const indirizzo = inputs[2].value;
-    const password = inputs[3].value;
-    const confirm = inputs[4].value;
+    const password = inputs[2].value;
+    const confirm = inputs[3].value;
 
-    if (!email || !nome || !indirizzo || !password || !confirm) {
+    if (!email || !nome || !password || !confirm) {
       alert("Compila tutti i campi");
       return;
     }
@@ -115,9 +120,10 @@ function handleRegister() {
       return;
     }
 
-    console.log("Registrazione campo:", { email, nome, indirizzo, password });
+    console.log("Registrazione campo:", { email, nome, password });
+
+    window.location.href = "pagina_campi_gestore.html";
   }
-  window.location.href = "home_page.html";
 }
 
 function switchMode(mode) {
@@ -193,4 +199,38 @@ function riduciGiocatoreClub() {
   document.getElementById("club-count").textContent = giocatori_club;
 
   localStorage.setItem("clubCount", giocatori_club);
+}
+
+function toggleGiorno(btn) {
+  btn.classList.toggle('active');
+}
+
+function toggleOrario(btn) {
+  btn.classList.toggle('active');
+}
+
+function aggiungiImmagine() {
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = 'image/*';
+  input.onchange = function(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function(ev) {
+      const box = document.getElementById('upload-campo');
+      box.style.backgroundImage = `url(${ev.target.result})`;
+      box.style.backgroundSize = 'cover';
+      box.style.backgroundPosition = 'center';
+      box.innerText = '';
+    };
+    reader.readAsDataURL(file);
+  };
+  input.click();
+}
+
+const dataOggi = document.getElementById('data-oggi');
+if (dataOggi) {
+  const options = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
+  dataOggi.textContent = new Date().toLocaleDateString('it-IT', options);
 }
