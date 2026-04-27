@@ -1,6 +1,6 @@
 <?php
 require_once '../config/db_connection.php';
-require_once '../lib/function_utenti.php';
+require_once '../lib/functions_users.php';
 
 header('Content-Type: application/json');
 $nickname = $_POST['nickname'] ?? '';

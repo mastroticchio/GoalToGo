@@ -2,34 +2,45 @@
 <html lang="it">
 <head>
   <meta charset="UTF-8">
-  <title>Goal To Go</title>
+  <title>Goal To Go - Login</title>
   <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
-    <header class="header">
-        <h1>GOAL TO GO</h1>
-        <div class="profile-icon"></div>
-    </header>
 
-    <div class="container container--center">
-        <section class="welcome welcome--center">
-            <h2> Accedi </h2>
-        </section>
+<header class="header">
+  <h1>GOAL TO GO</h1>
+  <div class="profile-icon"></div>
+</header>
 
-        <div class="login-box">
-            <input type="text" placeholder="Username">
-        </div>
+<div class="container container--center">
 
-        <div class="login-box">
-            <input type="text" placeholder="Password">
-        </div>
+  <section class="welcome welcome--center">
+    <h2>Accedi</h2>
+  </section>
+  <form id="formLogin">
 
-        <button class="inizia-btn" onclick="handleClick('inizia')">Inizia</button>
-
-        <p class="registra-link" onclick="handleClick('schermata-registrati')">
-            Non hai un account? <span>Registrati</span>
-        </p>
+    <div class="login-box">
+      <input type="email" name="email" placeholder="Email" required>
     </div>
 
-    <script src="script.js"></script>
+    <div class="login-box">
+      <input type="password" name="password" placeholder="Password" required>
+    </div>
+
+    <button type="submit" class="inizia-btn">Accedi</button>
+
+    <div id="feedback"></div>
+
+  </form>
+
+  <!-- LINK REGISTRAZIONE -->
+  <p class="registra-link" onclick="handleClick('schermata-registrati')">
+    Non hai un account? <span>Registrati</span>
+  </p>
+
+</div>
+<script src="js_script/scripts.js"></script>
+
 </body>
+</html>
