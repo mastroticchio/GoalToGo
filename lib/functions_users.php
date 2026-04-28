@@ -36,4 +36,15 @@ function getClubById($conn, $id)
 
 
     }
+function registraGestore($conn, $nome_centro, $email, $password)
+    {
+    $passwordSafe = password_hash($password, PASSWORD_DEFAULT);
+
+    $sql = "INSERT INTO GESTORE (NOME_CENTRO, EMAIL, PWD) VALUES (?, ?, ?)";
+    $stmt = mysqli_prepare($conn, $sql);
+
+    mysqli_stmt_bind_param($stmt, "sss", $nome_centro, $email, $passwordSafe);
+
+    return mysqli_stmt_execute($stmt);
+    }
 ?>
