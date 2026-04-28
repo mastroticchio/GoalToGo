@@ -2,7 +2,7 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <title>Prenota Campo</title>
+    <title>Registrazione GoalToGo</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 
@@ -27,39 +27,51 @@
         </button>
     </div>
 
-    <!-- 🔥 UNICO FORM -->
     <form id="formRegistrazione">
+
+        <!-- 🔥 CAMPO NASCOSTO PER IL TIPO UTENTE -->
+        <input type="hidden" name="tipo" id="tipoUtente" value="giocatore">
 
         <!-- 👤 GIOCATORE -->
         <div id="form-giocatore" class="form active-form">
+
             <div class="login-box">
-                <input name="email" placeholder="email">
+                <input type="email" name="email" placeholder="email" required>
             </div>
+
             <div class="login-box">
-                <input name="nickname" placeholder="nome utente">
+                <input type="text" name="nickname" placeholder="nome utente" required>
             </div>
+
             <div class="login-box">
-                <input type="password" name="password" placeholder="password">
+                <input type="password" name="password" placeholder="password" required>
             </div>
+
             <div class="login-box">
-                <input type="password" name="confirm" placeholder="conferma password">
+                <input type="password" name="confirm" placeholder="conferma password" required>
             </div>
+
         </div>
 
         <!-- 🏟 CAMPO -->
         <div id="form-campo" class="form">
+
             <div class="login-box">
-                <input name="email" placeholder="email">
+                <input type="email" name="email" placeholder="email" disabled>
             </div>
+
             <div class="login-box">
-                <input name="nickname" placeholder="nome utente">
+                <input type="text" name="nickname" placeholder="nome utente" disabled>
             </div>
+
             <div class="login-box">
-                <input type="password" name="password" placeholder="password">
+                <input type="password" name="password" placeholder="password" disabled>
             </div>
+
             <div class="login-box">
-                <input type="password" name="confirm" placeholder="conferma password">
+                <input type="password" name="confirm" placeholder="conferma password" disabled>
             </div>
+
         </div>
 
         <button type="submit" class="inizia-btn">Inizia</button>
@@ -69,12 +81,11 @@
     </form>
 
     <p class="registra-link" onclick="handleClick('schermata-accedi')">
-        Hai già un account? Accedi
+        Hai gia un account? <span>Accedi</span>
     </p>
 
 </div>
 
-<script src="script.js"></script>
 <script src="js_script/scripts.js"></script>
 </body>
 </html>

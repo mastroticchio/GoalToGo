@@ -1,83 +1,90 @@
-document.addEventListener('DOMContentLoaded',function()
-    {
+document.addEventListener('DOMContentLoaded', function () {
+
     const formReg = document.getElementById('formRegistrazione');
-    
-    if(formReg)
-        {
-        formReg.addEventListener('submit', function(e)
-            {
+
+    if (formReg) {
+        formReg.addEventListener('submit', function (e) {
             e.preventDefault();
+
             const feedback = document.getElementById('feedback');
-            const dati = new FormData(this);  //prende i dati dai campi di registrazione i presenti nel form
-            fetch('api/api_signin.php', {method: 'POST', body:dati})
-            .then(res => 
-                {
-                if(!res.ok) throw new Error('Errore');
+            const dati = new FormData(this);
+
+            console.log([...dati.entries()]); // 🔥 debug utile
+
+            fetch('/GoalToGo/api/api_signin.php', {
+                method: 'POST',
+                body: dati
+            })
+            .then(res => {
+                if (!res.ok) throw new Error('Errore');
                 return res.json();
-                })
-            .then(data => 
-                {
-                if(data.status == 'success')
-                    {
+            })
+            .then(data => {
+
+                if (data.status == 'success') {
+
                     feedback.innerHTML = `<p class="success">${data.message}</p>`;
                     formReg.reset();
-                    window.location.href = home_page.html
-                    }    
-                else
-                    {
-                    feedback.innerHTML =  `<p class="error">${data.message}</p>`;   
+
+                    if (data.tipo === 'gestore') {
+                        window.location.href = "pagina_campi_gestore.html";
+                    } else {
+                        window.location.href = "home_page.html";
                     }
-                })
-                .catch(err => 
-                {
+
+                } else {
+                    feedback.innerHTML = `<p class="error">${data.message}</p>`;
+                }
+            })
+            .catch(err => {
                 feedback.innerHTML = '<p class="error">Communication error</p>';
                 console.error(err);
-                })
-            })    
-        }
+            });
+        });
+    }
+
     const formLog = document.getElementById("formLogin");
 
-    if(formLog)
-        {
-        formLog.addEventListener('submit', function(e)
-            {
-            e.preventDefault(); //non far aggiornale la pagina
-            const dati = new FormData(this); //mappa i dati del form attaraverso i name
-            fetch("api/api_login.php", {method: 'POST', body: dati})
-            .then(res => 
-                {
-                if(!res.ok) throw new Error('Errore');
-                return res.json();    
-                })
-            .then(data => 
-                {
-                if(data.status == 'success')
-                    {
+    if (formLog) {
+        formLog.addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const dati = new FormData(this);
+
+            fetch("/GoalToGo/api/api_login.php", {
+                method: 'POST',
+                body: dati
+            })
+            .then(res => {
+                if (!res.ok) throw new Error('Errore');
+                return res.json();
+            })
+            .then(data => {
+                if (data.status == 'success') {
+
                     Swal.fire({
-                    title: 'Ottimo!',
-                    text: 'Login effettuato!',
-                    icon: 'success',
-                    timer: 2000, // Chiude automaticamente dopo 2 secondi
-                    showConfirmButton: false
+                        title: 'Ottimo!',
+                        text: 'Login effettuato!',
+                        icon: 'success',
+                        timer: 2000,
+                        showConfirmButton: false
                     }).then(() => {
-                    
-                    window.location.href = "home_page.html";
-                    });    
-                    }
-                else    
-                    {
+                        window.location.href = "home_page.html";
+                    });
+
+                } else {
                     Swal.fire({
                         title: 'Errore',
                         text: data.message,
                         icon: 'error',
                         confirmButtonText: 'Riprova'
-                        });    
-                    }    
-                })
-            .catch(err => {console.error(err);});
+                    });
+                }
             })
-        }
-    })
+            .catch(err => console.error(err));
+        });
+    }
+});
 
 function handleClick(action, element = null) {
   switch (action) {
@@ -153,19 +160,33 @@ function setVisibility(button) {
 function switchMode(mode) {
   const giocatore = document.getElementById("form-giocatore");
   const campo = document.getElementById("form-campo");
+  const tipoInput = document.getElementById("tipoUtente");
+
+  const giocatoreInputs = giocatore.querySelectorAll("input");
+  const campoInputs = campo.querySelectorAll("input");
 
   const buttons = document.querySelectorAll(".toggle-btn");
-
   buttons.forEach(btn => btn.classList.remove("active"));
 
   if (mode === "giocatore") {
     giocatore.classList.add("active-form");
     campo.classList.remove("active-form");
     buttons[0].classList.add("active");
+
+    giocatoreInputs.forEach(input => input.disabled = false);
+    campoInputs.forEach(input => input.disabled = true);
+
+    tipoInput.value = "giocatore";
+
   } else {
     campo.classList.add("active-form");
     giocatore.classList.remove("active-form");
     buttons[1].classList.add("active");
+
+    campoInputs.forEach(input => input.disabled = false);
+    giocatoreInputs.forEach(input => input.disabled = true);
+
+    tipoInput.value = "gestore";
   }
 }
 
