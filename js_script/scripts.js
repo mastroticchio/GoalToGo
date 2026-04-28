@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded',function()
             e.preventDefault();
             const feedback = document.getElementById('feedback');
             const dati = new FormData(this);  //prende i dati dai campi di registrazione i presenti nel form
-            fetch('/GoalToGo/api/api_signin.php', {method: 'POST', body:dati})
+            fetch('../api/api_signin.php', {method: 'POST', body:dati})
             .then(res => 
                 {
                 if(!res.ok) throw new Error('Errore');
@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded',function()
             {
             e.preventDefault(); //non far aggiornale la pagina
             const dati = new FormData(this); //mappa i dati del form attaraverso i name
-            fetch("api/api_login.php", {method: 'POST', body: dati})
+            fetch("../api/api_login.php", {method: 'POST', body: dati})
             .then(res => 
                 {
                 if(!res.ok) throw new Error('Errore');
