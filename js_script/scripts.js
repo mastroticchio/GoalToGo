@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded',function()
             e.preventDefault();
             const feedback = document.getElementById('feedback');
             const dati = new FormData(this);  //prende i dati dai campi di registrazione i presenti nel form
-            fetch('api/api_signin.php', {method: 'POST', body:dati})
+            fetch('/GoalToGo/api/api_signin.php', {method: 'POST', body:dati})
             .then(res => 
                 {
                 if(!res.ok) throw new Error('Errore');

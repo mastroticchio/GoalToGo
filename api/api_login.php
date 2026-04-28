@@ -1,6 +1,6 @@
 <?php
-require_once 'C:/xampp/htdocs/goaltogo/config/db_connection.php';
-require_once 'C:/xampp/htdocs/goaltogo/lib/functions_users.php';
+require_once '../config/db_connection.php';
+require_once '../lib/functions_users.php';
 
 header('Content-Type: application/json');
 $email = $_POST['email'] ?? '';
