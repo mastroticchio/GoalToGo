@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>Goal To Go - Lega</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <div class="header">
+    <h1>GOAL &nbsp; TO &nbsp; GO</h1>
+    <div class="header-right">
+      <button class="home-btn" onclick="location.href='home_page.html'">🏠 HOME</button>
+      <div class="profile-icon"></div>
+    </div>
+  </div>
+
+  <div class="container container--center container--club">
+
+    <div class="club-banner">
+      <div class="club-logo-placeholder">🏆</div>
+      <div>
+        <div class="club-banner-nome">Lega primavera</div>
+        <div class="club-banner-info">
+          <div class="club-banner-rating">6 online</div>
+          <div class="club-banner-membri">12 membri</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="lega-layout">
+
+      <div class="lega-main">
+        <div class="data-label" id="data-oggi-lega"></div>
+        <div class="evento-pill">🏆 Lega Primavera creata da Mario</div>
+        <div class="proposte-list" id="proposte-list"></div>
+      </div>
+
+      <div class="lega-sidebar">
+        <div class="sb-section">
+          <div class="sb-label">MEMBRI : 12</div>
+        </div>
+        <div class="sb-section">
+          <div class="sb-label">ONLINE : 6</div>
+          <div class="sb-user"><div class="sb-avatar-green">M</div><div class="sb-nome">Mario M.</div></div>
+          <div class="sb-user"><div class="sb-avatar-green">M</div><div class="sb-nome">Mario M.</div></div>
+          <div class="sb-user"><div class="sb-avatar-green">M</div><div class="sb-nome">Mario M.</div></div>
+        </div>
+        <div class="sb-section">
+          <div class="sb-label">OFFLINE : 6</div>
+          <div class="sb-user"><div class="sb-avatar-gray">H</div><div class="sb-nome">Huge R.</div></div>
+          <div class="sb-user"><div class="sb-avatar-gray">H</div><div class="sb-nome">Huge R.</div></div>
+          <div class="sb-user"><div class="sb-avatar-gray">H</div><div class="sb-nome">Huge R.</div></div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="club-footer-btns">
+      <button class="btn-accetta" onclick="accettaPartita()">Accetta e gioca !</button>
+      <button class="btn-proponi" onclick="apriModale()">Proponi una partita</button>
+    </div>
+
+  </div>
+
+  <!-- MODALE PROPONI PARTITA -->
+  <div class="modale-overlay" id="modale" style="display:none;">
+    <div class="modale-box">
+      <h3 style="margin-bottom:16px; color:white;">Proponi una partita</h3>
+      <input class="input" type="text" id="input-campo" placeholder="Nome del campo">
+      <input class="input" type="text" id="input-orario" placeholder="Orario (es. 18:00 - 19:00)">
+      <input class="input" type="number" id="input-max" placeholder="Numero massimo giocatori">
+      <div style="display:flex; gap:12px; margin-top:20px;">
+        <button class="btn-accetta" onclick="inviaProposta()">Invia</button>
+        <button class="btn-proponi" onclick="chiudiModale()">Annulla</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
