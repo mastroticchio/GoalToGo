@@ -33,7 +33,7 @@ if ($res) {
             "status" => "success",
             "message" => "Login effettuato",
             "tipo" => $res['TIPO'],
-            "email" => $res['EMAIL'],
+            "email" => $res['ID'],
             "user" => [
                 "nickname" => $nome
             ]

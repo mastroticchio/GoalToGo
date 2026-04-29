@@ -4,9 +4,6 @@ require_once '../lib/functions_campo.php';
 
 header('Content-Type: application/json');
 
-// =========================
-// RACCOLTA DATI
-// =========================
 $nome = $_POST['nome'] ?? '';
 $indirizzo = $_POST['indirizzo'] ?? '';
 $citta = $_POST['citta'] ?? '';
@@ -14,9 +11,6 @@ $prezzo = $_POST['prezzo'] ?? '';
 $fk_gestore = $_POST['fk_gestore'] ?? '';
 $orari = $_POST['orari'] ?? '';
 
-// =========================
-// CONTROLLO CAMPI
-// =========================
 if (
     empty($nome) ||
     empty($indirizzo) ||
@@ -31,18 +25,12 @@ if (
     exit;
 }
 
-// =========================
-// DECODIFICA ORARI
-// =========================
 $orariArray = json_decode($orari, true);
 
 if (!$orariArray) {
     $orariArray = [];
 }
 
-// =========================
-// INSERIMENTO
-// =========================
 $res = registraCampo(
     $conn,
     $nome,
@@ -53,9 +41,6 @@ $res = registraCampo(
     $orariArray
 );
 
-// =========================
-// RISPOSTA FINALE
-// =========================
 if ($res) {
     echo json_encode([
         "status" => "success",
