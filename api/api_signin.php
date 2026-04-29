@@ -1,16 +1,29 @@
 <?php
 require_once '../config/db_connection.php';
-require_once '../lib/functions_users.php';
+require_once '../lib/functions_campo.php';
 
 header('Content-Type: application/json');
 
-$nickname = $_POST['nickname'] ?? '';
-$email = $_POST['email'] ?? '';
-$password = $_POST['password'] ?? '';
-$tipo = $_POST['tipo'] ?? ''; // 🔥 NUOVO
+// =========================
+// RACCOLTA DATI
+// =========================
+$nome = $_POST['nome'] ?? '';
+$indirizzo = $_POST['indirizzo'] ?? '';
+$citta = $_POST['citta'] ?? '';
+$prezzo = $_POST['prezzo'] ?? '';
+$fk_gestore = $_POST['fk_gestore'] ?? '';
+$orari = $_POST['orari'] ?? '';
 
-// controllo campi
-if (empty($nickname) || empty($email) || empty($password) || empty($tipo)) {
+// =========================
+// CONTROLLO CAMPI
+// =========================
+if (
+    empty($nome) ||
+    empty($indirizzo) ||
+    empty($citta) ||
+    empty($prezzo) ||
+    empty($fk_gestore)
+) {
     echo json_encode([
         "status" => "error",
         "message" => "Campi mancanti"
@@ -18,33 +31,40 @@ if (empty($nickname) || empty($email) || empty($password) || empty($tipo)) {
     exit;
 }
 
-if ($tipo === 'giocatore') {
+// =========================
+// DECODIFICA ORARI
+// =========================
+$orariArray = json_decode($orari, true);
 
-    $res = registraGiocatore($conn, $nickname, $email, $password);
-
-} elseif ($tipo === 'gestore') {
-
-    $res = registraGestore($conn, $nickname, $email, $password);
-
-} else {
-    echo json_encode([
-        "status" => "error",
-        "message" => "Tipo utente non valido"
-    ]);
-    exit;
+if (!$orariArray) {
+    $orariArray = [];
 }
 
-// risposta finale
+// =========================
+// INSERIMENTO
+// =========================
+$res = registraCampo(
+    $conn,
+    $nome,
+    $indirizzo,
+    $citta,
+    $prezzo,
+    $fk_gestore,
+    $orariArray
+);
+
+// =========================
+// RISPOSTA FINALE
+// =========================
 if ($res) {
     echo json_encode([
         "status" => "success",
-        "message" => "Registrazione riuscita!",
-        "tipo" => $tipo // 🔥 serve per redirect JS
+        "message" => "Campo registrato con successo"
     ]);
 } else {
     echo json_encode([
         "status" => "error",
-        "message" => "Errore nel database (forse email già usata?)"
+        "message" => "Errore nel database"
     ]);
 }
 ?>
