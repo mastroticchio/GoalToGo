@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const feedback = document.getElementById('feedback');
             const dati = new FormData(this);
 
-            console.log([...dati.entries()]); // 🔥 debug utile
+            console.log([...dati.entries()]);
 
             fetch('/GoalToGo/api/api_signin.php', {
                 method: 'POST',
@@ -60,6 +60,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 return res.json();
             })
             .then(data => {
+
+                console.log("LOGIN RESPONSE:", data); // 🔍 debug utile
+
                 if (data.status == 'success') {
 
                     Swal.fire({
@@ -69,7 +72,15 @@ document.addEventListener('DOMContentLoaded', function () {
                         timer: 2000,
                         showConfirmButton: false
                     }).then(() => {
-                        window.location.href = "home_page.html";
+
+                        localStorage.setItem("tipoUtente", data.tipo);
+
+                        if (data.tipo === "gestore") {
+                            window.location.href = "pagina_campi_gestore.html";
+                        } else {
+                            window.location.href = "home_page.html";
+                        }
+
                     });
 
                 } else {
@@ -81,7 +92,14 @@ document.addEventListener('DOMContentLoaded', function () {
                     });
                 }
             })
-            .catch(err => console.error(err));
+            .catch(err => {
+                console.error(err);
+                Swal.fire({
+                    title: 'Errore',
+                    text: 'Problema di comunicazione con il server',
+                    icon: 'error'
+                });
+            });
         });
     }
 });

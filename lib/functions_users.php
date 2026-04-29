@@ -7,15 +7,35 @@ function registraGiocatore($conn, $nickname, $email, $password)   //funzione per
     mysqli_stmt_bind_param($stmt, "sss", $nickname, $email, $passwordSafe); // invio i dati reali che interpreta come stringhe e non come possibili comandi mysqli
     return mysqli_stmt_execute($stmt);
     }
-function getUtenteByEmail($conn, $email)    //funzione in fase di login per recuperare i dati in base all'email
-    {
-    $sql = "SELECT * FROM GIOCATORE WHERE EMAIL = ?";
-    $stmt = mysqli_prepare($conn, $sql);
-    mysqli_stmt_bind_param($stmt, "s",$email);
-    mysqli_stmt_execute($stmt);
-    $result = mysqli_stmt_get_result($stmt);
-    return mysqli_fetch_assoc($result);    
+function getUtenteByEmail($conn, $email)
+{
+    // 🔍 CERCA IN GIOCATORE
+    $sql1 = "SELECT NICKNAME, EMAIL, PWD FROM GIOCATORE WHERE EMAIL = ?";
+    $stmt1 = mysqli_prepare($conn, $sql1);
+    mysqli_stmt_bind_param($stmt1, "s", $email);
+    mysqli_stmt_execute($stmt1);
+    $result1 = mysqli_stmt_get_result($stmt1);
+
+    if ($row = mysqli_fetch_assoc($result1)) {
+        $row['TIPO'] = 'giocatore'; // 🔥 aggiungiamo il tipo
+        return $row;
     }
+
+    // 🔍 CERCA IN GESTORE
+    $sql2 = "SELECT NOME_CENTRO, EMAIL, PWD FROM GESTORE WHERE EMAIL = ?";
+    $stmt2 = mysqli_prepare($conn, $sql2);
+    mysqli_stmt_bind_param($stmt2, "s", $email);
+    mysqli_stmt_execute($stmt2);
+    $result2 = mysqli_stmt_get_result($stmt2);
+
+    if ($row = mysqli_fetch_assoc($result2)) {
+        $row['TIPO'] = 'gestore'; // 🔥 aggiungiamo il tipo
+        return $row;
+    }
+
+    // ❌ non trovato
+    return null;
+}
 function getPartitaByName($conn, $nome)
     {
     
