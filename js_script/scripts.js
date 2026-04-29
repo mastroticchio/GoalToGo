@@ -1,3 +1,109 @@
+document.addEventListener('DOMContentLoaded', function () {
+
+    const formReg = document.getElementById('formRegistrazione');
+
+    if (formReg) {
+        formReg.addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const feedback = document.getElementById('feedback');
+            const dati = new FormData(this);
+
+            console.log([...dati.entries()]);
+
+            fetch('/GoalToGo/api/api_signin.php', {
+                method: 'POST',
+                body: dati
+            })
+            .then(res => {
+                if (!res.ok) throw new Error('Errore');
+                return res.json();
+            })
+            .then(data => {
+
+                if (data.status == 'success') {
+
+                    feedback.innerHTML = `<p class="success">${data.message}</p>`;
+                    formReg.reset();
+
+                    if (data.tipo === 'gestore') {
+                        window.location.href = "pagina_campi_gestore.html";
+                    } else {
+                        window.location.href = "home_page.html";
+                    }
+
+                } else {
+                    feedback.innerHTML = `<p class="error">${data.message}</p>`;
+                }
+            })
+            .catch(err => {
+                feedback.innerHTML = '<p class="error">Communication error</p>';
+                console.error(err);
+            });
+        });
+    }
+
+    const formLog = document.getElementById("formLogin");
+
+    if (formLog) {
+        formLog.addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const dati = new FormData(this);
+
+            fetch("/GoalToGo/api/api_login.php", {
+                method: 'POST',
+                body: dati
+            })
+            .then(res => {
+                if (!res.ok) throw new Error('Errore');
+                return res.json();
+            })
+            .then(data => {
+
+                console.log("LOGIN RESPONSE:", data); // 🔍 debug utile
+
+                if (data.status == 'success') {
+
+                    Swal.fire({
+                        title: 'Ottimo!',
+                        text: 'Login effettuato!',
+                        icon: 'success',
+                        timer: 2000,
+                        showConfirmButton: false
+                    }).then(() => {
+
+                        localStorage.setItem("tipoUtente", data.tipo);
+
+                        if (data.tipo === "gestore") {
+                            window.location.href = "pagina_campi_gestore.html";
+                        } else {
+                            window.location.href = "home_page.html";
+                        }
+
+                    });
+
+                } else {
+                    Swal.fire({
+                        title: 'Errore',
+                        text: data.message,
+                        icon: 'error',
+                        confirmButtonText: 'Riprova'
+                    });
+                }
+            })
+            .catch(err => {
+                console.error(err);
+                Swal.fire({
+                    title: 'Errore',
+                    text: 'Problema di comunicazione con il server',
+                    icon: 'error'
+                });
+            });
+        });
+    }
+});
+
 function handleClick(action, element = null) {
   switch (action) {
     case 'crea-club':
@@ -12,14 +118,8 @@ function handleClick(action, element = null) {
     case 'club':
       window.location.href = "pagina_club.html";
       break;
-    case 'inizia':
-      window.location.href = "home_page.html";
-      break;
     case 'pagina-prenota-seconda-per-partite':
       window.location.href = "pagina_prenota_seconda_per_partite.html"
-      break;
-    case 'inizia-registrazione':
-      handleRegister();
       break;
     case 'schermata-accedi':
       window.location.href = "pagina_accedi.html"
@@ -58,10 +158,7 @@ function handleClick(action, element = null) {
       window.location.href = "pagina_pagamento.html"
       break;
     case 'pagamento-trova-partita-2':
-      const numGiocatori2 = document.getElementById("count-player").textContent;
-      localStorage.setItem("count", numGiocatori2);
       window.location.href = "pagina_pagamento.html"
-      break;
     default:
       console.log("Azione sconosciuta");
   }
@@ -78,73 +175,36 @@ function setVisibility(button) {
   localStorage.setItem("clubVisibility", value);
 }
 
-function handleRegister() {
-  const isGiocatore = document
-    .querySelector(".toggle-btn.active")
-    .innerText.includes("giocatore");
-
-  if (isGiocatore) {
-    const inputs = document.querySelectorAll("#form-giocatore input");
-
-    const email = inputs[0].value;
-    const username = inputs[1].value;
-    const password = inputs[2].value;
-    const confirm = inputs[3].value;
-
-    if (!email || !username || !password || !confirm) {
-      alert("Compila tutti i campi");
-      return;
-    }
-
-    if (password !== confirm) {
-      alert("Le password non coincidono");
-      return;
-    }
-
-    console.log("Registrazione giocatore:", { email, username, password });
-
-    window.location.href = "home_page.html";
-
-  } else {
-    const inputs = document.querySelectorAll("#form-campo input");
-
-    const email = inputs[0].value;
-    const nome = inputs[1].value;
-    const password = inputs[2].value;
-    const confirm = inputs[3].value;
-
-    if (!email || !nome || !password || !confirm) {
-      alert("Compila tutti i campi");
-      return;
-    }
-
-    if (password !== confirm) {
-      alert("Le password non coincidono");
-      return;
-    }
-
-    console.log("Registrazione campo:", { email, nome, password });
-
-    window.location.href = "pagina_campi_gestore.html";
-  }
-}
-
 function switchMode(mode) {
   const giocatore = document.getElementById("form-giocatore");
   const campo = document.getElementById("form-campo");
+  const tipoInput = document.getElementById("tipoUtente");
+
+  const giocatoreInputs = giocatore.querySelectorAll("input");
+  const campoInputs = campo.querySelectorAll("input");
 
   const buttons = document.querySelectorAll(".toggle-btn");
-
   buttons.forEach(btn => btn.classList.remove("active"));
 
   if (mode === "giocatore") {
     giocatore.classList.add("active-form");
     campo.classList.remove("active-form");
     buttons[0].classList.add("active");
+
+    giocatoreInputs.forEach(input => input.disabled = false);
+    campoInputs.forEach(input => input.disabled = true);
+
+    tipoInput.value = "giocatore";
+
   } else {
     campo.classList.add("active-form");
     giocatore.classList.remove("active-form");
     buttons[1].classList.add("active");
+
+    campoInputs.forEach(input => input.disabled = false);
+    giocatoreInputs.forEach(input => input.disabled = true);
+
+    tipoInput.value = "gestore";
   }
 }
 
@@ -236,76 +296,4 @@ const dataOggi = document.getElementById('data-oggi');
 if (dataOggi) {
   const options = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
   dataOggi.textContent = new Date().toLocaleDateString('it-IT', options);
-}
-
-
-// Data lega
-const dataLega = document.getElementById('data-oggi-lega');
-if (dataLega) {
-  const options = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
-  dataLega.textContent = 'OGGI ' + new Date().toLocaleDateString('it-IT', options).toUpperCase();
-}
-
-function apriModale() {
-  document.getElementById('modale').style.display = 'flex';
-}
-
-function chiudiModale() {
-  document.getElementById('modale').style.display = 'none';
-}
-
-function inviaProposta() {
-  const campo = document.getElementById('input-campo').value;
-  const orario = document.getElementById('input-orario').value;
-  const max = document.getElementById('input-max').value;
-  if (!campo || !orario || !max) return alert('Compila tutti i campi!');
-
-  const lista = document.getElementById('proposte-list');
-  const div = document.createElement('div');
-  div.className = 'proposta-row';
-  div.innerHTML = `
-    <div class="proposta-avatar">T</div>
-    <div class="proposta-body">
-      <div class="proposta-nome">Tu</div>
-      <div class="proposta-card">
-        <div class="proposta-card-title">Proposta partita</div>
-        <div class="proposta-card-campo">${campo}</div>
-        <div class="proposta-card-ora">${orario}</div>
-        <div class="proposta-progress-row">
-          <span class="prog-label">1/${max}</span>
-          <div class="prog-bar"><div class="prog-fill" style="width:${(1/max)*100}%"></div></div>
-        </div>
-        <div class="proposta-btns">
-          <button class="btn-accetta-proposta" onclick="accettaProposta(this, ${max})">Accetta</button>
-          <button class="btn-rifiuta-proposta" onclick="rifiutaProposta(this)">Rifiuta</button>
-        </div>
-      </div>
-    </div>
-  `;
-  lista.appendChild(div);
-  chiudiModale();
-  document.getElementById('input-campo').value = '';
-  document.getElementById('input-orario').value = '';
-  document.getElementById('input-max').value = '';
-}
-
-function accettaProposta(btn, max) {
-  const card = btn.closest('.proposta-card');
-  const label = card.querySelector('.prog-label');
-  const fill = card.querySelector('.prog-fill');
-  let current = parseInt(label.textContent.split('/')[0]) + 1;
-  label.textContent = `${current}/${max}`;
-  fill.style.width = `${(current / max) * 100}%`;
-  btn.disabled = true;
-  btn.textContent = '✓ Accettato';
-}
-
-function rifiutaProposta(btn) {
-  btn.closest('.proposta-row').remove();
-}
-
-function accettaPartita() {
-  const btns = document.querySelectorAll('.btn-accetta-proposta');
-  if (btns.length === 0) return alert('Nessuna proposta disponibile!');
-  btns[0].click();
 }
