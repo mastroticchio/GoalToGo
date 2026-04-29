@@ -1,5 +1,8 @@
 document.addEventListener('DOMContentLoaded', function () {
 
+    // =========================
+    // REGISTRAZIONE UTENTI
+    // =========================
     const formReg = document.getElementById('formRegistrazione');
 
     if (formReg) {
@@ -8,17 +11,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
             const feedback = document.getElementById('feedback');
             const dati = new FormData(this);
-
-            console.log([...dati.entries()]);
+            
 
             fetch('/GoalToGo/api/api_signin.php', {
                 method: 'POST',
                 body: dati
             })
-            .then(res => {
-                if (!res.ok) throw new Error('Errore');
-                return res.json();
-            })
+            .then(res => res.json())
             .then(data => {
 
                 if (data.status == 'success') {
@@ -37,12 +36,15 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             })
             .catch(err => {
-                feedback.innerHTML = '<p class="error">Communication error</p>';
                 console.error(err);
+                feedback.innerHTML = '<p class="error">Communication error</p>';
             });
         });
     }
 
+    // =========================
+    // LOGIN (FIXATO)
+    // =========================
     const formLog = document.getElementById("formLogin");
 
     if (formLog) {
@@ -55,13 +57,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 method: 'POST',
                 body: dati
             })
-            .then(res => {
-                if (!res.ok) throw new Error('Errore');
-                return res.json();
-            })
+            .then(res => res.json())
             .then(data => {
-
-                console.log("LOGIN RESPONSE:", data); // 🔍 debug utile
 
                 if (data.status == 'success') {
 
@@ -73,7 +70,12 @@ document.addEventListener('DOMContentLoaded', function () {
                         showConfirmButton: false
                     }).then(() => {
 
+                      console.log("LOGIN RESPONSE:", data);
+
                         localStorage.setItem("tipoUtente", data.tipo);
+                        localStorage.setItem("idUtente", data.email);
+
+                        console.log("ID UTENTE SALVATO:", data.id);
 
                         if (data.tipo === "gestore") {
                             window.location.href = "pagina_campi_gestore.html";
@@ -87,8 +89,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     Swal.fire({
                         title: 'Errore',
                         text: data.message,
-                        icon: 'error',
-                        confirmButtonText: 'Riprova'
+                        icon: 'error'
                     });
                 }
             })
@@ -102,6 +103,88 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         });
     }
+// =========================
+// REGISTRAZIONE CAMPO
+// =========================
+const formCampo = document.getElementById("formCampo");
+
+let orariSelezionati = [];
+
+// toggle orari
+window.toggleOrario = function (btn) {
+
+    btn.classList.toggle("active");
+
+    const valore = btn.innerText;
+
+    if (orariSelezionati.includes(valore)) {
+        orariSelezionati = orariSelezionati.filter(o => o !== valore);
+    } else {
+        orariSelezionati.push(valore);
+    }
+
+    console.log("Orari selezionati:", orariSelezionati);
+};
+
+// submit campo
+if (formCampo) {
+
+    formCampo.addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        const payload = {
+            nome: document.getElementById("nome").value,
+            indirizzo: document.getElementById("indirizzo").value,
+            citta: document.getElementById("citta").value,
+            prezzo: document.getElementById("prezzo").value,
+            fk_gestore: localStorage.getItem("idUtente"),
+            orari: orariSelezionati
+        };
+
+        console.log("INVIO CAMPO:", payload);
+
+        fetch("/GoalToGo/api/api_registrazione_campo.php", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(payload)
+        })
+        .then(res => res.json())
+        .then(data => {
+
+            if (data.status === "success") {
+
+                Swal.fire({
+                    title: "Campo creato!",
+                    text: "Registrazione completata con successo",
+                    icon: "success",
+                    timer: 2000,
+                    showConfirmButton: false
+                }).then(() => {
+                    window.location.href = "pagina_campi_gestore.html";
+                });
+
+            } else {
+                Swal.fire({
+                    title: "Errore",
+                    text: data.message,
+                    icon: "error"
+                });
+            }
+
+        })
+        .catch(err => {
+            console.error(err);
+            Swal.fire({
+                title: "Errore",
+                text: "Errore di comunicazione col server",
+                icon: "error"
+            });
+        });
+
+    });
+}
 });
 
 function handleClick(action, element = null) {
