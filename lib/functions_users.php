@@ -9,7 +9,6 @@ function registraGiocatore($conn, $nickname, $email, $password)   //funzione per
     }
 function getUtenteByEmail($conn, $email)
 {
-    // 🔍 CERCA IN GIOCATORE
     $sql1 = "SELECT NICKNAME, EMAIL, PWD FROM GIOCATORE WHERE EMAIL = ?";
     $stmt1 = mysqli_prepare($conn, $sql1);
     mysqli_stmt_bind_param($stmt1, "s", $email);
@@ -17,11 +16,10 @@ function getUtenteByEmail($conn, $email)
     $result1 = mysqli_stmt_get_result($stmt1);
 
     if ($row = mysqli_fetch_assoc($result1)) {
-        $row['TIPO'] = 'giocatore'; // 🔥 aggiungiamo il tipo
+        $row['TIPO'] = 'giocatore';
         return $row;
     }
 
-    // 🔍 CERCA IN GESTORE
     $sql2 = "SELECT NOME_CENTRO, EMAIL, PWD FROM GESTORE WHERE EMAIL = ?";
     $stmt2 = mysqli_prepare($conn, $sql2);
     mysqli_stmt_bind_param($stmt2, "s", $email);
@@ -29,11 +27,10 @@ function getUtenteByEmail($conn, $email)
     $result2 = mysqli_stmt_get_result($stmt2);
 
     if ($row = mysqli_fetch_assoc($result2)) {
-        $row['TIPO'] = 'gestore'; // 🔥 aggiungiamo il tipo
+        $row['TIPO'] = 'gestore';
         return $row;
     }
 
-    // ❌ non trovato
     return null;
 }
 function getPartitaByName($conn, $nome)
