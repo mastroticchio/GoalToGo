@@ -1,1 +1,0 @@
-{"nome":"Campo Prato Falcone","indirizzo":"Via Alfredo Serranti 13","citta":"Roma","prezzo":"50","fk_gestore":"marta.nicolettialtimari@gmail.com","orari":"[\"09:00-10:00\",\"10:00-11:00\"]"}
