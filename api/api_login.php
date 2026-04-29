@@ -17,33 +17,36 @@ if (empty($email) || empty($password)) {
 
 $res = getUtenteByEmail($conn, $email);
 
-if ($res)
-{
-    if (password_verify($password, $res['PWD']))
-    {
+if ($res) {
+
+    if (password_verify($password, $res['PWD'])) {
+
+        // nome da mostrare
         if ($res['TIPO'] === 'gestore') {
             $nome = $res['NOME_CENTRO'];
         } else {
             $nome = $res['NICKNAME'];
         }
 
+        // 🔥 FIX: aggiunto ID
         echo json_encode([
             "status" => "success",
             "message" => "Login effettuato",
             "tipo" => $res['TIPO'],
-            "user" => ["nickname" => $nome]
+            "email" => $res['EMAIL'],
+            "user" => [
+                "nickname" => $nome
+            ]
         ]);
-    }
-    else
-    {
+
+    } else {
         echo json_encode([
             "status" => "error",
             "message" => "Password errata"
         ]);
     }
-}
-else
-{
+
+} else {
     echo json_encode([
         "status" => "error",
         "message" => "Email non trovata"

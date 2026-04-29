@@ -9,7 +9,8 @@ function registraGiocatore($conn, $nickname, $email, $password)   //funzione per
     }
 function getUtenteByEmail($conn, $email)
 {
-    $sql1 = "SELECT NICKNAME, EMAIL, PWD FROM GIOCATORE WHERE EMAIL = ?";
+    // GIOCATORE
+    $sql1 = "SELECT ID, NICKNAME, EMAIL, PWD FROM GIOCATORE WHERE EMAIL = ?";
     $stmt1 = mysqli_prepare($conn, $sql1);
     mysqli_stmt_bind_param($stmt1, "s", $email);
     mysqli_stmt_execute($stmt1);
@@ -20,7 +21,8 @@ function getUtenteByEmail($conn, $email)
         return $row;
     }
 
-    $sql2 = "SELECT NOME_CENTRO, EMAIL, PWD FROM GESTORE WHERE EMAIL = ?";
+    // GESTORE
+    $sql2 = "SELECT ID, NOME_CENTRO, EMAIL, PWD FROM GESTORE WHERE EMAIL = ?";
     $stmt2 = mysqli_prepare($conn, $sql2);
     mysqli_stmt_bind_param($stmt2, "s", $email);
     mysqli_stmt_execute($stmt2);
@@ -61,6 +63,56 @@ function registraGestore($conn, $nome_centro, $email, $password)
     $stmt = mysqli_prepare($conn, $sql);
 
     mysqli_stmt_bind_param($stmt, "sss", $nome_centro, $email, $passwordSafe);
+
+    return mysqli_stmt_execute($stmt);
+    }
+function registraCampo($conn, $nome, $indirizzo, $citta, $prezzo, $fk_gestore, $orari)
+    {
+    $sql = "INSERT INTO CAMPO (NOME, INDIRIZZO, CITTA, PREZZO, FK_GESTORE)
+            VALUES (?, ?, ?, ?, ?)";
+
+    $stmt = mysqli_prepare($conn, $sql);
+
+    mysqli_stmt_bind_param($stmt, "sssdi",
+        $nome,
+        $indirizzo,
+        $citta,
+        $prezzo,
+        $fk_gestore
+    );
+
+    $ok = mysqli_stmt_execute($stmt);
+
+    if (!$ok) {
+        return false;
+    }
+
+    $campo_id = mysqli_insert_id($conn);
+
+    if (!$orari || !is_array($orari)) {
+        return $campo_id;
+    }
+
+    foreach ($orari as $fascia) {
+        inserisciOrarioCampo($conn, $campo_id, $fascia);
+    }
+
+    return $campo_id;
+    }
+function inserisciOrarioCampo($conn, $campo_id, $fascia)
+    {
+    $parts = explode("-", $fascia);
+
+    if (count($parts) != 2) return false;
+
+    $start = trim($parts[0]);
+    $end = trim($parts[1]);
+
+    $sql = "INSERT INTO CAMPO_ORARI (CAMPO_ID, ORARIO_INIZIO, ORARIO_FINE)
+            VALUES (?, ?, ?)";
+
+    $stmt = mysqli_prepare($conn, $sql);
+    mysqli_stmt_bind_param($stmt, "iss", $campo_id, $start, $end);
 
     return mysqli_stmt_execute($stmt);
     }
