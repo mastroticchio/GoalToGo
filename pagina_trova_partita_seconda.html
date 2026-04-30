@@ -26,29 +26,37 @@
       </h3>
 
       <div class="campo-right">
-        <strong>7/10</strong>
+        <strong><span id="count-player" class="text-white"></span>/10</strong>
       </div>
     </div>
+    <script>
+      const count = localStorage.getItem("count-player");
+
+    if (count !== null) {
+      document.getElementById("count-player").textContent = count;
+    }
+    </script>
 
     <div class="campo">
       <img src="campo-alto.jpg" alt="campo da calcio">
 
-      <div class="player p1" onclick="handleClick('pagamento-trova-partita')">+</div>
-      <div class="player p2" onclick="handleClick('pagamento-trova-partita')">+</div>
-      <div class="player p3" onclick="handleClick('pagamento-trova-partita')">+</div>
-      <div class="player p4" onclick="handleClick('pagamento-trova-partita')">+</div>
-      <div class="player p5" onclick="handleClick('pagamento-trova-partita')">+</div>
-      <div class="player p6" onclick="handleClick('pagamento-trova-partita')">+</div>
-      <div class="player p7" onclick="handleClick('pagamento-trova-partita')">+</div>
-      <div class="player p8" onclick="handleClick('pagamento-trova-partita')">+</div>
-      <div class="player p9" onclick="handleClick('pagamento-trova-partita')">+</div>
-      <div class="player p10" onclick="handleClick('pagamento-trova-partita')">+</div>
+      <div class="player p1" onclick="handleClick('pagamento-trova-partita-2')">+</div>
+      <div class="player p2" onclick="handleClick('pagamento-trova-partita-2')">+</div>
+      <div class="player p3" onclick="handleClick('pagamento-trova-partita-2')">+</div>
+      <div class="player p4" onclick="handleClick('pagamento-trova-partita-2')">+</div>
+      <div class="player p5" onclick="handleClick('pagamento-trova-partita-2')">+</div>
+      <div class="player p6" onclick="handleClick('pagamento-trova-partita-2')">+</div>
+      <div class="player p7" onclick="handleClick('pagamento-trova-partita-2')">+</div>
+      <div class="player p8" onclick="handleClick('pagamento-trova-partita-2')">+</div>
+      <div class="player p9" onclick="handleClick('pagamento-trova-partita-2')">+</div>
+      <div class="player p10" onclick="handleClick('pagamento-trova-partita-2')">+</div>
     </div>
 
     <div class="campo-info">
+      <p><strong>Campo :</strong> Balduina Sporting Club</p>
       <p><strong>Indirizzo :</strong> Via del mare 104, Marino</p>
       <p><strong>Orario :</strong> 19:00-20:30</p>
-      <p><strong>Prezzo :</strong> 5$</p>
+      <p><strong>Prezzo :</strong><span id="price">5</span>$</p>
     </div>
 
   </div>

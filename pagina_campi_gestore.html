@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>Goal To Go - I miei campi</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <div class="header">
+    <h1>GOAL &nbsp; TO &nbsp; GO</h1>
+    <div class="header-right">
+      <button class="home-btn" onclick="location.href='home_page.html'">
+        🏠 HOME
+      </button>
+      <div class="profile-icon"></div>
+    </div>
+  </div>
+
+  <div class="container container--center">
+
+    <div class="miei-campi-top">
+      <div>
+        <h2>I miei campi</h2>
+        <p class="data-oggi" id="data-oggi"></p>
+      </div>
+      <button class="aggiungi-campo-btn" onclick="location.href='pagina_registrazione_campo.html'">+ Aggiungi campo</button>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-number">3</div>
+        <div class="stat-label">CAMPI</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">7/12</div>
+        <div class="stat-label">SLOT OGGI</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">3</div>
+        <div class="stat-label">IN ATTESA</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">400</div>
+        <div class="stat-label">INCASSI OGGI</div>
+      </div>
+    </div>
+
+    <h3 class="sezione-titolo">STATO CAMPI IN TEMPO REALE</h3>
+
+    <div class="campo-card">
+      <div class="campo-card-header">
+        <div class="campo-icon">⚽</div>
+        <span class="campo-nome">Campo prato Falcone</span>
+      </div>
+      <div class="fasce-label">FASCE ORARIE OGGI</div>
+      <div class="legenda">
+        <span class="legenda-item"><span class="dot dot--grigio"></span> Disponibile</span>
+        <span class="legenda-item"><span class="dot dot--rosso"></span> Non disponibile</span>
+        <span class="legenda-item"><span class="dot dot--verde"></span> Non disponibile</span>
+      </div>
+      <div class="fasce-orarie">
+        <button class="fascia-btn fascia--verde">9-10</button>
+        <button class="fascia-btn fascia--grigio">10-11</button>
+        <button class="fascia-btn fascia--verde">11-12</button>
+        <button class="fascia-btn fascia--rosso">12-13</button>
+        <button class="fascia-btn fascia--grigio">13-14</button>
+        <button class="fascia-btn fascia--grigio">14-15</button>
+        <button class="fascia-btn fascia--grigio">15-16</button>
+        <button class="fascia-btn fascia--grigio">16-17</button>
+      </div>
+    </div>
+
+    <div class="campo-card">
+      <div class="campo-card-header">
+        <div class="campo-icon">⚽</div>
+        <span class="campo-nome">Campo prato Falcone</span>
+      </div>
+      <div class="fasce-label">FASCE ORARIE OGGI</div>
+      <div class="fasce-orarie">
+        <button class="fascia-btn fascia--verde">9-10</button>
+        <button class="fascia-btn fascia--grigio">10-11</button>
+        <button class="fascia-btn fascia--verde">11-12</button>
+        <button class="fascia-btn fascia--rosso">12-13</button>
+        <button class="fascia-btn fascia--grigio">13-14</button>
+        <button class="fascia-btn fascia--grigio">14-15</button>
+        <button class="fascia-btn fascia--grigio">15-16</button>
+        <button class="fascia-btn fascia--grigio">16-17</button>
+    </div>
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

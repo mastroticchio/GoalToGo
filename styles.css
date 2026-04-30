@@ -8,7 +8,7 @@
 body {
   background-color: black;
   padding: 20px;
-  /*overflow: hidden;*/
+  
 }
 
 .header {
@@ -94,7 +94,7 @@ body {
   margin-bottom: 5px;
 }
 
-.card span {
+.card span:not(.titolo) {
   font-size: 12px;
   color: #666;
 }
@@ -316,6 +316,8 @@ body {
 
 .create-btn {
   white-space: nowrap;
+  background: #CEFF00 !important;
+  color: black !important;
 }
 
 .text-white {
@@ -372,22 +374,22 @@ body {
 }
 
 .p6 {
-  top: 60%;
-  left: 60%;
+  top: 40%;
+  left: 55%;
   transition: transform 0.2s;
 }
 .p7 {
-  top: 30%;
-  left: 60%;
+  top: 20%;
+  left: 65%;
   transition: transform 0.2s;
 }
 .p8 {
   top: 60%;
-  left: 75%;
+  left: 65%;
   transition: transform 0.2s;
 }
 .p9 {
-  top: 30%;
+  top: 40%;
   left: 75%;
   transition: transform 0.2s;
 }
@@ -681,4 +683,599 @@ body {
 
 .home-btn:hover {
   transform: scale(1.05);
+}
+
+.input--large {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.prezzo-container {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.input--prezzo {
+  width: 120px;
+  text-align: center;
+  margin: 10px 0;
+}
+
+.prezzo-label {
+  font-size: 16px;
+  color: white;
+}
+
+.giorni {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+.giorno-btn {
+  padding: 8px 14px;
+  border-radius: 20px;
+  border: 2px solid #505050;
+  background: #505050;
+  color: white;
+  cursor: pointer;
+  font-weight: bold;
+  transition: transform 0.2s;
+}
+
+.giorno-btn.active {
+  border: 2px solid #ceff00;
+  color: #ceff00;
+}
+
+.upload-box--large {
+  width: 100%;
+  height: 120px;
+  border: 2px dashed #666;
+  background: #3a3a3a;
+  border-radius: 15px;
+  font-size: 36px;
+  color: white;
+  margin: 10px 0 25px;
+}
+
+.orari {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin: 10px 0 30px;
+}
+
+.orario-btn {
+  padding: 8px 14px;
+  border-radius: 20px;
+  border: 2px solid #505050;
+  background: #505050;
+  color: white;
+  cursor: pointer;
+  font-size: 13px;
+  transition: transform 0.2s;
+}
+
+.orario-btn.active {
+  border: 2px solid #ceff00;
+  color: #ceff00;
+}
+
+.miei-campi-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.miei-campi-top h2 {
+  font-size: 24px;
+  margin-bottom: 5px;
+}
+
+.data-oggi {
+  font-size: 13px;
+  color: #aaa;
+}
+
+.aggiungi-campo-btn {
+  background: transparent;
+  color: white;
+  border: 2px solid white;
+  padding: 10px 20px;
+  border-radius: 10px;
+  font-size: 15px;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.aggiungi-campo-btn:hover {
+  transform: scale(1.05);
+}
+
+.stats-grid {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 30px;
+  flex-wrap: wrap;
+}
+
+.stat-card {
+  flex: 1;
+  min-width: 120px;
+  border: 2px solid #ceff00;
+  border-radius: 15px;
+  padding: 20px;
+  text-align: center;
+}
+
+.stat-number {
+  font-size: 32px;
+  font-weight: bold;
+  color: #ceff00;
+}
+
+.stat-label {
+  font-size: 12px;
+  color: #aaa;
+  margin-top: 5px;
+  letter-spacing: 1px;
+}
+
+.sezione-titolo {
+  font-size: 13px;
+  letter-spacing: 2px;
+  color: #aaa;
+  margin-bottom: 15px;
+}
+
+.campo-card {
+  border: 2px solid #ceff00;
+  border-radius: 15px;
+  padding: 20px;
+  margin-bottom: 15px;
+  background: #1a1a1a;
+}
+
+.campo-card-header {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 15px;
+}
+
+.campo-icon {
+  width: 45px;
+  height: 45px;
+  background: #505050;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+}
+
+.campo-nome {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.fasce-label {
+  font-size: 11px;
+  letter-spacing: 2px;
+  color: #aaa;
+  margin-bottom: 10px;
+}
+
+.legenda {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 12px;
+}
+
+.legenda-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  color: #aaa;
+}
+
+.dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.dot--grigio { background: #888; }
+.dot--rosso  { background: #e53935; }
+.dot--verde  { background: #ceff00; }
+
+.fasce-orarie {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.fascia-btn {
+  padding: 8px 14px;
+  border-radius: 20px;
+  border: none;
+  font-weight: bold;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.fascia--verde { background: #ceff00; color: black; }
+.fascia--rosso { background: #e53935; color: white; }
+.fascia--grigio { background: #505050; color: white; }
+
+.club-banner {
+  background: #3a3a3a;
+  border-radius: 0;
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 0;
+  border-bottom: 1px solid #555;
+  border-radius: 15px;
+}
+
+.club-logo-placeholder {
+  width: 44px;
+  height: 44px;
+  background: #ceff00;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+}
+
+.container--club {
+  padding-top: 20px;
+}
+.club-banner-nome {
+  flex: 1;
+  font-size: 18px;
+  font-weight: bold;
+  color: white;
+  letter-spacing: 1px;
+  border-radius: 15px;
+}
+
+.club-banner-info {
+  display: flex;
+  gap: 14px;
+  margin-top: 4px;
+  font-size: 12px;
+  color: #aaa;
+  flex-direction: row;
+}
+
+.club-banner-rating {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: #aaa;
+  font-size: 12px;
+}
+
+.club-banner-rating::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #ceff00;
+  display: inline-block;
+}
+
+.club-banner-membri {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: #aaa;
+  font-size: 12px;
+}
+
+.club-banner-membri::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #888;
+  display: inline-block;
+}
+
+.giocatori-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-width: 800px;
+  padding: 16px 0;
+}
+
+.giocatore-row {
+  background: #505050;
+  border-radius: 10px;
+  padding: 6px 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.giocatore-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #ceff00;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: bold;
+  color: black;
+  flex-shrink: 0;
+}
+
+.giocatore-nome {
+  flex: 1;
+  color: white;
+  font-size: 13px;
+  font-weight: bold;
+}
+
+.giocatore-stelle {
+  color: #ceff00;
+  font-size: 14px;
+  letter-spacing: 1px;
+}
+
+.giocatore-badge-cap {
+  color: #ceff00;
+  font-size: 16px;
+}
+
+.ruolo--att { color: #e53935; border: 1px solid #e53935; padding: 3px 10px; border-radius: 6px; font-size: 12px; font-weight: bold; }
+.ruolo--cen { color: #4caf50; border: 1px solid #4caf50; padding: 3px 10px; border-radius: 6px; font-size: 12px; font-weight: bold; }
+.ruolo--def { color: #2196f3; border: 1px solid #2196f3; padding: 3px 10px; border-radius: 6px; font-size: 12px; font-weight: bold; }
+.ruolo--por { color: #ff9800; border: 1px solid #ff9800; padding: 3px 10px; border-radius: 6px; font-size: 12px; font-weight: bold; }
+
+.club-footer-btns {
+  display: flex;
+  gap: 12px;
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid #444;
+}
+
+.btn-accetta {
+  flex: 1;
+  background: #ceff00;
+  color: black;
+  border: none;
+  padding: 16px;
+  border-radius: 30px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.btn-accetta:hover { transform: scale(1.03); }
+
+.btn-proponi {
+  flex: 1;
+  background: transparent;
+  color: white;
+  border: 2px solid white;
+  padding: 16px;
+  border-radius: 30px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.btn-proponi:hover { transform: scale(1.03); }
+
+
+.lega-layout {
+  display: flex;
+  gap: 0;
+  margin-top: 0;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #3a3a3a;
+}
+
+.lega-main {
+  flex: 1;
+  padding: 16px 20px;
+  border-right: 1px solid #444;
+  min-height: 450px;
+  background: #3a3a3a;
+}
+
+.lega-sidebar {
+  width: 200px;
+  padding: 16px;
+  flex-shrink: 0;
+  background: #3a3a3a;
+}
+.data-label {
+  text-align: center;
+  font-size: 11px;
+  color: #aaa;
+  letter-spacing: 2px;
+  margin-bottom: 10px;
+}
+
+.evento-pill {
+  background: #505050;
+  border-radius: 20px;
+  padding: 6px 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: #ceff00;
+  margin: 0 auto 16px;
+  display: flex;
+  width: fit-content;
+}
+
+.proposte-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.proposta-row {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+.proposta-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #ceff00;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 13px;
+  color: black;
+  flex-shrink: 0;
+}
+
+.proposta-body { flex: 1; }
+
+.proposta-nome {
+  color: white;
+  font-size: 13px;
+  font-weight: bold;
+  margin-bottom: 6px;
+}
+
+.proposta-card {
+  background: #505050;
+  border-radius: 10px;
+  padding: 12px 14px;
+}
+
+.proposta-card-title {
+  color: white;
+  font-size: 13px;
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+
+.proposta-card-campo {
+  color: #aaa;
+  font-size: 11px;
+  letter-spacing: 1px;
+  margin-bottom: 2px;
+  text-transform: uppercase;
+}
+
+.proposta-card-ora {
+  color: #aaa;
+  font-size: 11px;
+  margin-bottom: 8px;
+}
+
+.proposta-progress-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.prog-label {
+  color: #ceff00;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.prog-bar {
+  flex: 1;
+  height: 10px;
+  background: #777;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.prog-fill {
+  height: 100%;
+  background: #ceff00;
+  border-radius: 10px;
+  transition: width 0.3s;
+}
+
+.proposta-btns {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-accetta-proposta {
+  background: #ceff00;
+  color: black;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.btn-accetta-proposta:hover { transform: scale(1.05); }
+
+.btn-rifiuta-proposta {
+  background: transparent;
+  color: #e53935;
+  border: 1px solid #e53935;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.btn-rifiuta-proposta:hover { transform: scale(1.05); }
+
+.sb-section { margin-bottom: 16px; }
+.sb-label { font-size: 11px; color: #aaa; letter-spacing: 1px; margin-bottom: 10px; }
+.sb-user { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+.sb-avatar-green { width: 30px; height: 30px; border-radius: 50%; background: #ceff00; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 12px; color: black; flex-shrink: 0; }
+.sb-avatar-gray { width: 30px; height: 30px; border-radius: 50%; background: #888; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 12px; color: white; flex-shrink: 0; }
+.sb-nome { color: white; font-size: 13px; font-weight: bold; }
+
+.modale-overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.7);
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modale-box {
+  background: #2a2a2a;
+  border: 2px solid #ceff00;
+  border-radius: 20px;
+  padding: 30px;
+  width: 90%;
+  max-width: 400px;
 }
