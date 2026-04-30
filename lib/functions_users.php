@@ -116,4 +116,29 @@ function inserisciOrarioCampo($conn, $campo_id, $fascia)
 
     return mysqli_stmt_execute($stmt);
     }
+function getCampiByGestore($conn, $email)
+    {
+    $sql = "SELECT ID, NOME, INDIRIZZO, CITTA, PREZZO 
+            FROM CAMPO 
+            WHERE FK_GESTORE = ?";
+
+    $stmt = mysqli_prepare($conn, $sql);
+
+    if (!$stmt) {
+        return false;
+    }
+
+    mysqli_stmt_bind_param($stmt, "s", $email);
+    mysqli_stmt_execute($stmt);
+
+    $result = mysqli_stmt_get_result($stmt);
+
+    $campi = [];
+
+    while ($row = mysqli_fetch_assoc($result)) {
+        $campi[] = $row;
+    }
+
+    return $campi;
+    }
 ?>

@@ -1,8 +1,5 @@
 document.addEventListener('DOMContentLoaded', function () {
 
-    // =========================
-    // REGISTRAZIONE UTENTI
-    // =========================
     const formReg = document.getElementById('formRegistrazione');
 
     if (formReg) {
@@ -42,9 +39,6 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // =========================
-    // LOGIN (FIXATO)
-    // =========================
     const formLog = document.getElementById("formLogin");
 
     if (formLog) {
@@ -73,9 +67,8 @@ document.addEventListener('DOMContentLoaded', function () {
                       console.log("LOGIN RESPONSE:", data);
 
                         localStorage.setItem("tipoUtente", data.tipo);
-                        localStorage.setItem("idUtente", data.email);
+                        localStorage.setItem("idUtente", data.id);
 
-                        console.log("ID UTENTE SALVATO:", data.id);
 
                         if (data.tipo === "gestore") {
                             window.location.href = "pagina_campi_gestore.html";
@@ -103,14 +96,11 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         });
     }
-// =========================
-// REGISTRAZIONE CAMPO
-// =========================
+
 const formCampo = document.getElementById("formCampo");
 
 let orariSelezionati = [];
 
-// toggle orari
 window.toggleOrario = function (btn) {
 
     btn.classList.toggle("active");
@@ -126,7 +116,6 @@ window.toggleOrario = function (btn) {
     console.log("Orari selezionati:", orariSelezionati);
 };
 
-// submit campo
 if (formCampo) {
 
     formCampo.addEventListener('submit', function (e) {
@@ -183,6 +172,81 @@ if (formCampo) {
             });
         });
 
+    });
+}
+// =========================
+// CARICAMENTO CAMPI GESTORE
+// =========================
+
+const listaCampiContainer = document.getElementById("listaCampi");
+
+if (listaCampiContainer) {
+
+    const utenteId = localStorage.getItem("idUtente");
+
+    console.log("ID RECUPERATO:", utenteId);
+
+    if (!email) {
+        console.error("Utente non loggato");
+        return;
+    }
+
+    const dati = new FormData();
+    dati.append("email", email);
+
+    fetch("/GoalToGo/api/api_get_campi.php", {
+        method: "POST",
+        body: dati
+    })
+    .then(res => res.json())
+    .then(data => {
+
+        console.log("CAMPI RICEVUTI:", data);
+
+        if (data.status === "success") {
+
+            const campi = data.campi;
+
+            // se non ci sono campi
+            if (campi.length === 0) {
+                listaCampiContainer.innerHTML = "<p>Nessun campo registrato</p>";
+                return;
+            }
+
+            // svuota container
+            listaCampiContainer.innerHTML = "";
+
+            // loop campi
+            campi.forEach(campo => {
+
+                const card = `
+                    <div class="campo-card">
+                        <div class="campo-card-header">
+                            <div class="campo-icon">⚽</div>
+                            <span class="campo-nome">${campo.NOME}</span>
+                        </div>
+
+                        <div class="fasce-label">FASCE ORARIE OGGI</div>
+
+                        <div class="fasce-orarie">
+                            <!-- placeholder per ora -->
+                            <button class="fascia-btn fascia--grigio">9-10</button>
+                            <button class="fascia-btn fascia--grigio">10-11</button>
+                            <button class="fascia-btn fascia--grigio">11-12</button>
+                        </div>
+                    </div>
+                `;
+
+                listaCampiContainer.innerHTML += card;
+            });
+
+        } else {
+            console.error("Errore:", data.message);
+        }
+
+    })
+    .catch(err => {
+        console.error("Errore fetch campi:", err);
     });
 }
 });

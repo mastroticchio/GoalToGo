@@ -21,19 +21,17 @@ if ($res) {
 
     if (password_verify($password, $res['PWD'])) {
 
-        // nome da mostrare
         if ($res['TIPO'] === 'gestore') {
             $nome = $res['NOME_CENTRO'];
         } else {
             $nome = $res['NICKNAME'];
         }
 
-        // 🔥 FIX: aggiunto ID
         echo json_encode([
             "status" => "success",
             "message" => "Login effettuato",
             "tipo" => $res['TIPO'],
-            "email" => $res['ID'],
+            "id" => $res['ID'],
             "user" => [
                 "nickname" => $nome
             ]
