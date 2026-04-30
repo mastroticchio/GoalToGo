@@ -116,7 +116,7 @@ function inserisciOrarioCampo($conn, $campo_id, $fascia)
 
     return mysqli_stmt_execute($stmt);
     }
-function getCampiByGestore($conn, $email)
+function getCampiByGestore($conn, $id)
     {
     $sql = "SELECT ID, NOME, INDIRIZZO, CITTA, PREZZO 
             FROM CAMPO 
@@ -128,7 +128,7 @@ function getCampiByGestore($conn, $email)
         return false;
     }
 
-    mysqli_stmt_bind_param($stmt, "s", $email);
+    mysqli_stmt_bind_param($stmt, "s", $id);
     mysqli_stmt_execute($stmt);
 
     $result = mysqli_stmt_get_result($stmt);

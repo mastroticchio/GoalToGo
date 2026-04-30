@@ -7,15 +7,15 @@ header('Content-Type: application/json');
 // =========================
 // 1. PRENDO EMAIL
 // =========================
-$email = $_POST['email'] ?? '';
+$id = $_POST['id'] ?? '';
 
 // =========================
 // 2. VALIDAZIONE
 // =========================
-if (empty($email)) {
+if (empty($id)) {
     echo json_encode([
         "status" => "error",
-        "message" => "Email mancante"
+        "message" => "id mancante"
     ]);
     exit;
 }
@@ -23,7 +23,7 @@ if (empty($email)) {
 // =========================
 // 3. CHIAMATA FUNZIONE
 // =========================
-$campi = getCampiByGestore($conn, $email);
+$campi = getCampiByGestore($conn, $id);
 
 if ($campi === false) {
     echo json_encode([

@@ -186,13 +186,13 @@ if (listaCampiContainer) {
 
     console.log("ID RECUPERATO:", utenteId);
 
-    if (!email) {
+    if (!utenteId) {
         console.error("Utente non loggato");
         return;
     }
 
     const dati = new FormData();
-    dati.append("email", email);
+    dati.append("id", utenteId);
 
     fetch("/GoalToGo/api/api_get_campi.php", {
         method: "POST",
