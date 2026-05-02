@@ -203,22 +203,36 @@ if (listaCampiContainer) {
 
             const campi = data.campi;
 
-            // nessun campo
+            const numCampiEl = document.getElementById("numCampi");
+            if (numCampiEl) {
+              numCampiEl.innerText = campi.length;
+            }
+
+            let totaleSlot = 0;
+
+            campi.forEach(campo => {
+              if (campo.orari && Array.isArray(campo.orari)) {
+                totaleSlot += campo.orari.length;
+              }
+            });
+
+            const numSlotEl = document.getElementById("numSlot");
+              if (numSlotEl) {
+                numSlotEl.innerText = totaleSlot;
+              }
+
             if (!campi || campi.length === 0) {
                 listaCampiContainer.innerHTML = "<p>Nessun campo registrato</p>";
                 return;
             }
 
-            // pulisco container
             listaCampiContainer.innerHTML = "";
 
-            // loop campi
             campi.forEach(campo => {
 
                 const cardDiv = document.createElement("div");
                 cardDiv.className = "campo-card";
 
-                // 🔥 COSTRUZIONE ORARI (già dentro campo.orari)
                 let orariHTML = "";
 
                 if (!campo.orari || campo.orari.length === 0) {
@@ -240,7 +254,6 @@ if (listaCampiContainer) {
                     });
                 }
 
-                // HTML card finale
                 cardDiv.innerHTML = `
                     <div class="campo-card-header">
                         <div class="campo-icon">⚽</div>
