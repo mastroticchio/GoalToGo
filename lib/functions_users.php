@@ -128,7 +128,7 @@ function getCampiByGestore($conn, $id)
         return false;
     }
 
-    mysqli_stmt_bind_param($stmt, "s", $id);
+    mysqli_stmt_bind_param($stmt, "i", $id);
     mysqli_stmt_execute($stmt);
 
     $result = mysqli_stmt_get_result($stmt);
@@ -136,9 +136,35 @@ function getCampiByGestore($conn, $id)
     $campi = [];
 
     while ($row = mysqli_fetch_assoc($result)) {
+
+        $row['orari'] = getOrariByCampoId($conn, $row['ID']);
+
         $campi[] = $row;
     }
 
     return $campi;
+}
+function getOrariByCampoId($conn, $campo_id)
+    {
+    $sql = "SELECT ORARIO_INIZIO, ORARIO_FINE 
+            FROM CAMPO_ORARI 
+            WHERE CAMPO_ID = ?";
+
+    $stmt = mysqli_prepare($conn, $sql);
+    mysqli_stmt_bind_param($stmt, "i", $campo_id);
+    mysqli_stmt_execute($stmt);
+
+    $result = mysqli_stmt_get_result($stmt);
+
+    $orari = [];
+
+    while ($row = mysqli_fetch_assoc($result)) {
+        $orari[] = [
+            "inizio" => $row['ORARIO_INIZIO'],
+            "fine" => $row['ORARIO_FINE']
+        ];
+    }
+
+    return $orari;
     }
 ?>

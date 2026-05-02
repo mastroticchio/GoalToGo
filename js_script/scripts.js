@@ -174,10 +174,6 @@ if (formCampo) {
 
     });
 }
-// =========================
-// CARICAMENTO CAMPI GESTORE
-// =========================
-
 const listaCampiContainer = document.getElementById("listaCampi");
 
 if (listaCampiContainer) {
@@ -207,49 +203,71 @@ if (listaCampiContainer) {
 
             const campi = data.campi;
 
-            // se non ci sono campi
-            if (campi.length === 0) {
+            // nessun campo
+            if (!campi || campi.length === 0) {
                 listaCampiContainer.innerHTML = "<p>Nessun campo registrato</p>";
                 return;
             }
 
-            // svuota container
+            // pulisco container
             listaCampiContainer.innerHTML = "";
 
             // loop campi
             campi.forEach(campo => {
 
-                const card = `
-                    <div class="campo-card">
-                        <div class="campo-card-header">
-                            <div class="campo-icon">⚽</div>
-                            <span class="campo-nome">${campo.NOME}</span>
-                        </div>
+                const cardDiv = document.createElement("div");
+                cardDiv.className = "campo-card";
 
-                        <div class="fasce-label">FASCE ORARIE OGGI</div>
+                // 🔥 COSTRUZIONE ORARI (già dentro campo.orari)
+                let orariHTML = "";
 
-                        <div class="fasce-orarie">
-                            <!-- placeholder per ora -->
-                            <button class="fascia-btn fascia--grigio">9-10</button>
-                            <button class="fascia-btn fascia--grigio">10-11</button>
-                            <button class="fascia-btn fascia--grigio">11-12</button>
-                        </div>
+                if (!campo.orari || campo.orari.length === 0) {
+
+                    orariHTML = "<p>Nessun orario disponibile</p>";
+
+                } else {
+
+                    campo.orari.forEach(orario => {
+
+                        const inizio = orario.inizio.slice(0,5);
+                        const fine = orario.fine.slice(0,5);
+
+                        orariHTML += `
+                            <button class="fascia-btn fascia--grigio">
+                                ${inizio}-${fine}
+                            </button>
+                        `;
+                    });
+                }
+
+                // HTML card finale
+                cardDiv.innerHTML = `
+                    <div class="campo-card-header">
+                        <div class="campo-icon">⚽</div>
+                        <span class="campo-nome">${campo.NOME}</span>
+                    </div>
+
+                    <div class="fasce-label">FASCE ORARIE OGGI</div>
+
+                    <div class="fasce-orarie">
+                        ${orariHTML}
                     </div>
                 `;
 
-                listaCampiContainer.innerHTML += card;
+                listaCampiContainer.appendChild(cardDiv);
             });
 
         } else {
             console.error("Errore:", data.message);
+            listaCampiContainer.innerHTML = "<p>Errore nel caricamento dei campi</p>";
         }
 
     })
     .catch(err => {
         console.error("Errore fetch campi:", err);
+        listaCampiContainer.innerHTML = "<p>Errore di comunicazione col server</p>";
     });
-}
-});
+}});
 
 function handleClick(action, element = null) {
   switch (action) {
