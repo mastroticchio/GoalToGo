@@ -116,4 +116,55 @@ function inserisciOrarioCampo($conn, $campo_id, $fascia)
 
     return mysqli_stmt_execute($stmt);
     }
+function getCampiByGestore($conn, $id)
+    {
+    $sql = "SELECT ID, NOME, INDIRIZZO, CITTA, PREZZO 
+            FROM CAMPO 
+            WHERE FK_GESTORE = ?";
+
+    $stmt = mysqli_prepare($conn, $sql);
+
+    if (!$stmt) {
+        return false;
+    }
+
+    mysqli_stmt_bind_param($stmt, "i", $id);
+    mysqli_stmt_execute($stmt);
+
+    $result = mysqli_stmt_get_result($stmt);
+
+    $campi = [];
+
+    while ($row = mysqli_fetch_assoc($result)) {
+
+        $row['orari'] = getOrariByCampoId($conn, $row['ID']);
+
+        $campi[] = $row;
+    }
+
+    return $campi;
+}
+function getOrariByCampoId($conn, $campo_id)
+    {
+    $sql = "SELECT ORARIO_INIZIO, ORARIO_FINE 
+            FROM CAMPO_ORARI 
+            WHERE CAMPO_ID = ?";
+
+    $stmt = mysqli_prepare($conn, $sql);
+    mysqli_stmt_bind_param($stmt, "i", $campo_id);
+    mysqli_stmt_execute($stmt);
+
+    $result = mysqli_stmt_get_result($stmt);
+
+    $orari = [];
+
+    while ($row = mysqli_fetch_assoc($result)) {
+        $orari[] = [
+            "inizio" => $row['ORARIO_INIZIO'],
+            "fine" => $row['ORARIO_FINE']
+        ];
+    }
+
+    return $orari;
+    }
 ?>

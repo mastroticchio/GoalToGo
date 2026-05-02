@@ -1,8 +1,5 @@
 document.addEventListener('DOMContentLoaded', function () {
 
-    // =========================
-    // REGISTRAZIONE UTENTI
-    // =========================
     const formReg = document.getElementById('formRegistrazione');
 
     if (formReg) {
@@ -42,9 +39,6 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // =========================
-    // LOGIN (FIXATO)
-    // =========================
     const formLog = document.getElementById("formLogin");
 
     if (formLog) {
@@ -73,9 +67,8 @@ document.addEventListener('DOMContentLoaded', function () {
                       console.log("LOGIN RESPONSE:", data);
 
                         localStorage.setItem("tipoUtente", data.tipo);
-                        localStorage.setItem("idUtente", data.email);
+                        localStorage.setItem("idUtente", data.id);
 
-                        console.log("ID UTENTE SALVATO:", data.id);
 
                         if (data.tipo === "gestore") {
                             window.location.href = "pagina_campi_gestore.html";
@@ -103,14 +96,11 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         });
     }
-// =========================
-// REGISTRAZIONE CAMPO
-// =========================
+
 const formCampo = document.getElementById("formCampo");
 
 let orariSelezionati = [];
 
-// toggle orari
 window.toggleOrario = function (btn) {
 
     btn.classList.toggle("active");
@@ -126,7 +116,6 @@ window.toggleOrario = function (btn) {
     console.log("Orari selezionati:", orariSelezionati);
 };
 
-// submit campo
 if (formCampo) {
 
     formCampo.addEventListener('submit', function (e) {
@@ -185,7 +174,113 @@ if (formCampo) {
 
     });
 }
-});
+const listaCampiContainer = document.getElementById("listaCampi");
+
+if (listaCampiContainer) {
+
+    const utenteId = localStorage.getItem("idUtente");
+
+    console.log("ID RECUPERATO:", utenteId);
+
+    if (!utenteId) {
+        console.error("Utente non loggato");
+        return;
+    }
+
+    const dati = new FormData();
+    dati.append("id", utenteId);
+
+    fetch("/GoalToGo/api/api_get_campi.php", {
+        method: "POST",
+        body: dati
+    })
+    .then(res => res.json())
+    .then(data => {
+
+        console.log("CAMPI RICEVUTI:", data);
+
+        if (data.status === "success") {
+
+            const campi = data.campi;
+
+            const numCampiEl = document.getElementById("numCampi");
+            if (numCampiEl) {
+              numCampiEl.innerText = campi.length;
+            }
+
+            let totaleSlot = 0;
+
+            campi.forEach(campo => {
+              if (campo.orari && Array.isArray(campo.orari)) {
+                totaleSlot += campo.orari.length;
+              }
+            });
+
+            const numSlotEl = document.getElementById("numSlot");
+              if (numSlotEl) {
+                numSlotEl.innerText = totaleSlot;
+              }
+
+            if (!campi || campi.length === 0) {
+                listaCampiContainer.innerHTML = "<p>Nessun campo registrato</p>";
+                return;
+            }
+
+            listaCampiContainer.innerHTML = "";
+
+            campi.forEach(campo => {
+
+                const cardDiv = document.createElement("div");
+                cardDiv.className = "campo-card";
+
+                let orariHTML = "";
+
+                if (!campo.orari || campo.orari.length === 0) {
+
+                    orariHTML = "<p>Nessun orario disponibile</p>";
+
+                } else {
+
+                    campo.orari.forEach(orario => {
+
+                        const inizio = orario.inizio.slice(0,5);
+                        const fine = orario.fine.slice(0,5);
+
+                        orariHTML += `
+                            <button class="fascia-btn fascia--grigio">
+                                ${inizio}-${fine}
+                            </button>
+                        `;
+                    });
+                }
+
+                cardDiv.innerHTML = `
+                    <div class="campo-card-header">
+                        <div class="campo-icon">⚽</div>
+                        <span class="campo-nome">${campo.NOME}</span>
+                    </div>
+
+                    <div class="fasce-label">FASCE ORARIE OGGI</div>
+
+                    <div class="fasce-orarie">
+                        ${orariHTML}
+                    </div>
+                `;
+
+                listaCampiContainer.appendChild(cardDiv);
+            });
+
+        } else {
+            console.error("Errore:", data.message);
+            listaCampiContainer.innerHTML = "<p>Errore nel caricamento dei campi</p>";
+        }
+
+    })
+    .catch(err => {
+        console.error("Errore fetch campi:", err);
+        listaCampiContainer.innerHTML = "<p>Errore di comunicazione col server</p>";
+    });
+}});
 
 function handleClick(action, element = null) {
   switch (action) {
