@@ -475,3 +475,47 @@ if (dataOggi) {
   const options = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
   dataOggi.textContent = new Date().toLocaleDateString('it-IT', options);
 }
+
+
+
+const formCreaClub = document.getElementById("formCreaClub");
+
+if (formCreaClub) {
+    formCreaClub.addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const payload = {
+            nome: document.getElementById("nomeClub").value,
+            descrizione: document.getElementById("descrizioneClub").value,
+            visibilita: localStorage.getItem("clubVisibility") || "pubblico",
+            n_componenti: parseInt(document.getElementById("club-count").textContent),
+            fk_giocatore: parseInt(localStorage.getItem("idUtente"))
+        };
+
+        fetch("/GoalToGo/api/api_crea_club.php", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload)
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.status === "success") {
+                Swal.fire({
+                    title: "Club creato!",
+                    icon: "success",
+                    timer: 2000,
+                    showConfirmButton: false
+                }).then(() => {
+                    localStorage.setItem("idClub", data.id_club);
+                    window.location.href = "pagina_club.html";
+                });
+            } else {
+                Swal.fire({ title: "Errore", text: data.message, icon: "error" });
+            }
+        })
+        .catch(err => {
+            console.error(err);
+            Swal.fire({ title: "Errore", text: "Errore di comunicazione", icon: "error" });
+        });
+    });
+}
