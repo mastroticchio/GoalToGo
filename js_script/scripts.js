@@ -214,8 +214,6 @@ document.addEventListener('DOMContentLoaded', function () {
                     const cardDiv = document.createElement('div');
                     cardDiv.className = 'campo-card';
 
-                    // dentro il forEach(campo => { ... })
-
 let orariHTML = '';
 
 if (!campo.orari || campo.orari.length === 0) {
@@ -225,7 +223,7 @@ if (!campo.orari || campo.orari.length === 0) {
         const inizio      = orario.inizio.slice(0, 5);
         const fine        = orario.fine.slice(0, 5);
         const disponibile = orario.disponibile == 1;
-        const colore      = disponibile ? 'fascia--verde' : 'fascia--rosso';
+        const colore      = disponibile ? 'fascia--rosso' : 'fascia--verde';
 
         orariHTML += `
             <button class="fascia-btn ${colore}">
