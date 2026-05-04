@@ -29,36 +29,49 @@
 
     <form id="formRegistrazione">
 
+        <!-- 🔥 CAMPO NASCOSTO PER IL TIPO UTENTE -->
+        <input type="hidden" name="tipo" id="tipoUtente" value="giocatore">
+
         <!-- 👤 GIOCATORE -->
         <div id="form-giocatore" class="form active-form">
+
             <div class="login-box">
                 <input name="email" placeholder="email" required>
             </div>
+
             <div class="login-box">
                 <input name="nickname" placeholder="nome utente" required>
             </div>
+
             <div class="login-box">
                 <input type="password" name="password" placeholder="password" required>
             </div>
+
             <div class="login-box">
                 <input type="password" name="confirm" placeholder="conferma password" required>
             </div>
+
         </div>
 
         <!-- 🏟 CAMPO -->
         <div id="form-campo" class="form">
+
             <div class="login-box">
                 <input name="email" placeholder="email" disabled>
             </div>
+
             <div class="login-box">
                 <input name="nickname" placeholder="nome utente" disabled>
             </div>
+
             <div class="login-box">
                 <input type="password" name="password" placeholder="password" disabled>
             </div>
+
             <div class="login-box">
                 <input type="password" name="confirm" placeholder="conferma password" disabled>
             </div>
+
         </div>
 
         <button type="submit" class="inizia-btn">Inizia</button>
@@ -68,7 +81,7 @@
     </form>
 
     <p class="registra-link" onclick="handleClick('schermata-accedi')">
-        Hai già un account? Accedi
+        Hai gia un account? <span>Accedi</span>
     </p>
 
 </div>

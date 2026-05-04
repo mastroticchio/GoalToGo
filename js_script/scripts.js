@@ -1,24 +1,24 @@
-document.addEventListener('DOMContentLoaded',function()
-    {
+document.addEventListener('DOMContentLoaded', function () {
+
     const formReg = document.getElementById('formRegistrazione');
-    
-    if(formReg)
-        {
-        formReg.addEventListener('submit', function(e)
-            {
+
+    if (formReg) {
+        formReg.addEventListener('submit', function (e) {
             e.preventDefault();
+
             const feedback = document.getElementById('feedback');
-            const dati = new FormData(this);  //prende i dati dai campi di registrazione i presenti nel form
-            fetch('api/api_signin.php', {method: 'POST', body:dati})
-            .then(res => 
-                {
-                if(!res.ok) throw new Error('Errore');
-                return res.json();
-                })
-            .then(data => 
-                {
-                if(data.status == 'success')
-                    {
+            const dati = new FormData(this);
+            
+
+            fetch('/GoalToGo/api/api_signin.php', {
+                method: 'POST',
+                body: dati
+            })
+            .then(res => res.json())
+            .then(data => {
+
+                if (data.status == 'success') {
+
                     feedback.innerHTML = `<p class="success">${data.message}</p>`;
                     formReg.reset();
                     window.location.href = "home_page.html"
@@ -27,57 +27,260 @@ document.addEventListener('DOMContentLoaded',function()
                     {
                     feedback.innerHTML =  `<p class="error">${data.message}</p>`;   
                     }
-                })
-                .catch(err => 
-                {
-                feedback.innerHTML = '<p class="error">Communication error</p>';
+
+                } else {
+                    feedback.innerHTML = `<p class="error">${data.message}</p>`;
+                }
+            })
+            .catch(err => {
                 console.error(err);
-                })
-            })    
-        }
+                feedback.innerHTML = '<p class="error">Communication error</p>';
+            });
+        });
+    }
+
     const formLog = document.getElementById("formLogin");
 
-    if(formLog)
-        {
-        formLog.addEventListener('submit', function(e)
-            {
-            e.preventDefault(); //non far aggiornale la pagina
-            const dati = new FormData(this); //mappa i dati del form attaraverso i name
-            fetch("api/api_login.php", {method: 'POST', body: dati})
-            .then(res => 
-                {
-                if(!res.ok) throw new Error('Errore');
-                return res.json();    
-                })
-            .then(data => 
-                {
-                if(data.status == 'success')
-                    {
+    if (formLog) {
+        formLog.addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const dati = new FormData(this);
+
+            fetch("/GoalToGo/api/api_login.php", {
+                method: 'POST',
+                body: dati
+            })
+            .then(res => res.json())
+            .then(data => {
+
+                if (data.status == 'success') {
+
                     Swal.fire({
-                    title: 'Ottimo!',
-                    text: 'Login effettuato!',
-                    icon: 'success',
-                    timer: 2000, // Chiude automaticamente dopo 2 secondi
-                    showConfirmButton: false
+                        title: 'Ottimo!',
+                        text: 'Login effettuato!',
+                        icon: 'success',
+                        timer: 2000,
+                        showConfirmButton: false
                     }).then(() => {
-                    
-                    window.location.href = "home_page.html";
-                    });    
-                    }
-                else    
-                    {
+
+                      console.log("LOGIN RESPONSE:", data);
+
+                        localStorage.setItem("tipoUtente", data.tipo);
+                        localStorage.setItem("idUtente", data.id);
+
+
+                        if (data.tipo === "gestore") {
+                            window.location.href = "pagina_campi_gestore.html";
+                        } else {
+                            window.location.href = "home_page.html";
+                        }
+
+                    });
+
+                } else {
                     Swal.fire({
                         title: 'Errore',
                         text: data.message,
-                        icon: 'error',
-                        confirmButtonText: 'Riprova'
-                        });    
-                    }    
-                })
-            .catch(err => {console.error(err);});
+                        icon: 'error'
+                    });
+                }
             })
-        }
+            .catch(err => {
+                console.error(err);
+                Swal.fire({
+                    title: 'Errore',
+                    text: 'Problema di comunicazione con il server',
+                    icon: 'error'
+                });
+            });
+        });
+    }
+
+const formCampo = document.getElementById("formCampo");
+
+let orariSelezionati = [];
+
+window.toggleOrario = function (btn) {
+
+    btn.classList.toggle("active");
+
+    const valore = btn.innerText;
+
+    if (orariSelezionati.includes(valore)) {
+        orariSelezionati = orariSelezionati.filter(o => o !== valore);
+    } else {
+        orariSelezionati.push(valore);
+    }
+
+    console.log("Orari selezionati:", orariSelezionati);
+};
+
+if (formCampo) {
+
+    formCampo.addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        const payload = {
+            nome: document.getElementById("nome").value,
+            indirizzo: document.getElementById("indirizzo").value,
+            citta: document.getElementById("citta").value,
+            prezzo: document.getElementById("prezzo").value,
+            fk_gestore: localStorage.getItem("idUtente"),
+            orari: orariSelezionati
+        };
+
+        console.log("INVIO CAMPO:", payload);
+
+        fetch("/GoalToGo/api/api_registrazione_campo.php", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(payload)
+        })
+        .then(res => res.json())
+        .then(data => {
+
+            if (data.status === "success") {
+
+                Swal.fire({
+                    title: "Campo creato!",
+                    text: "Registrazione completata con successo",
+                    icon: "success",
+                    timer: 2000,
+                    showConfirmButton: false
+                }).then(() => {
+                    window.location.href = "pagina_campi_gestore.html";
+                });
+
+            } else {
+                Swal.fire({
+                    title: "Errore",
+                    text: data.message,
+                    icon: "error"
+                });
+            }
+
+        })
+        .catch(err => {
+            console.error(err);
+            Swal.fire({
+                title: "Errore",
+                text: "Errore di comunicazione col server",
+                icon: "error"
+            });
+        });
+
+    });
+}
+const listaCampiContainer = document.getElementById("listaCampi");
+
+if (listaCampiContainer) {
+
+    const utenteId = localStorage.getItem("idUtente");
+
+    console.log("ID RECUPERATO:", utenteId);
+
+    if (!utenteId) {
+        console.error("Utente non loggato");
+        return;
+    }
+
+    const dati = new FormData();
+    dati.append("id", utenteId);
+
+    fetch("/GoalToGo/api/api_get_campi.php", {
+        method: "POST",
+        body: dati
     })
+    .then(res => res.json())
+    .then(data => {
+
+        console.log("CAMPI RICEVUTI:", data);
+
+        if (data.status === "success") {
+
+            const campi = data.campi;
+
+            const numCampiEl = document.getElementById("numCampi");
+            if (numCampiEl) {
+              numCampiEl.innerText = campi.length;
+            }
+
+            let totaleSlot = 0;
+
+            campi.forEach(campo => {
+              if (campo.orari && Array.isArray(campo.orari)) {
+                totaleSlot += campo.orari.length;
+              }
+            });
+
+            const numSlotEl = document.getElementById("numSlot");
+              if (numSlotEl) {
+                numSlotEl.innerText = totaleSlot;
+              }
+
+            if (!campi || campi.length === 0) {
+                listaCampiContainer.innerHTML = "<p>Nessun campo registrato</p>";
+                return;
+            }
+
+            listaCampiContainer.innerHTML = "";
+
+            campi.forEach(campo => {
+
+                const cardDiv = document.createElement("div");
+                cardDiv.className = "campo-card";
+
+                let orariHTML = "";
+
+                if (!campo.orari || campo.orari.length === 0) {
+
+                    orariHTML = "<p>Nessun orario disponibile</p>";
+
+                } else {
+
+                    campo.orari.forEach(orario => {
+
+                        const inizio = orario.inizio.slice(0,5);
+                        const fine = orario.fine.slice(0,5);
+
+                        orariHTML += `
+                            <button class="fascia-btn fascia--grigio">
+                                ${inizio}-${fine}
+                            </button>
+                        `;
+                    });
+                }
+
+                cardDiv.innerHTML = `
+                    <div class="campo-card-header">
+                        <div class="campo-icon">⚽</div>
+                        <span class="campo-nome">${campo.NOME}</span>
+                    </div>
+
+                    <div class="fasce-label">FASCE ORARIE OGGI</div>
+
+                    <div class="fasce-orarie">
+                        ${orariHTML}
+                    </div>
+                `;
+
+                listaCampiContainer.appendChild(cardDiv);
+            });
+
+        } else {
+            console.error("Errore:", data.message);
+            listaCampiContainer.innerHTML = "<p>Errore nel caricamento dei campi</p>";
+        }
+
+    })
+    .catch(err => {
+        console.error("Errore fetch campi:", err);
+        listaCampiContainer.innerHTML = "<p>Errore di comunicazione col server</p>";
+    });
+}});
 
 function handleClick(action, element = null) {
   switch (action) {
@@ -153,6 +356,10 @@ function setVisibility(button) {
 function switchMode(mode) {
   const giocatore = document.getElementById("form-giocatore");
   const campo = document.getElementById("form-campo");
+  const tipoInput = document.getElementById("tipoUtente");
+
+  const giocatoreInputs = giocatore.querySelectorAll("input");
+  const campoInputs = campo.querySelectorAll("input");
 
   const giocatoreInputs = giocatore.querySelectorAll("input");
   const campoInputs = campo.querySelectorAll("input");
@@ -266,4 +473,48 @@ const dataOggi = document.getElementById('data-oggi');
 if (dataOggi) {
   const options = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
   dataOggi.textContent = new Date().toLocaleDateString('it-IT', options);
+}
+
+
+
+const formCreaClub = document.getElementById("formCreaClub");
+
+if (formCreaClub) {
+    formCreaClub.addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const payload = {
+            nome: document.getElementById("nomeClub").value,
+            descrizione: document.getElementById("descrizioneClub").value,
+            visibilita: localStorage.getItem("clubVisibility") || "pubblico",
+            n_componenti: parseInt(document.getElementById("club-count").textContent),
+            fk_giocatore: parseInt(localStorage.getItem("idUtente"))
+        };
+
+        fetch("/GoalToGo/api/api_crea_club.php", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload)
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.status === "success") {
+                Swal.fire({
+                    title: "Club creato!",
+                    icon: "success",
+                    timer: 2000,
+                    showConfirmButton: false
+                }).then(() => {
+                    localStorage.setItem("idClub", data.id_club);
+                    window.location.href = "pagina_club.html";
+                });
+            } else {
+                Swal.fire({ title: "Errore", text: data.message, icon: "error" });
+            }
+        })
+        .catch(err => {
+            console.error(err);
+            Swal.fire({ title: "Errore", text: "Errore di comunicazione", icon: "error" });
+        });
+    });
 }

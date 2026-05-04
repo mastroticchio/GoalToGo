@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <meta charset="UTF-8">
   <title>Goal To Go</title>
   <link rel="stylesheet" href="styles.css">
@@ -8,14 +9,14 @@
 <body>
 
   <div class="header">
-  <h1>GOAL &nbsp; TO &nbsp; GO</h1>
-  <div class="header-right">
-    <button class="home-btn" onclick="location.href='home_page.html'">
-      🏠 HOME
-    </button>
-    <div class="profile-icon"></div>
+    <h1>GOAL &nbsp; TO &nbsp; GO</h1>
+    <div class="header-right">
+      <button class="home-btn" onclick="location.href='home_page.html'">
+        🏠 HOME
+      </button>
+      <div class="profile-icon"></div>
+    </div>
   </div>
-</div>
 
   <div class="container container--center">
 
@@ -24,48 +25,53 @@
       <p>Configura i dettagli e invita i tuoi amici !</p>
     </div>
 
-    <div class="form-grid">
+    <form id="formCreaClub">
 
-      <div class="form-left">
+      <div class="form-grid">
 
-        <label>Nome del tuo Club</label>
-        <input class="input" type="text" placeholder="Inserisci un nome ...">
+        <div class="form-left">
 
-        <label>Inserisci immagine del Club</label>
-        <div class="upload-boxes">
-          <div class="upload-box">+</div>
-          <div class="upload-box"></div>
-          <div class="upload-box"></div>
+          <label>Nome del tuo Club</label>
+          <input class="input" type="text" id="nomeClub" placeholder="Inserisci un nome ..." required>
+
+          <label>Inserisci immagine del Club</label>
+          <div class="upload-boxes">
+            <div class="upload-box">+</div>
+            <div class="upload-box"></div>
+            <div class="upload-box"></div>
+          </div>
+
+          <label>Descrizione (opzionale)</label>
+          <textarea class="textarea" id="descrizioneClub" rows="3" placeholder="Una breve descrizione della tua lega ..."></textarea>
+
         </div>
 
-        <label>Descrizione (opzionale)</label>
-        <textarea class="textarea" rows="3" placeholder="Una breve descrizione della tua lega ..."></textarea>
+        <div class="form-right">
+
+          <label>Scegli il numero massimo di componenti</label>
+          <div class="counter">
+            <button type="button" class="plus-btn" onclick="handleClick('aggiungi-giocatori-club')">+</button>
+            <div id="club-count" class="counter-value">2</div>
+            <button type="button" class="minus-btn" onclick="handleClick('riduci-giocatori-club')">-</button>
+          </div>
+
+          <label>Visibilità del Club</label>
+          <div class="visibility">
+            <button type="button" class="visibility-btn active" onclick="setVisibility(this)">pubblico</button>
+            <button type="button" class="visibility-btn" onclick="setVisibility(this)">privato</button>
+            <button type="button" class="visibility-btn" onclick="setVisibility(this)">su invito</button>
+          </div>
+
+        </div>
 
       </div>
 
-      <div class="form-right">
+      <button type="submit" class="create-club-btn">Crea il tuo Club!</button>
 
-        <label>Scegli il numero massimo di componenti</label>
-        <div class="counter">
-          <button class="plus-btn" onclick="handleClick('aggiungi-giocatori-club')">+</button>
-          <div id="club-count" class="counter-value">2</div>
-           <button class="minus-btn" onclick="handleClick('riduci-giocatori-club')">-</button>
-        </div>
-
-        <label>Visibilità del Club</label>
-        <div class="visibility">
-          <button class="visibility-btn active" onclick="setVisibility(this)">pubblico</button>
-          <button class="visibility-btn" onclick="setVisibility(this)">privato</button>
-          <button class="visibility-btn" onclick="setVisibility(this)">su invito</button>
-        </div>
-
-      </div>
-
-    </div>
-
-    <button class="create-club-btn">Crea il tuo Club!</button>
+    </form>
 
   </div>
 
-  <script src="script.js"></script>
+  <script src="js_script/scripts.js"></script>
 </body>
+</html>

@@ -1,36 +1,53 @@
 <?php
-require_once 'C:/xampp/htdocs/goaltogo/config/db_connection.php';
-require_once 'C:/xampp/htdocs/goaltogo/lib/functions_users.php';
+require_once '../config/db_connection.php';
+require_once '../lib/functions_users.php';
 
 header('Content-Type: application/json');
+
 $email = $_POST['email'] ?? '';
 $password = $_POST['password'] ?? '';
 
-if(empty($email) || empty($password))
-    {
-    echo json_encode(["status" => "error", "message" => "invalid camp"]);
+if (empty($email) || empty($password)) {
+    echo json_encode([
+        "status" => "error",
+        "message" => "Campi mancanti"
+    ]);
     exit;    
-    }
+}
+
 $res = getUtenteByEmail($conn, $email);
 
-if($res)
-    {
-    if(password_verify($password, $res['PWD']))
-        {
+if ($res) {
+
+    if (password_verify($password, $res['PWD'])) {
+
+        if ($res['TIPO'] === 'gestore') {
+            $nome = $res['NOME_CENTRO'];
+        } else {
+            $nome = $res['NICKNAME'];
+        }
+
         echo json_encode([
             "status" => "success",
             "message" => "Login effettuato",
-            "user" => ["nickname" => $res['NICKNAME']]
-            ]);
-  
-        }
-    else   
-        {
-        echo json_encode(["status" =>  "error", "message" =>"Password errata"]);    
-        }
+            "tipo" => $res['TIPO'],
+            "id" => $res['ID'],
+            "user" => [
+                "nickname" => $nome
+            ]
+        ]);
+
+    } else {
+        echo json_encode([
+            "status" => "error",
+            "message" => "Password errata"
+        ]);
     }
-else
-    {
-    echo json_encode(["status" => "error", "message" => "email not found"]);    
-    }
+
+} else {
+    echo json_encode([
+        "status" => "error",
+        "message" => "Email non trovata"
+    ]);
+}
 ?>

@@ -6,23 +6,46 @@ require_once '../config/db_connection.php';
 require_once '../lib/functions_users.php';
 
 header('Content-Type: application/json');
+
 $nickname = $_POST['nickname'] ?? '';
 $email = $_POST['email'] ?? '';
 $password = $_POST['password'] ?? '';
+$tipo = $_POST['tipo'] ?? '';
 
+// controllo campi
+if (empty($nickname) || empty($email) || empty($password) || empty($tipo)) {
+    echo json_encode([
+        "status" => "error",
+        "message" => "Campi mancanti"
+    ]);
+    exit;
+}
 
+if ($tipo === 'giocatore') {
+        $res = registraGiocatore($conn, $nickname, $email, $password);
 
-if(empty($nickname) || empty($email) || empty($password) )
-    {
-    echo json_encode(["status" => "error", "message" => "invalid camps"]);
-    exit;    
-    }
+} elseif ($tipo === 'gestore') {
 
-$res = registraGiocatore($conn, $nickname,$email, $password);
+    $res = registraGestore($conn, $nickname, $email, $password);
+
+} else {
+    echo json_encode([
+        "status" => "error",
+        "message" => "Tipo utente non valido"
+    ]);
+    exit;
+}
 
 if ($res) {
-    echo json_encode(["status" => "success", "message" => "Registrazione riuscita!"]);
+    echo json_encode([
+        "status" => "success",
+        "message" => "Registrazione riuscita!",
+        "tipo" => $tipo
+            ]);
 } else {
-    echo json_encode(["status" => "error", "message" => "Errore nel database (forse email già usata?)."]);
+    echo json_encode([
+        "status" => "error",
+        "message" => "Errore nel database (forse email già usata?)"
+    ]);
 }
 ?>
