@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded',function()
                     {
                     feedback.innerHTML = `<p class="success">${data.message}</p>`;
                     formReg.reset();
-                    window.location.href = home_page.html
+                    window.location.href = "home_page.html"
                     }    
                 else
                     {
@@ -154,18 +154,27 @@ function switchMode(mode) {
   const giocatore = document.getElementById("form-giocatore");
   const campo = document.getElementById("form-campo");
 
-  const buttons = document.querySelectorAll(".toggle-btn");
+  const giocatoreInputs = giocatore.querySelectorAll("input");
+  const campoInputs = campo.querySelectorAll("input");
 
+  const buttons = document.querySelectorAll(".toggle-btn");
   buttons.forEach(btn => btn.classList.remove("active"));
 
   if (mode === "giocatore") {
     giocatore.classList.add("active-form");
     campo.classList.remove("active-form");
     buttons[0].classList.add("active");
+
+    giocatoreInputs.forEach(input => input.disabled = false);
+    campoInputs.forEach(input => input.disabled = true);
+
   } else {
     campo.classList.add("active-form");
     giocatore.classList.remove("active-form");
     buttons[1].classList.add("active");
+
+    campoInputs.forEach(input => input.disabled = false);
+    giocatoreInputs.forEach(input => input.disabled = true);
   }
 }
 
