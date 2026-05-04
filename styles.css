@@ -1279,3 +1279,36 @@ body {
   width: 90%;
   max-width: 400px;
 }
+
+.fascia--verde {
+    background-color: #4caf50;
+    color: white;
+}
+
+.fascia--rosso {
+    background-color: #e53935;
+    color: white;
+}
+
+.legenda {
+    display: flex;
+    gap: 16px;
+    margin: 8px 0;
+    font-size: 0.8rem;
+}
+
+.legenda-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.pallino {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.pallino--verde { background-color: #4caf50; }
+.pallino--rosso { background-color: #e53935; }

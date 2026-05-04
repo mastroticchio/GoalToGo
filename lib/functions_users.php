@@ -100,22 +100,22 @@ function registraCampo($conn, $nome, $indirizzo, $citta, $prezzo, $fk_gestore, $
     return $campo_id;
     }
 function inserisciOrarioCampo($conn, $campo_id, $fascia)
-    {
+{
     $parts = explode("-", $fascia);
 
     if (count($parts) != 2) return false;
 
     $start = trim($parts[0]);
-    $end = trim($parts[1]);
+    $end   = trim($parts[1]);
 
-    $sql = "INSERT INTO CAMPO_ORARI (CAMPO_ID, ORARIO_INIZIO, ORARIO_FINE)
-            VALUES (?, ?, ?)";
+    $sql = "INSERT INTO CAMPO_ORARI (CAMPO_ID, ORARIO_INIZIO, ORARIO_FINE, DISPONIBILE)
+            VALUES (?, ?, ?, 0)";
 
     $stmt = mysqli_prepare($conn, $sql);
     mysqli_stmt_bind_param($stmt, "iss", $campo_id, $start, $end);
 
     return mysqli_stmt_execute($stmt);
-    }
+}
 function getCampiByGestore($conn, $id)
     {
     $sql = "SELECT ID, NOME, INDIRIZZO, CITTA, PREZZO 
