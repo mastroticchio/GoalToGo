@@ -1312,3 +1312,23 @@ body {
 
 .pallino--verde { background-color: #4caf50; }
 .pallino--rosso { background-color: #e53935; }
+
+.campo-card-header .elimina-campo-btn {
+    margin-left: auto;
+    background-color: transparent;
+    color: #e53935;
+    border: 1px solid #e53935;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.2s, background-color 0.2s;
+    display: inline-block;
+}
+
+.campo-card-header .elimina-campo-btn:hover {
+    background-color: #e53935;
+    color: white;
+    transform: scale(1.05);
+}
