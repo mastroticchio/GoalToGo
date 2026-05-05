@@ -158,6 +158,101 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
+    // ===================== GESTIONE CAMPO =====================
+
+const fasceOrarieContainer = document.getElementById('fasceOrarie');
+
+if (fasceOrarieContainer) {
+    const campoId   = localStorage.getItem('campoSelezionato');
+    const campoNome = localStorage.getItem('campoNome');
+    const campoInd  = localStorage.getItem('campoIndirizzo');
+    const campoCitta= localStorage.getItem('campoCitta');
+    const campoPrezzo = localStorage.getItem('campoPrezzo');
+
+    if (campoNome)   document.getElementById('titoloCampo').innerText      = campoNome;
+    if (campoInd)    document.getElementById('dettaglioIndirizzo').innerText = campoInd;
+    if (campoCitta)  document.getElementById('dettaglioCitta').innerText     = campoCitta;
+    if (campoPrezzo) document.getElementById('dettaglioPrezzo').innerText    = '€' + campoPrezzo + ' / ora';
+
+    const dati = new FormData();
+    dati.append('id', campoId);
+
+    fetch('/GoalToGo/api/api_get_orari_campo.php', {
+        method: 'POST',
+        body: dati
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.status === 'success') {
+            fasceOrarieContainer.innerHTML = '';
+
+            data.orari.forEach(orario => {
+                const inizio      = orario.inizio.slice(0, 5);
+                const fine        = orario.fine.slice(0, 5);
+                const disponibile = orario.disponibile;
+                const colore      = disponibile ? 'fascia--rosso' : 'fascia--verde';
+
+                const btn = document.createElement('button');
+                btn.type      = 'button';
+                btn.className = `orario-btn ${colore}`;
+                btn.dataset.id = orario.id;
+                btn.dataset.disponibile = disponibile ? '1' : '0';
+                btn.innerText = `${inizio}-${fine}`;
+
+                btn.addEventListener('click', function () {
+                    const attuale = this.dataset.disponibile === '1';
+                    this.dataset.disponibile = attuale ? '0' : '1';
+                    this.classList.toggle('fascia--rosso', !attuale);
+                    this.classList.toggle('fascia--verde', attuale);
+                });
+
+                fasceOrarieContainer.appendChild(btn);
+            });
+        }
+    })
+    .catch(err => {
+        console.error(err);
+    });
+}
+
+window.salvaDisponibilita = function () {
+    const bottoni = document.querySelectorAll('#fasceOrarie .orario-btn');
+
+    const aggiornamenti = [];
+    bottoni.forEach(btn => {
+        aggiornamenti.push({
+            id:           parseInt(btn.dataset.id),
+            disponibile:  btn.dataset.disponibile === '1'
+        });
+    });
+
+    fetch('/GoalToGo/api/api_aggiorna_disponibilita.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ orari: aggiornamenti })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.status === 'success') {
+            Swal.fire({
+                title: 'Salvato!',
+                text: 'Disponibilità aggiornata',
+                icon: 'success',
+                timer: 2000,
+                showConfirmButton: false
+            }).then(() => {
+                window.location.href = 'pagina_campi_gestore.html';
+            });
+        } else {
+            Swal.fire({ title: 'Errore', text: data.message, icon: 'error' });
+        }
+    })
+    .catch(err => {
+        console.error(err);
+        Swal.fire({ title: 'Errore', text: 'Errore di comunicazione', icon: 'error' });
+    });
+};
+
     // ===================== LISTA CAMPI GESTORE =====================
 
     const listaCampiContainer = document.getElementById('listaCampi');
@@ -192,15 +287,35 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
 
                 let totaleSlot = 0;
+                let totaleOccupati = 0;
+                let totaleIncassi = 0;
+
                 campi.forEach(campo => {
+                    console.log('CAMPO:', campo);
                     if (campo.orari && Array.isArray(campo.orari)) {
                         totaleSlot += campo.orari.length;
+                        campo.orari.forEach(orario =>{
+                            if(orario.disponibile){
+                                totaleOccupati++;
+                                totaleIncassi+=parseInt(campo.PREZZO);
+                            }
+                        });
                     }
                 });
 
                 const numSlotEl = document.getElementById('numSlot');
                 if (numSlotEl) {
                     numSlotEl.innerText = totaleSlot;
+                }
+
+                const numOccupatiEl = document.getElementById('numOccupati');
+                if(numOccupatiEl) {
+                    numOccupatiEl.innerText = totaleOccupati;
+                }
+
+                const numIncassiEl = document.getElementById('numIncassi');
+                if(numIncassiEl) {
+                    numIncassiEl.innerText = totaleIncassi + '€';
                 }
 
                 if (!campi || campi.length === 0) {
@@ -254,6 +369,16 @@ cardDiv.innerHTML = `
         ${orariHTML}
     </div>
 `;
+
+                    cardDiv.style.cursor = 'pointer';
+cardDiv.addEventListener('click', function () {
+    localStorage.setItem('campoSelezionato', campo.ID);
+    localStorage.setItem('campoNome',        campo.NOME);
+    localStorage.setItem('campoIndirizzo',   campo.INDIRIZZO);
+    localStorage.setItem('campoCitta',       campo.CITTA);
+    localStorage.setItem('campoPrezzo',      campo.PREZZO);
+    window.location.href = 'pagina_gestione_campo.html';
+});
 
                     listaCampiContainer.appendChild(cardDiv);
                 });

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>Goal To Go - Gestione Campo</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="header">
+  <h1>GOAL &nbsp; TO &nbsp; GO</h1>
+  <div class="header-right">
+    <button class="home-btn" onclick="window.location.href='pagina_campi_gestore.html'">← INDIETRO</button>
+    <div class="profile-icon"></div>
+  </div>
+</div>
+
+<div class="container container--center">
+
+  <!-- TITOLO -->
+  <div class="miei-campi-top">
+    <div>
+      <h2 id="titoloCampo" class="titolo">GESTIONE CAMPO</h2>
+      <div class="data-oggi" id="data-oggi"></div>
+    </div>
+    <div class="campo-icon" style="width:55px;height:55px;font-size:28px;">⚽</div>
+  </div>
+
+  <!-- INFO CAMPO -->
+  <div class="campo-card" style="margin-bottom: 30px;">
+    <div class="stats-grid" style="margin-bottom: 0;">
+
+      <div class="stat-card">
+        <div class="stat-number" style="font-size:20px;" id="dettaglioIndirizzo">—</div>
+        <div class="stat-label">INDIRIZZO</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-number" style="font-size:20px;" id="dettaglioCitta">—</div>
+        <div class="stat-label">CITTÀ</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-number" style="font-size:20px;" id="dettaglioPrezzo">—</div>
+        <div class="stat-label">PREZZO / ORA</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- LEGENDA -->
+  <div class="legenda" style="margin-bottom: 15px;">
+    <span class="legenda-item">
+      <span class="pallino pallino--verde"></span> Disponibile
+    </span>
+    <span class="legenda-item">
+      <span class="pallino pallino--rosso"></span> Occupato
+    </span>
+  </div>
+
+  <!-- FASCE ORARIE -->
+  <div class="campo-card">
+    <div class="fasce-label">FASCE ORARIE — CLICCA PER CAMBIARE DISPONIBILITÀ</div>
+    <div class="fasce-orarie" id="fasceOrarie">
+      <!-- popolato dinamicamente dal JS -->
+    </div>
+  </div>
+
+  <!-- BOTTONE SALVA -->
+  <button class="create-club-btn" onclick="salvaDisponibilita()">
+    Salva modifiche
+  </button>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="js_script/scripts.js"></script>
+</body>
+</html>

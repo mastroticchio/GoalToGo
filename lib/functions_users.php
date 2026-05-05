@@ -146,7 +146,7 @@ function getCampiByGestore($conn, $id)
 }
 function getOrariByCampoId($conn, $campo_id)
     {
-    $sql = "SELECT ORARIO_INIZIO, ORARIO_FINE, DISPONIBILE 
+    $sql = "SELECT ID, ORARIO_INIZIO, ORARIO_FINE, DISPONIBILE 
             FROM CAMPO_ORARI 
             WHERE CAMPO_ID = ?";
 
@@ -160,6 +160,7 @@ function getOrariByCampoId($conn, $campo_id)
 
     while ($row = mysqli_fetch_assoc($result)) {
         $orari[] = [
+            'id'         => $row['ID'],
             'inizio'     => $row['ORARIO_INIZIO'],
             'fine'       => $row['ORARIO_FINE'],
             'disponibile' => (bool) $row['DISPONIBILE']
