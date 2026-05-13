@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Goal To Go</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .splash { min-height: 100vh; display: grid; place-items: center; background: var(--bg); color: var(--text); padding-bottom: 0; }
+    .splash__brand { font-family: var(--font-display); font-weight: 800; font-size: var(--text-2xl); letter-spacing: 0.18em; color: var(--brand); margin-bottom: var(--s-5); }
+    .splash__spinner { width: 36px; height: 36px; border: 3px solid var(--border); border-top-color: var(--brand); border-radius: var(--r-pill); animation: spin 0.8s linear infinite; margin: 0 auto; }
+    .splash__text { font-size: var(--text-sm); color: var(--text-2); margin-top: var(--s-3); }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    @media (prefers-reduced-motion: reduce) { .splash__spinner { animation: none; border-top-color: transparent; } }
+  </style>
+</head>
+<body class="splash">
+  <main role="main" style="text-align:center;">
+    <div class="splash__brand">GOAL&middot;TO&middot;GO</div>
+    <div class="splash__spinner" aria-hidden="true"></div>
+    <p class="splash__text">Caricamento&hellip;</p>
+  </main>
+  <script>
+    (function () {
+      var TARGET_LOGIN  = 'pagina_accedi.html';
+      var TARGET_PLAYER = 'home_page.html';
+      var TARGET_OWNER  = 'pagina_campi_gestore.html';
+
+      // Optimistic check from localStorage so even if API is slow we redirect fast
+      var lsTipo = localStorage.getItem('tipoUtente');
+      var lsId   = localStorage.getItem('idUtente');
+
+      fetch('/GoalToGo/api/api_me.php', { credentials: 'include' })
+        .then(function (res) {
+          return res.json().catch(function () { return null; }).then(function (j) {
+            return { ok: res.ok, body: j };
+          });
+        })
+        .then(function (r) {
+          if (r.ok && r.body && r.body.status === 'success') {
+            // server confirms session
+            if (r.body.user) {
+              localStorage.setItem('idUtente', r.body.user.id);
+              localStorage.setItem('tipoUtente', r.body.user.tipo);
+              localStorage.setItem('nomeUtente', r.body.user.nome || '');
+            }
+            location.replace(r.body.tipo === 'gestore' ? TARGET_OWNER : TARGET_PLAYER);
+          } else {
+            localStorage.clear();
+            location.replace(TARGET_LOGIN);
+          }
+        })
+        .catch(function () {
+          // network error: fall back to localStorage hint, else go to login
+          if (lsTipo === 'gestore' && lsId) location.replace(TARGET_OWNER);
+          else if (lsTipo === 'giocatore' && lsId) location.replace(TARGET_PLAYER);
+          else location.replace(TARGET_LOGIN);
+        });
+    })();
+  </script>
+</body>
+</html>

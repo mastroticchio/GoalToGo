@@ -1,71 +1,108 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <meta charset="UTF-8">
-  <title>Goal To Go</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Goal To Go — Crea club</title>
   <link rel="stylesheet" href="styles.css">
+  <script>window.__AUTH_REQUIRES__ = { role: 'giocatore' };</script>
+  <script src="js_script/auth_guard.js"></script>
 </head>
 <body>
+  <a href="#main" class="skip-link sr-only">Salta al contenuto</a>
 
-  <div class="header">
-  <h1>GOAL &nbsp; TO &nbsp; GO</h1>
-  <div class="header-right">
-    <button class="home-btn" onclick="location.href='home_page.html'">
-      🏠 HOME
-    </button>
-    <div class="profile-icon"></div>
-  </div>
-</div>
+  <header class="header">
+    <h1>GOAL &nbsp; TO &nbsp; GO</h1>
+    <div class="header-right">
+      <a class="home-btn" href="home_page.html" aria-label="Torna alla home">
+        <span aria-hidden="true">🏠</span> HOME
+      </a>
+      <div class="profile-icon" aria-hidden="true"></div>
+    </div>
+  </header>
 
-  <div class="container container--center">
+  <main id="main" class="container container--center">
 
     <div class="welcome">
       <h2>Crea il tuo Club</h2>
       <p>Configura i dettagli e invita i tuoi amici !</p>
     </div>
 
-    <div class="form-grid">
+    <form id="formCreaClub" novalidate>
 
-      <div class="form-left">
+      <div class="form-grid">
 
-        <label>Nome del tuo Club</label>
-        <input class="input" type="text" placeholder="Inserisci un nome ...">
+        <div class="form-left">
 
-        <label>Inserisci immagine del Club</label>
-        <div class="upload-boxes">
-          <div class="upload-box">+</div>
-          <div class="upload-box"></div>
-          <div class="upload-box"></div>
+          <label for="nomeClub">Nome del tuo Club</label>
+          <input class="input" type="text" id="nomeClub" name="nome" placeholder="Inserisci un nome ..." required>
+
+          <span class="form-label">Inserisci immagine del Club</span>
+          <div class="upload-boxes">
+            <button type="button" class="upload-box" aria-label="Carica un'immagine principale">+</button>
+            <button type="button" class="upload-box" aria-label="Carica un'immagine aggiuntiva"></button>
+            <button type="button" class="upload-box" aria-label="Carica un'altra immagine"></button>
+          </div>
+
+          <label for="descrizioneClub">Descrizione (opzionale)</label>
+          <textarea class="textarea" id="descrizioneClub" name="descrizione" rows="3"
+                    placeholder="Una breve descrizione della tua lega ..."></textarea>
+
         </div>
 
-        <label>Descrizione (opzionale)</label>
-        <textarea class="textarea" rows="3" placeholder="Una breve descrizione della tua lega ..."></textarea>
+        <div class="form-right">
+
+          <span class="form-label" id="counter-label">Scegli il numero massimo di componenti (max 40)</span>
+          <div class="counter" role="group" aria-labelledby="counter-label">
+            <button type="button" class="plus-btn" aria-label="Aggiungi componente"
+                    onclick="handleClick('aggiungi-giocatori-club')">+</button>
+            <div id="club-count" class="counter-value" aria-live="polite" data-min="2" data-max="40">2</div>
+            <button type="button" class="minus-btn" aria-label="Riduci componente"
+                    onclick="handleClick('riduci-giocatori-club')">-</button>
+          </div>
+
+          <span class="form-label" id="visibility-label">Visibilità del Club</span>
+          <div class="visibility" role="radiogroup" aria-labelledby="visibility-label">
+            <button type="button" class="visibility-btn active" role="radio" aria-checked="true"
+                    onclick="setVisibility(this)">pubblico</button>
+            <button type="button" class="visibility-btn" role="radio" aria-checked="false"
+                    onclick="setVisibility(this)">privato</button>
+            <button type="button" class="visibility-btn" role="radio" aria-checked="false"
+                    onclick="setVisibility(this)">su invito</button>
+          </div>
+
+        </div>
 
       </div>
 
-      <div class="form-right">
+      <button type="submit" class="create-club-btn">Crea il tuo Club!</button>
 
-        <label>Scegli il numero massimo di componenti</label>
-        <div class="counter">
-          <button class="plus-btn" onclick="handleClick('aggiungi-giocatori-club')">+</button>
-          <div id="club-count" class="counter-value">2</div>
-           <button class="minus-btn" onclick="handleClick('riduci-giocatori-club')">-</button>
-        </div>
+    </form>
 
-        <label>Visibilità del Club</label>
-        <div class="visibility">
-          <button class="visibility-btn active" onclick="setVisibility(this)">pubblico</button>
-          <button class="visibility-btn" onclick="setVisibility(this)">privato</button>
-          <button class="visibility-btn" onclick="setVisibility(this)">su invito</button>
-        </div>
+    <div id="feedback" role="status" aria-live="polite"></div>
 
-      </div>
+  </main>
 
-    </div>
+  <nav class="bottom-nav" aria-label="Navigazione principale">
+    <a href="home_page.html" class="bottom-nav__item">
+      <span aria-hidden="true">🏠</span>
+      <span>Home</span>
+    </a>
+    <a href="pagina_trova_partita.html" class="bottom-nav__item">
+      <span aria-hidden="true">🔍</span>
+      <span>Trova</span>
+    </a>
+    <a href="pagina_club.html" class="bottom-nav__item is-active" aria-current="page">
+      <span aria-hidden="true">👥</span>
+      <span>Club</span>
+    </a>
+    <a href="pagina_profilo.html" class="bottom-nav__item">
+      <span aria-hidden="true">👤</span>
+      <span>Profilo</span>
+    </a>
+  </nav>
 
-    <button class="create-club-btn">Crea il tuo Club!</button>
-
-  </div>
-
-  <script src="script.js"></script>
+  <script src="js_script/scripts.js"></script>
 </body>
+</html>

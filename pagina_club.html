@@ -2,64 +2,80 @@
 <html lang="it">
   <head>
     <meta charset="UTF-8" />
-    <title>Campo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Goal To Go — Club</title>
     <link rel="stylesheet" href="styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>window.__AUTH_REQUIRES__ = { role: 'giocatore' };</script>
+    <script src="js_script/auth_guard.js"></script>
   </head>
 
   <body>
-    <div class="header">
-  <h1>GOAL &nbsp; TO &nbsp; GO</h1>
-  <div class="header-right">
-    <button class="home-btn" onclick="location.href='home_page.html'">
-      🏠 HOME
-    </button>
-    <div class="profile-icon"></div>
-  </div>
-</div>
-    <div class="container container--center">
+    <a href="#main" class="skip-link sr-only">Salta al contenuto</a>
+    <header class="header">
+      <h1>GOAL &nbsp; TO &nbsp; GO</h1>
+      <div class="header-right">
+        <a class="home-btn" href="home_page.html" aria-label="Torna alla home">
+          <span aria-hidden="true">🏠</span> HOME
+        </a>
+        <div class="profile-icon" aria-hidden="true"></div>
+      </div>
+    </header>
+    <main id="main" class="container container--center">
+      <h2 class="sr-only">I miei Club</h2>
+
+      <section id="mioClubSection" aria-live="polite" style="margin-bottom: var(--s-5);">
+        <div class="skeleton" style="height: 120px; border-radius: var(--r-lg);"></div>
+      </section>
+
       <div class="club-dropdown">
-        <div class="club-header">☰ I miei Club</div>
+        <div class="club-header" aria-hidden="true">☰ I miei Club</div>
 
         <div class="club-content">
           <div class="club-left">
-            <div class="card club-btn" onclick="handleClick('crea-club')">+ Crea un Club</div>
-            <div class="card club-btn"># Codice Club</div>
+            <a class="card club-btn btn btn--primary" href="pagina_crea_club.html">
+              + Crea un Club
+            </a>
+            <button type="button" class="card club-btn btn btn--secondary"># Codice Club</button>
           </div>
 
           <div class="club-right">
+            <label for="searchClub" class="sr-only">Cerca un club</label>
             <input
-              type="text"
+              id="searchClub"
+              name="cerca"
+              type="search"
               class="search-input"
               placeholder="🔍 Cerca Club"
             />
 
-            <div class="club-list">
-              <div class="club-item">
-                <div>
-                  <strong>FC MARCO POLO</strong>
-                  <span class="status open">Aperta</span>
-                </div>
-                <div class="club-info">
-                  ⭐ 3.8/5 <br />
-                  👤 8/12
-                </div>
-              </div>
-
-              <div class="club-item">
-                <div>
-                  <strong>FC MARCO POLO</strong>
-                  <span class="status closed">Chiusa</span>
-                </div>
-                <div class="club-info">
-                  ⭐ 3.8/5 <br />
-                  👤 12/12
-                </div>
-              </div>
+            <div id="clubList" class="club-list" aria-live="polite">
+              <div class="skeleton" style="height: 80px; border-radius: var(--r-md); margin-bottom: var(--s-3);"></div>
+              <div class="skeleton" style="height: 80px; border-radius: var(--r-md); margin-bottom: var(--s-3);"></div>
+              <div class="skeleton" style="height: 80px; border-radius: var(--r-md);"></div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-    <script src="script.js"></script>
+    </main>
+    <nav class="bottom-nav" aria-label="Navigazione principale">
+      <a href="home_page.html" class="bottom-nav__item">
+        <span aria-hidden="true">🏠</span>
+        <span>Home</span>
+      </a>
+      <a href="pagina_trova_partita.html" class="bottom-nav__item">
+        <span aria-hidden="true">🔍</span>
+        <span>Trova</span>
+      </a>
+      <a href="pagina_club.html" class="bottom-nav__item is-active" aria-current="page">
+        <span aria-hidden="true">👥</span>
+        <span>Club</span>
+      </a>
+      <a href="pagina_profilo.html" class="bottom-nav__item">
+        <span aria-hidden="true">👤</span>
+        <span>Profilo</span>
+      </a>
+    </nav>
+    <script src="js_script/scripts.js"></script>
   </body>
 </html>

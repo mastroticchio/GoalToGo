@@ -1,49 +1,124 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <title>Prenota Campo</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Goal To Go — Registrati</title>
+  <link rel="stylesheet" href="styles.css">
+  <script>window.__AUTH_REQUIRES__ = { inverseGuard: true };</script>
+  <script src="js_script/auth_guard.js"></script>
 </head>
+
 <body>
-    <header class="header">
-        <h1>GOAL TO GO</h1>
-        <div class="profile-icon"></div>
-    </header>
-    <div class="container container--center">
 
-    <section class="welcome welcome--center">
-        <h2>Registrati</h2>
-    </section>
+<a href="#main" class="skip-link sr-only">Salta al contenuto</a>
 
-    <div class="toggle">
-        <button class="toggle-btn active" onclick="switchMode('giocatore')">
-            sono un giocatore
-        </button>
-        <button class="toggle-btn" onclick="switchMode('campo')">
-            ho un campo
-        </button>
-    </div>
+<header class="header">
+  <h1>GOAL TO GO</h1>
+  <div class="profile-icon"></div>
+</header>
 
+<main class="container container--center" id="main">
+
+  <section class="welcome welcome--center">
+    <h2>Registrati</h2>
+  </section>
+
+  <div class="toggle">
+    <button type="button" class="toggle-btn active" onclick="switchMode('giocatore')">
+      sono un giocatore
+    </button>
+    <button type="button" class="toggle-btn" onclick="switchMode('campo')">
+      ho un campo
+    </button>
+  </div>
+
+  <form id="formRegistrazione">
+
+    <!-- 🔥 CAMPO NASCOSTO PER IL TIPO UTENTE -->
+    <input type="hidden" name="tipo" id="tipoUtente" value="giocatore">
+
+    <!-- 👤 GIOCATORE -->
     <div id="form-giocatore" class="form active-form">
-        <div class="login-box"><input placeholder="email"></div>
-        <div class="login-box"><input placeholder="nome utente"></div>
-        <div class="login-box"><input placeholder="password"></div>
-        <div class="login-box"><input placeholder="conferma password"></div>
+
+      <div class="login-box">
+        <label class="sr-only" for="email-giocatore">Email</label>
+        <input id="email-giocatore" type="email" name="email" placeholder="email" required autocomplete="email">
+      </div>
+
+      <div class="login-box">
+        <label class="sr-only" for="nickname-giocatore">Nome utente</label>
+        <input id="nickname-giocatore" name="nickname" placeholder="nome utente" required autocomplete="username">
+      </div>
+
+      <div class="login-box">
+        <label class="sr-only" for="password-giocatore">Password</label>
+        <input id="password-giocatore" type="password" name="password" placeholder="password" required autocomplete="new-password">
+      </div>
+
+      <div class="login-box">
+        <label class="sr-only" for="confirm-giocatore">Conferma password</label>
+        <input id="confirm-giocatore" type="password" name="confirm" placeholder="conferma password" required autocomplete="new-password">
+      </div>
+
     </div>
 
+    <!-- 🏟 CAMPO -->
     <div id="form-campo" class="form">
-        <div class="login-box"><input placeholder="email"></div>
-        <div class="login-box"><input placeholder="nome utente"></div>
-        <div class="login-box"><input placeholder="password"></div>
-        <div class="login-box"><input placeholder="conferma password"></div>
-        </div>
 
-        <button class="inizia-btn" onclick="handleClick('inizia-registrazione')">Inizia</button>
+      <div class="login-box">
+        <label class="sr-only" for="email-campo">Email</label>
+        <input id="email-campo" type="email" name="email" placeholder="email" disabled autocomplete="email">
+      </div>
 
-        <p class="registra-link" onclick="handleClick('schermata-accedi')">Hai già un account? Accedi</p>
+      <div class="login-box">
+        <label class="sr-only" for="nickname-campo">Nome utente</label>
+        <input id="nickname-campo" name="nickname" placeholder="nome utente" disabled autocomplete="username">
+      </div>
+
+      <div class="login-box">
+        <label class="sr-only" for="password-campo">Password</label>
+        <input id="password-campo" type="password" name="password" placeholder="password" disabled autocomplete="new-password">
+      </div>
+
+      <div class="login-box">
+        <label class="sr-only" for="confirm-campo">Conferma password</label>
+        <input id="confirm-campo" type="password" name="confirm" placeholder="conferma password" disabled autocomplete="new-password">
+      </div>
 
     </div>
 
-    <script src="script.js"></script>
+    <button type="submit" class="inizia-btn">Inizia</button>
+
+    <div id="feedback"></div>
+
+  </form>
+
+  <a class="registra-link" href="pagina_accedi.html">
+    Hai gia un account? <span>Accedi</span>
+  </a>
+
+</main>
+
+<nav class="bottom-nav" aria-label="Navigazione principale">
+  <a href="home_page.html" class="bottom-nav__item is-active" aria-current="page">
+    <span aria-hidden="true">🏠</span>
+    <span>Home</span>
+  </a>
+  <a href="pagina_trova_partita.html" class="bottom-nav__item">
+    <span aria-hidden="true">🔍</span>
+    <span>Trova</span>
+  </a>
+  <a href="pagina_club.html" class="bottom-nav__item">
+    <span aria-hidden="true">👥</span>
+    <span>Club</span>
+  </a>
+  <a href="pagina_profilo.html" class="bottom-nav__item">
+    <span aria-hidden="true">👤</span>
+    <span>Profilo</span>
+  </a>
+</nav>
+
+<script src="js_script/scripts.js"></script>
 </body>
+</html>

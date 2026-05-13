@@ -2,24 +2,28 @@
 <html lang="it">
 <head>
   <meta charset="UTF-8">
-  <title>Goal To Go</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Goal To Go — Home</title>
   <link rel="stylesheet" href="styles.css">
+  <script>window.__AUTH_REQUIRES__ = { role: 'giocatore' };</script>
+  <script src="js_script/auth_guard.js"></script>
 </head>
 <body>
+
+  <a href="#main" class="skip-link sr-only">Salta al contenuto</a>
 
   <header class="header">
     <h1>GOAL TO GO</h1>
     <div class="profile-icon"></div>
   </header>
 
-  <div class="container">
+  <main class="container" id="main">
 
     <section class="welcome">
-      <h2>Ciao Mario</h2>
-      <p>
-        Oggi non hai nessuna partita in programma, puoi prenotarla facendo click su prenota il tuo campo o trova una partita oppure puoi organizzarla direttamente con la tua lega
-      </p>
+      <h2 id="ciao_user">Ciao!</h2>
+      <p>Pronto a scendere in campo? <span aria-hidden="true">⚽</span></p>
     </section>
+    <hr class="divider divider--brand" aria-hidden="true">
 
     <section class="play">
       <h3>Inizia a giocare</h3>
@@ -28,34 +32,53 @@
 
     <section class="actions">
 
-      <div class="card" onclick="handleClick('prenota')">
+      <a class="card" href="pagina_prenota.html">
         <div>
           <h4 class="titolo">Prenota il tuo campo</h4>
           <h6>Prenota il tuo campo con un click</h6>
         </div>
-        <button class="arrow">→</button>
-      </div>
+        <div class="arrow" aria-hidden="true">→</div>
+      </a>
 
-      <div class="card" onclick="handleClick('trova')">
+      <a class="card" href="pagina_trova_partita.html">
         <div>
           <h4 class="titolo">Trova una partita</h4>
           <h6>Trova una partita con un click</h6>
         </div>
-        <button class="arrow">→</button>
-      </div>
+        <div class="arrow" aria-hidden="true">→</div>
+      </a>
 
-      <div class="card" onclick="handleClick('club')">
+      <a class="card" href="pagina_club.html">
         <div>
           <h4 class="titolo">Club</h4>
           <h6>Unisciti a un Club</h6>
         </div>
-        <button class="arrow">→</button>
-      </div>
+        <div class="arrow" aria-hidden="true">→</div>
+      </a>
 
     </section>
 
-  </div>
+  </main>
 
-  <script src="script.js"></script>
+  <nav class="bottom-nav" aria-label="Navigazione principale">
+    <a href="home_page.html" class="bottom-nav__item is-active" aria-current="page">
+      <span aria-hidden="true">🏠</span>
+      <span>Home</span>
+    </a>
+    <a href="pagina_trova_partita.html" class="bottom-nav__item">
+      <span aria-hidden="true">🔍</span>
+      <span>Trova</span>
+    </a>
+    <a href="pagina_club.html" class="bottom-nav__item">
+      <span aria-hidden="true">👥</span>
+      <span>Club</span>
+    </a>
+    <a href="pagina_profilo.html" class="bottom-nav__item">
+      <span aria-hidden="true">👤</span>
+      <span>Profilo</span>
+    </a>
+  </nav>
+
+  <script src="js_script/scripts.js"></script>
 </body>
 </html>

@@ -2,63 +2,65 @@
 <html lang="it">
 <head>
   <meta charset="UTF-8">
-  <title>Prenota Campo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Goal To Go — Crea partita</title>
   <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script>window.__AUTH_REQUIRES__ = { role: 'giocatore' };</script>
+  <script src="js_script/auth_guard.js"></script>
 </head>
 <body>
- <div class="header">
-  <h1>GOAL &nbsp; TO &nbsp; GO</h1>
-  <div class="header-right">
-    <button class="home-btn" onclick="location.href='home_page.html'">
-      🏠 HOME
-    </button>
-    <div class="profile-icon"></div>
-  </div>
-</div>
+  <a href="#main" class="skip-link sr-only">Salta al contenuto</a>
 
-
-  <div class="container container--center">
-
-    <section class="welcome">
-      <h2>prenota il tuo campo</h2>
-      <p>campi vicino a te</p>
-    </section>
-
-    <div class="campo-container search-container">
-      
-        <input 
-            type="text" 
-            placeholder="Cerca partita ..." 
-            class="search-input"
-  >
+  <header class="header">
+    <h1>GOAL TO GO</h1>
+    <div class="header-right">
+      <button type="button" class="home-btn" onclick="handleClick('trova')" aria-label="Torna a trova partita">←</button>
+      <div class="profile-icon" aria-hidden="true"></div>
     </div>
+  </header>
 
-    <section class="actions">
+  <main id="main" class="container container--center">
+    <h2 class="titolo-grande">Crea una partita</h2>
+    <p class="welcome p-muted">Riempi i dettagli, gli altri giocatori potranno unirsi.</p>
 
-      <div class="card">
+    <form id="formCreaPartita" class="form-create" novalidate>
+      <label for="nome-partita">Nome partita</label>
+      <input id="nome-partita" name="nome" type="text" class="input" required maxlength="40" placeholder="Es. 5vs5 venerdì sera" autocomplete="off">
 
-        <div>
-          <h4 class="titolo text-white">Campo di prato falcone</h4>
+      <span class="form-label" id="slotLabel">Scegli lo slot orario di oggi</span>
+      <div id="slot-orari-partita" class="orari" role="radiogroup" aria-labelledby="slotLabel"></div>
+      <input id="orario-partita" name="orario" type="hidden" required>
 
-          <img src="campo.jpg" alt="campo da calcio" style="width:100%; border-radius:10px; margin-top:10px;">
+      <label for="campo-partita">Campo</label>
+      <select id="campo-partita" name="fk_campo" class="input" required>
+        <option value="">Seleziona un campo…</option>
+      </select>
 
-        </div>
+      <label for="max-giocatori">Massimo giocatori</label>
+      <input id="max-giocatori" name="max_giocatori" type="number" class="input" min="2" max="22" value="10" required>
 
-        <div class ="campo-right">
-          <p>prezzo: 50$</p>
-          <p>via delle case 13<p>
-          <p>contatti: +39 3666053846</p>
-          <br>
-          <button class="prenota-btn" onclick="handleClick('pagina-prenota-seconda-per-partite')">Prenota</button>
-        </div>
+      <button type="submit" class="create-club-btn">Crea partita</button>
+    </form>
 
-      </div>
+    <div id="feedback" role="status" aria-live="polite"></div>
+  </main>
 
-    </section>
+  <nav class="bottom-nav" aria-label="Navigazione principale">
+    <a href="home_page.html" class="bottom-nav__item">
+      <span aria-hidden="true">🏠</span><span>Home</span>
+    </a>
+    <a href="pagina_trova_partita.html" class="bottom-nav__item is-active" aria-current="page">
+      <span aria-hidden="true">🔍</span><span>Trova</span>
+    </a>
+    <a href="pagina_club.html" class="bottom-nav__item">
+      <span aria-hidden="true">👥</span><span>Club</span>
+    </a>
+    <a href="pagina_profilo.html" class="bottom-nav__item">
+      <span aria-hidden="true">👤</span><span>Profilo</span>
+    </a>
+  </nav>
 
-  </div>
-
-  <script src="script.js"></script>
-
+  <script src="js_script/scripts.js"></script>
 </body>
 </html>
