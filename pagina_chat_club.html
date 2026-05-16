@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Goal To Go — Chat club</title>
   <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script>window.__AUTH_REQUIRES__ = { role: 'giocatore' };</script>
   <script src="js_script/auth_guard.js"></script>
 </head>
@@ -14,83 +15,100 @@
   <header class="header">
     <h1>GOAL &nbsp; TO &nbsp; GO</h1>
     <div class="header-right">
-      <a class="home-btn" href="home_page.html" aria-label="Torna alla home"><span aria-hidden="true">🏠</span> HOME</a>
+      <a class="home-btn" href="home_page.html" aria-label="Torna alla home">
+        <span aria-hidden="true">🏠</span> HOME
+      </a>
       <div class="profile-icon" aria-hidden="true"></div>
     </div>
   </header>
 
   <main id="main" class="container container--center container--club">
 
+    <!-- BANNER CLUB -->
     <div class="club-banner">
       <div class="club-logo-placeholder" aria-hidden="true">🏆</div>
-      <div>
-        <h2 class="club-banner-nome">Lega primavera</h2>
+      <div style="flex:1;">
+        <h2 class="club-banner-nome" id="chat-club-nome">—</h2>
         <div class="club-banner-info">
-          <div class="club-banner-rating">6 online</div>
-          <div class="club-banner-membri">12 membri</div>
+          <div class="club-banner-membri" id="chat-club-membri">… membri</div>
         </div>
       </div>
     </div>
 
     <div class="lega-layout">
 
+      <!-- FEED PROPOSTE -->
       <div class="lega-main">
         <div class="data-label" id="data-oggi-lega"></div>
-        <div class="evento-pill"><span aria-hidden="true">🏆</span> Lega Primavera creata da Mario</div>
+
+        <!-- STATO TIMER GLOBALE (visibile quando c'è una proposta attiva) -->
+        <div id="chat-timer-banner" style="display:none;" class="evento-pill chat-timer-pill">
+          <span aria-hidden="true">⏱</span>
+          <span id="chat-timer-testo">Timer attivo</span>
+        </div>
+
         <div class="proposte-list" id="proposte-list" aria-live="polite">
-          <div class="skeleton" style="height: 60px; border-radius: var(--r-md); margin-bottom: var(--s-2);"></div>
-          <div class="skeleton" style="height: 60px; border-radius: var(--r-md); margin-bottom: var(--s-2);"></div>
-          <div class="skeleton" style="height: 60px; border-radius: var(--r-md);"></div>
+          <div class="skeleton" style="height:110px;border-radius:var(--r-md);margin-bottom:var(--s-2);"></div>
+          <div class="skeleton" style="height:110px;border-radius:var(--r-md);margin-bottom:var(--s-2);"></div>
+          <div class="skeleton" style="height:80px;border-radius:var(--r-md);"></div>
         </div>
       </div>
 
-      <aside class="lega-sidebar" aria-label="Membri del club">
+      <!-- SIDEBAR MEMBRI -->
+      <aside class="lega-sidebar" id="chat-sidebar" aria-label="Membri del club">
         <div class="sb-section">
-          <div class="sb-label">MEMBRI : 12</div>
+          <div class="sb-label" id="sb-label-totale">MEMBRI</div>
         </div>
-        <div class="sb-section">
-          <div class="sb-label">ONLINE : 6</div>
-          <div class="sb-user"><div class="sb-avatar-green" aria-hidden="true">M</div><div class="sb-nome">Mario M.</div></div>
-          <div class="sb-user"><div class="sb-avatar-green" aria-hidden="true">M</div><div class="sb-nome">Mario M.</div></div>
-          <div class="sb-user"><div class="sb-avatar-green" aria-hidden="true">M</div><div class="sb-nome">Mario M.</div></div>
-        </div>
-        <div class="sb-section">
-          <div class="sb-label">OFFLINE : 6</div>
-          <div class="sb-user"><div class="sb-avatar-gray" aria-hidden="true">H</div><div class="sb-nome">Huge R.</div></div>
-          <div class="sb-user"><div class="sb-avatar-gray" aria-hidden="true">H</div><div class="sb-nome">Huge R.</div></div>
-          <div class="sb-user"><div class="sb-avatar-gray" aria-hidden="true">H</div><div class="sb-nome">Huge R.</div></div>
+        <div class="sb-section" id="sb-membri-section">
+          <div id="sb-membri-list"></div>
         </div>
       </aside>
 
     </div>
 
+    <!-- BOTTONI FOOTER -->
     <div class="club-footer-btns">
-      <button type="button" class="btn-accetta" onclick="accettaPartita()">Accetta e gioca !</button>
-      <button type="button" class="btn-proponi" onclick="apriModale()">Proponi una partita</button>
+      <button type="button" class="btn-accetta"
+              id="btn-accetta-principale"
+              style="display:none;"
+              onclick="accettaPropostaPrincipale()">
+        Accetta e gioca !
+      </button>
+      <button type="button" class="btn-proponi"
+              id="btn-proponi-principale"
+              onclick="apriModaleProposta()">
+        Proponi una partita
+      </button>
     </div>
 
   </main>
 
-  <!-- MODALE PROPONI PARTITA -->
-  <div class="modale-overlay" id="modale" style="display:none;"
-       role="dialog" aria-modal="true" aria-labelledby="modale-titolo" aria-hidden="true">
+  <!-- ============================================================
+       MODALE: PROPONI UNA PARTITA
+  ============================================================ -->
+  <div class="modale-overlay" id="modale-proposta" style="display:none;"
+       role="dialog" aria-modal="true" aria-labelledby="modale-proposta-titolo" aria-hidden="true">
     <div class="modale-box">
-      <button type="button" class="modale-close" onclick="chiudiModale()" aria-label="Chiudi finestra"
-              style="position:absolute; top:12px; right:12px; background:transparent; border:0; color:white; font-size:20px; cursor:pointer;">✕</button>
-      <h3 id="modale-titolo" style="margin-bottom:16px; color:white;">Proponi una partita</h3>
+      <button type="button" onclick="chiudiModaleProposta()" aria-label="Chiudi"
+              style="position:absolute;top:12px;right:12px;background:transparent;border:0;color:white;font-size:20px;cursor:pointer;">✕</button>
+      <h3 id="modale-proposta-titolo" style="margin-bottom:16px;color:white;">Proponi una partita</h3>
 
-      <form onsubmit="inviaProposta(event)" novalidate>
-        <label for="modal-testo">Cosa proponi?</label>
-        <textarea id="modal-testo" name="testo" required maxlength="160" rows="2" placeholder="Es. Partita 5vs5 venerdì sera"></textarea>
+      <form id="form-proposta" onsubmit="inviaPropostaChat(event)" novalidate>
+        <label for="np-testo">Descrizione</label>
+        <textarea id="np-testo" name="testo" maxlength="160" rows="2"
+                  placeholder="Es. Partita 5vs5 domani sera"></textarea>
 
-        <label for="modal-orario">Orario</label>
-        <input id="modal-orario" name="orario" type="datetime-local">
+        <label for="np-data">Data</label>
+        <input id="np-data" name="data" type="date">
 
-        <label for="modal-campo">Campo (opzionale)</label>
-        <input id="modal-campo" name="nome_campo" type="text" maxlength="80" placeholder="Es. Sporting Balduina">
+        <label for="np-orario">Fascia oraria</label>
+        <input id="np-orario" name="orario" type="text" maxlength="16" placeholder="Es. 18:00-19:00">
 
-        <label for="modal-max">Numero max giocatori</label>
-        <input id="modal-max" name="max_giocatori" type="number" min="2" max="22" value="10">
+        <label for="np-campo">Campo (opzionale)</label>
+        <input id="np-campo" name="nome_campo" type="text" maxlength="80" placeholder="Es. Sporting Balduina">
+
+        <label for="np-max">N° max giocatori</label>
+        <input id="np-max" name="max_giocatori" type="number" min="2" max="22" value="10">
 
         <button type="submit" class="btn-proponi">Invia proposta</button>
       </form>
@@ -99,20 +117,16 @@
 
   <nav class="bottom-nav" aria-label="Navigazione principale">
     <a href="home_page.html" class="bottom-nav__item">
-      <span aria-hidden="true">🏠</span>
-      <span>Home</span>
+      <span aria-hidden="true">🏠</span><span>Home</span>
     </a>
     <a href="pagina_trova_partita.html" class="bottom-nav__item">
-      <span aria-hidden="true">🔍</span>
-      <span>Trova</span>
+      <span aria-hidden="true">🔍</span><span>Trova</span>
     </a>
     <a href="pagina_club.html" class="bottom-nav__item is-active" aria-current="page">
-      <span aria-hidden="true">👥</span>
-      <span>Club</span>
+      <span aria-hidden="true">👥</span><span>Club</span>
     </a>
     <a href="pagina_profilo.html" class="bottom-nav__item">
-      <span aria-hidden="true">👤</span>
-      <span>Profilo</span>
+      <span aria-hidden="true">👤</span><span>Profilo</span>
     </a>
   </nav>
 

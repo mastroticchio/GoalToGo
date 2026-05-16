@@ -1040,3 +1040,56 @@ button.card:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px
 }
 .profile-menu__item[data-action="logout"] { color: var(--danger); }
 .profile-menu__item[data-action="logout"]:hover { background: rgba(239, 68, 68, 0.1); color: var(--danger); }
+
+/* ===== MODALE CHAT CLUB — form fields ===== */
+.modale-box label {
+  display: block;
+  font-size: var(--text-xs);
+  font-weight: 700;
+  color: var(--text-2);
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  margin: var(--s-3) 0 var(--s-1);
+}
+.modale-box label:first-of-type { margin-top: 0; }
+
+.modale-box input,
+.modale-box textarea,
+.modale-box select {
+  width: 100%;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  padding: 10px 12px;
+  font-size: var(--text-base);
+  color: var(--text);
+  box-sizing: border-box;
+  transition: border-color var(--dur-fast);
+}
+.modale-box input::placeholder,
+.modale-box textarea::placeholder {
+  color: var(--text-3);
+}
+.modale-box input:focus,
+.modale-box textarea:focus {
+  outline: none;
+  border-color: var(--brand);
+  box-shadow: var(--shadow-glow);
+}
+.modale-box textarea { resize: vertical; min-height: 72px; }
+
+.modale-box button[type="submit"] {
+  width: 100%;
+  margin-top: var(--s-4);
+  padding: 14px;
+  border-radius: var(--r-md);
+  background: var(--brand);
+  color: var(--brand-ink);
+  font-weight: 700;
+  font-size: var(--text-md);
+  border: none;
+  cursor: pointer;
+  transition: opacity var(--dur-fast);
+}
+.modale-box button[type="submit"]:hover { opacity: .85; }
+.modale-box button[type="submit"]:disabled { opacity: .45; cursor: not-allowed; }

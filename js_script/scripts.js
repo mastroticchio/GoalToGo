@@ -14,33 +14,49 @@ document.addEventListener('DOMContentLoaded', function () {
             e.preventDefault();
 
             const feedback = document.getElementById('feedback');
-            const dati = new FormData(this);
+            const btnInvia = this.querySelector('button[type="submit"]');
+            const dati     = new FormData(this);
+
+            feedback.innerHTML = '';
+            if (btnInvia) { btnInvia.disabled = true; btnInvia.textContent = 'Attendere…'; }
 
             fetch('/GoalToGo/api/api_signin.php', {
                 method: 'POST',
                 body: dati,
                 credentials: 'include'
             })
-            .then(res => res.json())
-            .then(data => {
+            .then(res => res.text())   // testo grezzo prima — così se il server manda HTML non esplode
+            .then(raw => {
+                let data;
+                try {
+                    data = JSON.parse(raw);
+                } catch (_) {
+                    // Il server ha risposto con HTML (errore PHP o DB offline)
+                    console.error('Risposta non-JSON:', raw);
+                    feedback.innerHTML = '<p class="error">Errore del server. Controlla che XAMPP/MySQL sia attivo e che il database "goaltogo" esista.</p>';
+                    return;
+                }
+
                 if (data.status === 'success') {
-                    // server has set the session cookie + (now) returns full user payload
                     if (data.tipo && data.id) {
                         localStorage.setItem('tipoUtente', data.tipo);
-                        localStorage.setItem('idUtente', data.id);
+                        localStorage.setItem('idUtente',   data.id);
                         localStorage.setItem('nomeUtente', (data.user && data.user.nickname) || '');
                     }
                     feedback.innerHTML = `<p class="success">${data.message}</p>`;
-                    formReg.reset();
-                    // signup is for giocatori only, but be defensive
+                    this.reset();
                     window.location.href = data.tipo === 'gestore' ? 'pagina_campi_gestore.html' : 'home_page.html';
                 } else {
-                    feedback.innerHTML = `<p class="error">${data.message}</p>`;
+                    feedback.innerHTML = `<p class="error">${data.message ?? 'Errore sconosciuto'}</p>`;
+                    if (data.detail) console.error('Dettaglio:', data.detail);
                 }
             })
             .catch(err => {
-                console.error(err);
-                feedback.innerHTML = '<p class="error">Communication error</p>';
+                console.error('Fetch fallita:', err);
+                feedback.innerHTML = '<p class="error">Impossibile raggiungere il server. Controlla che XAMPP sia avviato.</p>';
+            })
+            .finally(() => {
+                if (btnInvia) { btnInvia.disabled = false; btnInvia.textContent = 'Inizia'; }
             });
         });
     }
@@ -53,51 +69,42 @@ document.addEventListener('DOMContentLoaded', function () {
         formLog.addEventListener('submit', function (e) {
             e.preventDefault();
 
-            const dati = new FormData(this);
+            const dati   = new FormData(this);
+            const btnLog = this.querySelector('button[type="submit"]');
+            if (btnLog) { btnLog.disabled = true; btnLog.textContent = 'Attendere…'; }
 
             fetch('/GoalToGo/api/api_login.php', {
                 method: 'POST',
                 body: dati,
                 credentials: 'include'
             })
-            .then(res => res.json())
-            .then(data => {
+            .then(res => res.text())
+            .then(raw => {
+                let data;
+                try { data = JSON.parse(raw); }
+                catch (_) {
+                    console.error('Risposta non-JSON dal login:', raw);
+                    Swal.fire({ title: 'Errore server', text: 'Controlla che XAMPP/MySQL sia attivo.', icon: 'error' });
+                    return;
+                }
                 if (data.status === 'success') {
-                    Swal.fire({
-                        title: 'Ottimo!',
-                        text: 'Login effettuato!',
-                        icon: 'success',
-                        timer: 2000,
-                        showConfirmButton: false
-                    })
-                    .then(() => {
-                        console.log('LOGIN RESPONSE:', data);
-
-                        localStorage.setItem('tipoUtente', data.tipo);
-                        localStorage.setItem('idUtente', data.id);
-                        localStorage.setItem('nomeUtente', data.user?.nickname ?? data.nickname ?? '');
-
-                        if (data.tipo === 'gestore') {
-                            window.location.href = 'pagina_campi_gestore.html';
-                        } else {
-                            window.location.href = 'home_page.html';
-                        }
-                    });
+                    localStorage.setItem('tipoUtente', data.tipo);
+                    localStorage.setItem('idUtente',   data.id);
+                    localStorage.setItem('nomeUtente', data.user?.nickname ?? data.nickname ?? '');
+                    Swal.fire({ title: 'Ottimo!', text: 'Login effettuato!', icon: 'success', timer: 1500, showConfirmButton: false })
+                        .then(() => {
+                            window.location.href = data.tipo === 'gestore' ? 'pagina_campi_gestore.html' : 'home_page.html';
+                        });
                 } else {
-                    Swal.fire({
-                        title: 'Errore',
-                        text: data.message,
-                        icon: 'error'
-                    });
+                    Swal.fire({ title: 'Errore', text: data.message ?? 'Credenziali non valide', icon: 'error' });
                 }
             })
             .catch(err => {
-                console.error(err);
-                Swal.fire({
-                    title: 'Errore',
-                    text: 'Problema di comunicazione con il server',
-                    icon: 'error'
-                });
+                console.error('Fetch login fallita:', err);
+                Swal.fire({ title: 'Errore', text: 'Impossibile raggiungere il server.', icon: 'error' });
+            })
+            .finally(() => {
+                if (btnLog) { btnLog.disabled = false; btnLog.textContent = 'Accedi'; }
             });
         });
     }
@@ -561,6 +568,7 @@ cardDiv.innerHTML = `
                           return;
                       }
                       const c = d.club;
+                      localStorage.setItem('idClub', c.ID);
                       mioClubEl.innerHTML = `
                           <div class="play"><h3>Il mio club</h3></div>
                           <a class="card" href="pagina_dettaglio_club.html" data-club-id="${escapeHtml(c.ID)}" style="border-color: var(--brand);">
@@ -569,9 +577,43 @@ cardDiv.innerHTML = `
                               <span class="text-white">${escapeHtml(c.membri_totali ?? 0)} / ${escapeHtml(c.N_COMPONENTI)} membri</span>
                             </div>
                             <div class="campo-right"><strong class="titolo">→</strong></div>
-                          </a>`;
+                          </a>
+                          <a href="pagina_chat_club.html"
+                             class="btn btn--primary"
+                             style="display:flex;align-items:center;justify-content:center;gap:8px;margin-top:var(--s-3);text-decoration:none;padding:14px;border-radius:var(--r-md);font-weight:700;font-size:var(--text-md);background:var(--brand);color:#000;">
+                            💬 Entra nella chat del club
+                          </a>
+                          <button type="button" id="btnLeaveMioClub"
+                             class="btn btn--secondary"
+                             style="margin-top:var(--s-2);width:100%;">
+                            Esci dal club
+                          </button>`;
                       const card = mioClubEl.querySelector('.card[data-club-id]');
                       if (card) card.addEventListener('click', () => localStorage.setItem('idClub', card.dataset.clubId));
+                      const btnLeaveMio = document.getElementById('btnLeaveMioClub');
+                      if (btnLeaveMio) {
+                          btnLeaveMio.addEventListener('click', () => {
+                              Swal.fire({
+                                  title: 'Vuoi davvero uscire?',
+                                  text: 'Lascerai il club ' + c.NOME,
+                                  icon: 'warning', showCancelButton: true,
+                                  confirmButtonText: "Sì, esci", cancelButtonText: 'Annulla'
+                              }).then(res => {
+                                  if (!res.isConfirmed) return;
+                                  fetch('/GoalToGo/api/api_leave_club.php', { method: 'POST', credentials: 'include' })
+                                      .then(r => r.json())
+                                      .then(d => {
+                                          if (d.status === 'success') {
+                                              localStorage.removeItem('idClub');
+                                              Swal.fire({ title: 'Hai lasciato il club', icon: 'success', timer: 1200, showConfirmButton: false })
+                                                  .then(() => window.location.reload());
+                                          } else {
+                                              Swal.fire({ title: 'Errore', text: d.message, icon: 'error' });
+                                          }
+                                      });
+                              });
+                          });
+                      }
                   });
             })
             .catch(err => console.error('Errore fetch mio club:', err));
@@ -675,7 +717,16 @@ cardDiv.innerHTML = `
                     const giaInAltro = fkClub !== null && String(fkClub) !== String(clubIdSelected);
                     clubActionsEl.hidden = false;
                     if (sonoIn) {
-                        clubActionsEl.innerHTML = `<button type="button" class="btn btn--secondary" id="btnLeaveClub">Esci dal club</button>`;
+                        clubActionsEl.innerHTML = `
+                            <button type="button" class="btn btn--primary" id="btnEntraChat" style="margin-bottom:var(--s-2);">💬 Entra nella chat del club</button>
+                            <button type="button" class="btn btn--secondary" id="btnLeaveClub">Esci dal club</button>
+                        `;
+                        const btnChat = document.getElementById('btnEntraChat');
+                        if (btnChat) {
+                            btnChat.addEventListener('click', () => {
+                                window.location.href = 'pagina_chat_club.html';
+                            });
+                        }
                     } else if (giaInAltro) {
                         clubActionsEl.innerHTML = `<button type="button" class="btn btn--secondary" disabled aria-disabled="true">Sei già in un altro club</button>`;
                     } else {
@@ -1814,3 +1865,490 @@ window.logout = function () {
             window.location.replace('pagina_accedi.html');
         });
 };
+// ================================================================
+
+// ================================================================
+// PAGINA CHAT CLUB — LOGICA PROPOSTA UNICA
+// Regole:
+//  1. Una sola proposta attiva per volta nel club (30 min di lock)
+//  2. Chiunque può accettare (aderire) durante i 30 min
+//  3. Se si raggiunge il MAX_GIOCATORI → proposta confermata → vai al pagamento
+//  4. Dopo i 30 min senza raggiungere il quorum → scaduta → chiunque può fare una nuova proposta
+// ================================================================
+
+(function () {
+    'use strict';
+
+    if (!document.getElementById('proposte-list')) return;
+
+    // ---- util ----
+    function escH(s) {
+        return String(s ?? '').replace(/[&<>"']/g, c =>
+            ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]);
+    }
+
+    function fmtData(iso) {
+        if (!iso) return '';
+        try {
+            const d = new Date(iso.includes('T') ? iso : iso + 'T00:00:00');
+            return d.toLocaleDateString('it-IT', { weekday: 'short', day: 'numeric', month: 'short' });
+        } catch { return iso; }
+    }
+
+    // ---- stato ----
+    let _globalTimer      = null;   // setInterval del countdown globale
+    let _propAttivaId     = null;   // id proposta attiva corrente
+    let _pollInterval     = null;   // setInterval del poll
+
+    // ---- DATA OGGI ----
+    const dataEl = document.getElementById('data-oggi-lega');
+    if (dataEl) {
+        dataEl.textContent = 'OGGI ' + new Date().toLocaleDateString('it-IT',
+            { day:'numeric', month:'long', year:'numeric' }).toUpperCase();
+    }
+
+    // ================================================================
+    // CARICA BANNER E SIDEBAR
+    // ================================================================
+    function caricaBannerClub() {
+        const idClub = localStorage.getItem('idClub');
+        if (!idClub) return;
+
+        fetch(`/GoalToGo/api/api_get_club.php?id=${encodeURIComponent(idClub)}`, { credentials: 'include' })
+            .then(r => r.json())
+            .then(data => {
+                if (data.status !== 'success' || !data.club) return;
+                const c = data.club;
+                const nomeEl = document.getElementById('chat-club-nome');
+                const memEl  = document.getElementById('chat-club-membri');
+                if (nomeEl) nomeEl.textContent = c.NOME ?? c.nome ?? '—';
+                if (memEl)  memEl.textContent  = (c.membri_totali ?? 0) + ' membri';
+            }).catch(console.error);
+
+        fetch('/GoalToGo/api/api_get_membri.php', { credentials: 'include' })
+            .then(r => r.json())
+            .then(data => {
+                if (data.status === 'success' && Array.isArray(data.membri)) {
+                    renderSidebar(data.membri);
+                }
+            }).catch(console.error);
+    }
+
+    function renderSidebar(membri) {
+        const labelEl = document.getElementById('sb-label-totale');
+        const listEl  = document.getElementById('sb-membri-list');
+        if (labelEl) labelEl.textContent = 'MEMBRI : ' + membri.length;
+        if (!listEl) return;
+        listEl.innerHTML = membri.map(m => {
+            const nick = m.NICKNAME ?? m.nickname ?? '?';
+            return `<div class="sb-user">
+                      <div class="sb-avatar-gray" aria-hidden="true">${escH(nick.charAt(0).toUpperCase())}</div>
+                      <div class="sb-nome">${escH(nick)}</div>
+                    </div>`;
+        }).join('');
+    }
+
+    // ================================================================
+    // COUNTDOWN GLOBALE (banner in cima al feed)
+    // ================================================================
+    function avviaTimerGlobale(secondiRimanenti) {
+        if (_globalTimer) clearInterval(_globalTimer);
+
+        const bannerEl = document.getElementById('chat-timer-banner');
+        const testoEl  = document.getElementById('chat-timer-testo');
+        if (!bannerEl || !testoEl) return;
+
+        let sec = Math.max(0, secondiRimanenti);
+
+        function aggiorna() {
+            if (sec <= 0) {
+                clearInterval(_globalTimer);
+                bannerEl.style.display = 'none';
+                // Scaduto: sblocca il bottone proponi e ricarica
+                abilitaProponi(true);
+                refreshProposteChat();
+                return;
+            }
+            const m = Math.floor(sec / 60);
+            const s = String(sec % 60).padStart(2, '0');
+            testoEl.textContent = `Proposta attiva — scade tra ${m}:${s}`;
+            bannerEl.style.display = '';
+            sec--;
+        }
+
+        aggiorna();
+        _globalTimer = setInterval(aggiorna, 1000);
+    }
+
+    function fermaTimerGlobale() {
+        if (_globalTimer) { clearInterval(_globalTimer); _globalTimer = null; }
+        const bannerEl = document.getElementById('chat-timer-banner');
+        if (bannerEl) bannerEl.style.display = 'none';
+    }
+
+    // ================================================================
+    // BOTTONE PROPONI — lock/unlock
+    // ================================================================
+    function abilitaProponi(abilitato) {
+        const btn = document.getElementById('btn-proponi-principale');
+        if (!btn) return;
+        btn.disabled = !abilitato;
+        if (abilitato) {
+            btn.classList.remove('btn-proponi--locked');
+            btn.title = '';
+        } else {
+            btn.classList.add('btn-proponi--locked');
+            btn.title = 'Non puoi proporre mentre è in corso un\'altra proposta';
+        }
+    }
+
+    // ================================================================
+    // RENDER PROPOSTE
+    // ================================================================
+    function renderProposte(proposte) {
+        const list = document.getElementById('proposte-list');
+        if (!list) return;
+
+        if (!Array.isArray(proposte) || proposte.length === 0) {
+            list.innerHTML = `<div class="empty-state" style="text-align:center;padding:var(--s-6) 0;">
+                <div style="font-size:2rem;margin-bottom:var(--s-2);">⚽</div>
+                <p>Nessuna proposta ancora.<br>Sii il primo a proporre una partita!</p>
+              </div>`;
+            document.getElementById('btn-accetta-principale').style.display = 'none';
+            fermaTimerGlobale();
+            abilitaProponi(true);
+            return;
+        }
+
+        // La proposta attiva è sempre al massimo 1 — la prima della lista
+        const attiva = proposte.find(p => p.STATO === 'attiva');
+        const storia = proposte.filter(p => p.STATO !== 'attiva');
+
+        // Gestisci timer globale e lock bottone proponi
+        if (attiva) {
+            _propAttivaId = parseInt(attiva.ID, 10);
+            avviaTimerGlobale(parseInt(attiva.SECONDI_RIMANENTI, 10) || 0);
+            abilitaProponi(false);
+
+            // Mostra bottone "Accetta e gioca" solo se l'utente non ha ancora aderito
+            const btnAcc = document.getElementById('btn-accetta-principale');
+            if (btnAcc) btnAcc.style.display = attiva.IO_HO_ADERITO ? 'none' : '';
+        } else {
+            _propAttivaId = null;
+            fermaTimerGlobale();
+            abilitaProponi(true);
+            document.getElementById('btn-accetta-principale').style.display = 'none';
+        }
+
+        let html = '';
+
+        // Card proposta attiva
+        if (attiva) html += buildCard(attiva, true);
+
+        // Storico proposte scadute/confermate
+        if (storia.length) {
+            html += `<div class="sb-label" style="margin-top:var(--s-5);letter-spacing:.1em;">STORICO</div>`;
+            html += storia.map(p => buildCard(p, false)).join('');
+        }
+
+        list.innerHTML = html;
+    }
+
+    function buildCard(p, isAttiva) {
+        const nick    = escH(p.NICKNAME ?? '—');
+        const iniziale= (p.NICKNAME ?? '?').charAt(0).toUpperCase();
+        const testo   = escH(p.TESTO ?? '');
+        const campo   = p.NOME_CAMPO ? escH(p.NOME_CAMPO).toUpperCase() : '';
+        const data    = p.DATA   ? fmtData(p.DATA)   : '';
+        const orario  = p.ORARIO ? escH(p.ORARIO)    : '';
+        const max     = parseInt(p.MAX_GIOCATORI, 10) || 10;
+        const num     = parseInt(p.NUM_ADESIONI,  10) || 0;
+        const pct     = Math.min(100, Math.round((num / max) * 100));
+        const ioHo    = !!p.IO_HO_ADERITO;
+        const conf    = p.STATO === 'confermata';
+        const scaduta = p.STATO === 'scaduta';
+        const propId  = parseInt(p.ID, 10);
+
+        // Badge stato
+        let badge = '';
+        if (conf)         badge = `<span class="proposta-stato proposta-stato--ok">Confermata ✓</span>`;
+        else if (scaduta) badge = `<span class="proposta-stato proposta-stato--off">Scaduta</span>`;
+
+        // Pulsante accetta / esci (solo proposta attiva)
+        let btnHtml = '';
+        if (isAttiva && !conf) {
+            if (ioHo) {
+                btnHtml = `<button class="btn-rifiuta-proposta" onclick="rifiutaProposta(${propId})">
+                             Esci dalla partita
+                           </button>`;
+            } else {
+                btnHtml = `<button class="btn-accetta-proposta" onclick="accettaProposta(${propId})">
+                             Accetta e gioca !
+                           </button>`;
+            }
+        }
+
+        // Badge "sei dentro" per proposte confermate a cui hai aderito
+        if (conf && ioHo) {
+            btnHtml = `<span class="proposta-stato proposta-stato--ok" style="font-size:var(--text-xs);">Sei dentro ✓</span>`;
+        }
+
+        return `
+        <div class="proposta-row${isAttiva ? ' proposta-row--attiva' : ''}" id="proposta-${propId}">
+          <div class="proposta-avatar" aria-hidden="true">${escH(iniziale)}</div>
+          <div class="proposta-body">
+            <div class="proposta-nome">${nick}</div>
+            <div class="proposta-card${isAttiva ? ' proposta-card--highlight' : ''}">
+              <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:var(--s-2);margin-bottom:var(--s-1);">
+                <div class="proposta-card-title">${testo}</div>
+                ${badge}
+              </div>
+              ${campo  ? `<div class="proposta-card-campo">${campo}</div>` : ''}
+              ${(data || orario) ? `<div class="proposta-card-ora">${[data, orario].filter(Boolean).join(' · ')}</div>` : ''}
+              <div class="proposta-progress-row">
+                <span class="prog-label">${num}/${max}</span>
+                <div class="prog-bar" role="progressbar" aria-valuenow="${num}" aria-valuemax="${max}"
+                     aria-label="${num} su ${max} giocatori">
+                  <div class="prog-fill${conf ? ' prog-fill--conf' : ''}" style="width:${pct}%;"></div>
+                </div>
+              </div>
+              ${btnHtml ? `<div class="proposta-btns" style="margin-top:var(--s-2);">${btnHtml}</div>` : ''}
+            </div>
+          </div>
+        </div>`;
+    }
+
+    // ================================================================
+    // FETCH PROPOSTE (polling)
+    // ================================================================
+    function refreshProposteChat() {
+        fetch('/GoalToGo/api/api_get_proposte_chat.php', { credentials: 'include' })
+            .then(r => r.text())
+            .then(raw => {
+                console.log('[GoalToGo] proposte raw:', raw.substring(0, 300));
+                let data;
+                try { data = JSON.parse(raw); }
+                catch(_) { console.error('[GoalToGo] proposte non-JSON:', raw); return; }
+                if (data.status !== 'success') { console.error('Proposte:', data.message); return; }
+                renderProposte(data.proposte || [], data.proposta_attiva || null);
+            })
+            .catch(err => console.error('Errore fetch proposte:', err));
+    }
+    window.refreshProposteChat = refreshProposteChat;
+
+    // ================================================================
+    // ACCETTA
+    // ================================================================
+    window.accettaProposta = function (propostaId) {
+        fetch('/GoalToGo/api/api_adesione_proposta.php', {
+            method: 'POST',
+            credentials: 'include',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ proposta_id: propostaId, azione: 'accetta' })
+        })
+        .then(r => r.json())
+        .then(data => {
+            if (data.ok || data.status === 'success') {
+                if (data.confermata) {
+                    // ✅ Partita completa → vai al pagamento
+                    Swal.fire({
+                        title: 'Partita confermata! ⚽',
+                        text: 'Tutti i giocatori sono pronti. Procedi al pagamento.',
+                        icon: 'success',
+                        confirmButtonText: 'Vai al pagamento'
+                    }).then(r => {
+                        if (r.isConfirmed) {
+                            // Salva l'id proposta per il pagamento e reindirizza
+                            localStorage.setItem('propostaConfermataId', propostaId);
+                            window.location.href = 'pagina_pagamento.html';
+                        } else {
+                            refreshProposteChat();
+                        }
+                    });
+                } else {
+                    Swal.fire({
+                        title: 'Sei dentro!',
+                        text: `Giocatori: ${data.num_adesioni ?? ''}. In attesa degli altri…`,
+                        icon: 'success',
+                        timer: 2000,
+                        showConfirmButton: false
+                    }).then(() => refreshProposteChat());
+                }
+            } else {
+                Swal.fire({ title: 'Errore', text: data.message, icon: 'error' });
+            }
+        })
+        .catch(err => Swal.fire({ title: 'Errore', text: err.message, icon: 'error' }));
+    };
+
+    // ================================================================
+    // BOTTONE FOOTER "Accetta e gioca !"
+    // ================================================================
+    window.accettaPropostaPrincipale = function () {
+        if (_propAttivaId) accettaProposta(_propAttivaId);
+    };
+
+    // ================================================================
+    // RIFIUTA / ESCI
+    // ================================================================
+    window.rifiutaProposta = function (propostaId) {
+        fetch('/GoalToGo/api/api_adesione_proposta.php', {
+            method: 'POST',
+            credentials: 'include',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ proposta_id: propostaId, azione: 'rifiuta' })
+        })
+        .then(r => r.json())
+        .then(data => {
+            if (data.status === 'success') {
+                refreshProposteChat();
+            } else {
+                Swal.fire({ title: 'Errore', text: data.message, icon: 'error' });
+            }
+        })
+        .catch(err => Swal.fire({ title: 'Errore', text: err.message, icon: 'error' }));
+    };
+
+    // ================================================================
+    // MODALE PROPOSTA
+    // ================================================================
+    window.apriModaleProposta = function () {
+        const btn = document.getElementById('btn-proponi-principale');
+        if (btn && btn.disabled) {
+            Swal.fire({
+                title: 'Proposta già in corso',
+                text: 'C\'è già una proposta attiva. Aspetta che scada (30 min) o che la partita si completi.',
+                icon: 'info'
+            });
+            return;
+        }
+        const m = document.getElementById('modale-proposta');
+        if (m) { m.style.display = 'flex'; m.setAttribute('aria-hidden', 'false'); }
+    };
+
+    window.chiudiModaleProposta = function () {
+        const m = document.getElementById('modale-proposta');
+        if (m) { m.style.display = 'none'; m.setAttribute('aria-hidden', 'true'); }
+    };
+
+    // Chiudi su click overlay
+    const modaleEl = document.getElementById('modale-proposta');
+    if (modaleEl) modaleEl.addEventListener('click', e => {
+        if (e.target === modaleEl) chiudiModaleProposta();
+    });
+
+    // ================================================================
+    // INVIA PROPOSTA
+    // ================================================================
+    window.inviaPropostaChat = function (event) {
+        event?.preventDefault();
+        const form = document.getElementById('form-proposta');
+        if (!form) return;
+        const get = name => form.querySelector(`[name="${name}"]`)?.value ?? '';
+
+        const payload = {
+            testo:         get('testo').trim(),
+            data:          get('data'),
+            orario:        get('orario').trim(),
+            nome_campo:    get('nome_campo').trim(),
+            max_giocatori: parseInt(get('max_giocatori') || '10', 10),
+        };
+
+        // descrizione opzionale — se vuota usa testo di default
+        if (!payload.testo) payload.testo = 'Partita proposta';
+
+        const btnSubmit = form.querySelector('button[type="submit"]');
+        if (btnSubmit) { btnSubmit.disabled = true; btnSubmit.textContent = 'Invio…'; }
+
+        fetch('/GoalToGo/api/api_crea_proposta_chat.php', {
+            method: 'POST',
+            credentials: 'include',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        })
+        .then(r => r.text())
+        .then(raw => {
+            console.log('[GoalToGo] risposta proposta:', raw);
+            let data;
+            try { data = JSON.parse(raw); }
+            catch (_) {
+                Swal.fire({ title: 'Errore server', text: 'Risposta non valida dal server. Controlla la console (F12).', icon: 'error' });
+                return;
+            }
+            if (data.status === 'success') {
+                Swal.fire({
+                    title: 'Proposta inviata! ⚽',
+                    text: 'I tuoi compagni hanno 30 minuti per accettare.',
+                    icon: 'success', timer: 2200, showConfirmButton: false
+                }).then(() => {
+                    form.reset();
+                    chiudiModaleProposta();
+                    refreshProposteChat();
+                });
+            } else {
+                Swal.fire({ title: 'Non puoi proporre ora', text: data.message, icon: 'info' });
+            }
+        })
+        .catch(err => Swal.fire({ title: 'Errore', text: err.message, icon: 'error' }))
+        .finally(() => {
+            if (btnSubmit) { btnSubmit.disabled = false; btnSubmit.textContent = 'Invia proposta'; }
+        });
+    };
+
+    // ================================================================
+    // CSS INLINE per i nuovi elementi
+    // ================================================================
+    const style = document.createElement('style');
+    style.textContent = `
+        /* Badge stato */
+        .proposta-stato {
+            display: inline-block;
+            padding: 2px 10px;
+            border-radius: 999px;
+            font-size: var(--text-xs);
+            font-weight: 700;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+        .proposta-stato--ok  { background: rgba(34,197,94,.15);  color: #22c55e; border: 1px solid #22c55e; }
+        .proposta-stato--off { background: rgba(239,68,68,.12);  color: var(--danger); border: 1px solid var(--danger); }
+
+        /* Highlight card attiva */
+        .proposta-card--highlight {
+            border-color: var(--brand) !important;
+            box-shadow: 0 0 0 1px var(--brand);
+        }
+
+        /* Banner timer */
+        .chat-timer-pill {
+            background: rgba(188,255,0,.1);
+            border: 1px solid var(--brand);
+            color: var(--brand);
+            font-weight: 700;
+            font-size: var(--text-sm);
+            text-align: center;
+            margin-bottom: var(--s-3);
+        }
+
+        /* Barra progress confermata */
+        .prog-fill--conf { background: #22c55e; }
+
+        /* Bottone proponi disabilitato */
+        .btn-proponi--locked {
+            opacity: .45;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+    `;
+    document.head.appendChild(style);
+
+    // ================================================================
+    // INIT
+    // ================================================================
+    caricaBannerClub();
+    refreshProposteChat();
+
+    // Poll ogni 15 secondi
+    _pollInterval = setInterval(refreshProposteChat, 15000);
+
+})();
