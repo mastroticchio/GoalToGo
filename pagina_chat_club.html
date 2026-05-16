@@ -2,81 +2,134 @@
 <html lang="it">
 <head>
   <meta charset="UTF-8">
-  <title>Goal To Go - Lega</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Goal To Go — Chat club</title>
   <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script>window.__AUTH_REQUIRES__ = { role: 'giocatore' };</script>
+  <script src="js_script/auth_guard.js"></script>
 </head>
 <body>
+  <a href="#main" class="skip-link sr-only">Salta al contenuto</a>
 
-  <div class="header">
+  <header class="header">
     <h1>GOAL &nbsp; TO &nbsp; GO</h1>
     <div class="header-right">
-      <button class="home-btn" onclick="location.href='home_page.html'">🏠 HOME</button>
-      <div class="profile-icon"></div>
+      <a class="home-btn" href="home_page.html" aria-label="Torna alla home">
+        <span aria-hidden="true">🏠</span> HOME
+      </a>
+      <div class="profile-icon" aria-hidden="true"></div>
     </div>
-  </div>
+  </header>
 
-  <div class="container container--center container--club">
+  <main id="main" class="container container--center container--club">
 
+    <!-- BANNER CLUB -->
     <div class="club-banner">
-      <div class="club-logo-placeholder">🏆</div>
-      <div>
-        <div class="club-banner-nome">Lega primavera</div>
+      <div class="club-logo-placeholder" aria-hidden="true">🏆</div>
+      <div style="flex:1;">
+        <h2 class="club-banner-nome" id="chat-club-nome">—</h2>
         <div class="club-banner-info">
-          <div class="club-banner-rating">6 online</div>
-          <div class="club-banner-membri">12 membri</div>
+          <div class="club-banner-membri" id="chat-club-membri">… membri</div>
         </div>
       </div>
     </div>
 
     <div class="lega-layout">
 
+      <!-- FEED PROPOSTE -->
       <div class="lega-main">
         <div class="data-label" id="data-oggi-lega"></div>
-        <div class="evento-pill">🏆 Lega Primavera creata da Mario</div>
-        <div class="proposte-list" id="proposte-list"></div>
+
+        <!-- STATO TIMER GLOBALE (visibile quando c'è una proposta attiva) -->
+        <div id="chat-timer-banner" style="display:none;" class="evento-pill chat-timer-pill">
+          <span aria-hidden="true">⏱</span>
+          <span id="chat-timer-testo">Timer attivo</span>
+        </div>
+
+        <div class="proposte-list" id="proposte-list" aria-live="polite">
+          <div class="skeleton" style="height:110px;border-radius:var(--r-md);margin-bottom:var(--s-2);"></div>
+          <div class="skeleton" style="height:110px;border-radius:var(--r-md);margin-bottom:var(--s-2);"></div>
+          <div class="skeleton" style="height:80px;border-radius:var(--r-md);"></div>
+        </div>
       </div>
 
-      <div class="lega-sidebar">
+      <!-- SIDEBAR MEMBRI -->
+      <aside class="lega-sidebar" id="chat-sidebar" aria-label="Membri del club">
         <div class="sb-section">
-          <div class="sb-label">MEMBRI : 12</div>
+          <div class="sb-label" id="sb-label-totale">MEMBRI</div>
         </div>
-        <div class="sb-section">
-          <div class="sb-label">ONLINE : 6</div>
-          <div class="sb-user"><div class="sb-avatar-green">M</div><div class="sb-nome">Mario M.</div></div>
-          <div class="sb-user"><div class="sb-avatar-green">M</div><div class="sb-nome">Mario M.</div></div>
-          <div class="sb-user"><div class="sb-avatar-green">M</div><div class="sb-nome">Mario M.</div></div>
+        <div class="sb-section" id="sb-membri-section">
+          <div id="sb-membri-list"></div>
         </div>
-        <div class="sb-section">
-          <div class="sb-label">OFFLINE : 6</div>
-          <div class="sb-user"><div class="sb-avatar-gray">H</div><div class="sb-nome">Huge R.</div></div>
-          <div class="sb-user"><div class="sb-avatar-gray">H</div><div class="sb-nome">Huge R.</div></div>
-          <div class="sb-user"><div class="sb-avatar-gray">H</div><div class="sb-nome">Huge R.</div></div>
-        </div>
-      </div>
+      </aside>
 
     </div>
 
+    <!-- BOTTONI FOOTER -->
     <div class="club-footer-btns">
-      <button class="btn-accetta" onclick="accettaPartita()">Accetta e gioca !</button>
-      <button class="btn-proponi" onclick="apriModale()">Proponi una partita</button>
+      <button type="button" class="btn-accetta"
+              id="btn-accetta-principale"
+              style="display:none;"
+              onclick="accettaPropostaPrincipale()">
+        Accetta e gioca !
+      </button>
+      <button type="button" class="btn-proponi"
+              id="btn-proponi-principale"
+              onclick="apriModaleProposta()">
+        Proponi una partita
+      </button>
     </div>
 
-  </div>
+  </main>
 
-  <!-- MODALE PROPONI PARTITA -->
-  <div class="modale-overlay" id="modale" style="display:none;">
+  <!-- ============================================================
+       MODALE: PROPONI UNA PARTITA
+  ============================================================ -->
+  <div class="modale-overlay" id="modale-proposta" style="display:none;"
+       role="dialog" aria-modal="true" aria-labelledby="modale-proposta-titolo" aria-hidden="true">
     <div class="modale-box">
-      <h3 style="margin-bottom:16px; color:white;">Proponi una partita</h3>
-      <input class="input" type="text" id="input-campo" placeholder="Nome del campo">
-      <input class="input" type="text" id="input-orario" placeholder="Orario (es. 18:00 - 19:00)">
-      <input class="input" type="number" id="input-max" placeholder="Numero massimo giocatori">
-      <div style="display:flex; gap:12px; margin-top:20px;">
-        <button class="btn-accetta" onclick="inviaProposta()">Invia</button>
-        <button class="btn-proponi" onclick="chiudiModale()">Annulla</button>
-      </div>
+      <button type="button" onclick="chiudiModaleProposta()" aria-label="Chiudi"
+              style="position:absolute;top:12px;right:12px;background:transparent;border:0;color:white;font-size:20px;cursor:pointer;">✕</button>
+      <h3 id="modale-proposta-titolo" style="margin-bottom:16px;color:white;">Proponi una partita</h3>
+
+      <form id="form-proposta" onsubmit="inviaPropostaChat(event)" novalidate>
+        <label for="np-testo">Descrizione</label>
+        <textarea id="np-testo" name="testo" maxlength="160" rows="2"
+                  placeholder="Es. Partita 5vs5 domani sera"></textarea>
+
+        <label for="np-data">Data</label>
+        <input id="np-data" name="data" type="date">
+
+        <label for="np-orario">Fascia oraria</label>
+        <input id="np-orario" name="orario" type="text" maxlength="16" placeholder="Es. 18:00-19:00">
+
+        <label for="np-campo">Campo (opzionale)</label>
+        <input id="np-campo" name="nome_campo" type="text" maxlength="80" placeholder="Es. Sporting Balduina">
+
+        <label for="np-max">N° max giocatori</label>
+        <input id="np-max" name="max_giocatori" type="number" min="2" max="22" value="10">
+
+        <button type="submit" class="btn-proponi">Invia proposta</button>
+      </form>
     </div>
   </div>
 
-  <script src="script.js"></script>
+  <nav class="bottom-nav" aria-label="Navigazione principale">
+    <a href="home_page.html" class="bottom-nav__item">
+      <span aria-hidden="true">🏠</span><span>Home</span>
+    </a>
+    <a href="pagina_trova_partita.html" class="bottom-nav__item">
+      <span aria-hidden="true">🔍</span><span>Trova</span>
+    </a>
+    <a href="pagina_club.html" class="bottom-nav__item is-active" aria-current="page">
+      <span aria-hidden="true">👥</span><span>Club</span>
+    </a>
+    <a href="pagina_profilo.html" class="bottom-nav__item">
+      <span aria-hidden="true">👤</span><span>Profilo</span>
+    </a>
+  </nav>
+
+  <script src="js_script/scripts.js"></script>
 </body>
 </html>

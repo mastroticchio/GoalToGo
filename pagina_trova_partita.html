@@ -2,58 +2,88 @@
 <html lang="it">
 <head>
   <meta charset="UTF-8">
-  <title>Goal To Go</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Goal To Go — Trova una partita</title>
   <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script>window.__AUTH_REQUIRES__ = { role: 'giocatore' };</script>
+  <script src="js_script/auth_guard.js"></script>
 </head>
 
 <body>
-  <div class="header">
-  <h1>GOAL &nbsp; TO &nbsp; GO</h1>
-  <div class="header-right">
-    <button class="home-btn" onclick="location.href='home_page.html'">
-      🏠 HOME
-    </button>
-    <div class="profile-icon"></div>
-  </div>
-</div>
+  <a href="#main" class="skip-link sr-only">Salta al contenuto</a>
 
-
-  <div class="container container--center">
-
-
-    <div class="campo-container search-container">
-      
-        <input 
-            type="text" 
-            placeholder="Cerca partita ..." 
-            class="search-input"
-  >
-
-        <button class="orario-btn create-btn" onclick="handleClick('crea-partita')">
-            crea partita
-        </button>
-
+  <header class="header">
+    <h1>GOAL &nbsp; TO &nbsp; GO</h1>
+    <div class="header-right">
+      <a class="home-btn" href="home_page.html" aria-label="Torna alla home">
+        <span aria-hidden="true">🏠</span> HOME
+      </a>
+      <div class="profile-icon" aria-hidden="true"></div>
     </div>
+  </header>
 
-    <div class="actions">
+  <main id="main" class="container container--center">
 
-      <div class="card" onclick="handleClick('trova-partita-seconda', this)">
-        <div>
-          <h4>informatici vs automatici</h4>
-          <span class="text-white">via del mare 104</span><br>
-          <span class="text-white">#009123</span>
-        </div>
+    <form name="form_partita" id="form_partita" class="search-row">
+      <label class="sr-only" for="nome_partita">Cerca partita</label>
+      <input type="search" placeholder="🔍 Cerca per zona, campo, orario"
+             class="search-input" name="nome_partita" id="nome_partita">
+      <a class="orario-btn create-btn" href="pagina_crea_partita.html" role="button">
+        + Crea partita
+      </a>
+    </form>
 
-        <div class="campo-right">
-          <strong class="titolo"><span id="count-player" class="titolo">6</span>/10</strong>
-        </div>
+    <section aria-labelledby="mie-partite-h">
+      <h3 id="mie-partite-h" class="play" style="margin-bottom: var(--s-3);">Le mie partite</h3>
+      <div id="miePartiteList" class="actions" aria-live="polite" style="margin-bottom: var(--s-5);">
+        <div class="skeleton" style="height: 90px; border-radius: var(--r-lg);"></div>
+      </div>
+    </section>
+
+    <section aria-labelledby="trova-h">
+      <h3 id="trova-h" class="play" style="margin-bottom: var(--s-3);">Trova una partita</h3>
+
+      <div class="chip-row" role="tablist" aria-label="Filtri partita">
+        <button type="button" class="chip chip--active" role="tab" aria-selected="true" data-filter="quando=oggi">Oggi</button>
+        <button type="button" class="chip" role="tab" aria-selected="false" data-filter="quando=mattina">Mattina</button>
+        <button type="button" class="chip" role="tab" aria-selected="false" data-filter="quando=sera">Sera</button>
+        <button type="button" class="chip" role="tab" aria-selected="false" data-filter="max_prezzo=5">&lt; €5/p</button>
       </div>
 
-    </div>
+      <div id="conteiner_partite" class="actions" aria-live="polite">
+        <div class="skeleton" style="height: 110px; border-radius: var(--r-lg);"></div>
+        <div class="skeleton" style="height: 110px; border-radius: var(--r-lg);"></div>
+        <div class="skeleton" style="height: 110px; border-radius: var(--r-lg);"></div>
+      </div>
+    </section>
 
-  </div>
+  </main>
 
-  <script src="script.js"></script>
+  <a href="pagina_crea_partita.html" class="fab" aria-label="Crea una partita">
+    <span aria-hidden="true">+</span>
+  </a>
+
+  <nav class="bottom-nav" aria-label="Navigazione principale">
+    <a href="home_page.html" class="bottom-nav__item">
+      <span aria-hidden="true">🏠</span>
+      <span>Home</span>
+    </a>
+    <a href="pagina_trova_partita.html" class="bottom-nav__item is-active" aria-current="page">
+      <span aria-hidden="true">🔍</span>
+      <span>Trova</span>
+    </a>
+    <a href="pagina_club.html" class="bottom-nav__item">
+      <span aria-hidden="true">👥</span>
+      <span>Club</span>
+    </a>
+    <a href="pagina_profilo.html" class="bottom-nav__item">
+      <span aria-hidden="true">👤</span>
+      <span>Profilo</span>
+    </a>
+  </nav>
+
+  <script src="js_script/scripts.js"></script>
 
 </body>
 </html>

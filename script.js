@@ -1,4 +1,4 @@
-function handleClick(action, element = null) {
+function handleClick(action) {
   switch (action) {
     case 'crea-club':
       window.location.href = "pagina_crea_club.html";
@@ -34,9 +34,7 @@ function handleClick(action, element = null) {
       window.location.href = "pagina_prenota_seconda_per_prenotazione.html"
       break;
     case 'trova-partita-seconda':
-      const count_player = document.getElementById("count-player").textContent;
-      localStorage.setItem("count-player", count_player);
-      window.location.href = "pagina_trova_partita_seconda.html";
+      window.location.href = "pagina_trova_partita_seconda.html"
       break;
     case 'aggiungi-giocatori':
       aggiungiGiocatore();
@@ -55,11 +53,6 @@ function handleClick(action, element = null) {
       localStorage.setItem("price", prezzo);
       const numGiocatori = document.getElementById("count").textContent;
       localStorage.setItem("count", numGiocatori);
-      window.location.href = "pagina_pagamento.html"
-      break;
-    case 'pagamento-trova-partita-2':
-      const numGiocatori2 = document.getElementById("count-player").textContent;
-      localStorage.setItem("count", numGiocatori2);
       window.location.href = "pagina_pagamento.html"
       break;
     default:
@@ -103,17 +96,16 @@ function handleRegister() {
 
     console.log("Registrazione giocatore:", { email, username, password });
 
-    window.location.href = "home_page.html";
-
   } else {
     const inputs = document.querySelectorAll("#form-campo input");
 
     const email = inputs[0].value;
     const nome = inputs[1].value;
-    const password = inputs[2].value;
-    const confirm = inputs[3].value;
+    const indirizzo = inputs[2].value;
+    const password = inputs[3].value;
+    const confirm = inputs[4].value;
 
-    if (!email || !nome || !password || !confirm) {
+    if (!email || !nome || !indirizzo || !password || !confirm) {
       alert("Compila tutti i campi");
       return;
     }
@@ -123,10 +115,9 @@ function handleRegister() {
       return;
     }
 
-    console.log("Registrazione campo:", { email, nome, password });
-
-    window.location.href = "pagina_campi_gestore.html";
+    console.log("Registrazione campo:", { email, nome, indirizzo, password });
   }
+  window.location.href = "home_page.html";
 }
 
 function switchMode(mode) {
@@ -202,110 +193,4 @@ function riduciGiocatoreClub() {
   document.getElementById("club-count").textContent = giocatori_club;
 
   localStorage.setItem("clubCount", giocatori_club);
-}
-
-function toggleGiorno(btn) {
-  btn.classList.toggle('active');
-}
-
-function toggleOrario(btn) {
-  btn.classList.toggle('active');
-}
-
-function aggiungiImmagine() {
-  const input = document.createElement('input');
-  input.type = 'file';
-  input.accept = 'image/*';
-  input.onchange = function(e) {
-    const file = e.target.files[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = function(ev) {
-      const box = document.getElementById('upload-campo');
-      box.style.backgroundImage = `url(${ev.target.result})`;
-      box.style.backgroundSize = 'cover';
-      box.style.backgroundPosition = 'center';
-      box.innerText = '';
-    };
-    reader.readAsDataURL(file);
-  };
-  input.click();
-}
-
-const dataOggi = document.getElementById('data-oggi');
-if (dataOggi) {
-  const options = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
-  dataOggi.textContent = new Date().toLocaleDateString('it-IT', options);
-}
-
-
-// Data lega
-const dataLega = document.getElementById('data-oggi-lega');
-if (dataLega) {
-  const options = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
-  dataLega.textContent = 'OGGI ' + new Date().toLocaleDateString('it-IT', options).toUpperCase();
-}
-
-function apriModale() {
-  document.getElementById('modale').style.display = 'flex';
-}
-
-function chiudiModale() {
-  document.getElementById('modale').style.display = 'none';
-}
-
-function inviaProposta() {
-  const campo = document.getElementById('input-campo').value;
-  const orario = document.getElementById('input-orario').value;
-  const max = document.getElementById('input-max').value;
-  if (!campo || !orario || !max) return alert('Compila tutti i campi!');
-
-  const lista = document.getElementById('proposte-list');
-  const div = document.createElement('div');
-  div.className = 'proposta-row';
-  div.innerHTML = `
-    <div class="proposta-avatar">T</div>
-    <div class="proposta-body">
-      <div class="proposta-nome">Tu</div>
-      <div class="proposta-card">
-        <div class="proposta-card-title">Proposta partita</div>
-        <div class="proposta-card-campo">${campo}</div>
-        <div class="proposta-card-ora">${orario}</div>
-        <div class="proposta-progress-row">
-          <span class="prog-label">1/${max}</span>
-          <div class="prog-bar"><div class="prog-fill" style="width:${(1/max)*100}%"></div></div>
-        </div>
-        <div class="proposta-btns">
-          <button class="btn-accetta-proposta" onclick="accettaProposta(this, ${max})">Accetta</button>
-          <button class="btn-rifiuta-proposta" onclick="rifiutaProposta(this)">Rifiuta</button>
-        </div>
-      </div>
-    </div>
-  `;
-  lista.appendChild(div);
-  chiudiModale();
-  document.getElementById('input-campo').value = '';
-  document.getElementById('input-orario').value = '';
-  document.getElementById('input-max').value = '';
-}
-
-function accettaProposta(btn, max) {
-  const card = btn.closest('.proposta-card');
-  const label = card.querySelector('.prog-label');
-  const fill = card.querySelector('.prog-fill');
-  let current = parseInt(label.textContent.split('/')[0]) + 1;
-  label.textContent = `${current}/${max}`;
-  fill.style.width = `${(current / max) * 100}%`;
-  btn.disabled = true;
-  btn.textContent = '✓ Accettato';
-}
-
-function rifiutaProposta(btn) {
-  btn.closest('.proposta-row').remove();
-}
-
-function accettaPartita() {
-  const btns = document.querySelectorAll('.btn-accetta-proposta');
-  if (btns.length === 0) return alert('Nessuna proposta disponibile!');
-  btns[0].click();
 }

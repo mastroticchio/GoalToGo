@@ -2,57 +2,82 @@
 <html lang="it">
 <head>
   <meta charset="UTF-8">
-  <title>Campo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Goal To Go — Dettaglio campo (partita)</title>
   <link rel="stylesheet" href="styles.css">
+  <script>window.__AUTH_REQUIRES__ = { role: 'giocatore' };</script>
+  <script src="js_script/auth_guard.js"></script>
 </head>
 <body>
+  <a href="#main" class="skip-link sr-only">Salta al contenuto</a>
 
- <div class="header">
-  <h1>GOAL &nbsp; TO &nbsp; GO</h1>
-  <div class="header-right">
-    <button class="home-btn" onclick="location.href='home_page.html'">
-      🏠 HOME
-    </button>
-    <div class="profile-icon"></div>
-  </div>
-</div>
+  <header class="header">
+    <h1>GOAL &nbsp; TO &nbsp; GO</h1>
+    <div class="header-right">
+      <a class="home-btn" href="home_page.html" aria-label="Torna alla home">
+        <span aria-hidden="true">🏠</span> HOME
+      </a>
+      <div class="profile-icon" aria-hidden="true"></div>
+    </div>
+  </header>
 
-    <div class="container container--center">
+  <main id="main" class="container container--center">
 
-        <h2 class="titolo titolo-grande text-white">Campo di prato falcone</h2>
+    <h2 class="titolo titolo-grande text-white">Campo di prato falcone</h2>
 
-        <div class="campo-container">
+    <div class="campo-container">
 
-        <div class="campo-left">
-            <img src="campo.jpg" alt="campo da calcio">
-        </div>
+      <div class="campo-left">
+        <img src="campo.jpg" alt="Foto del campo: Campo di prato falcone">
+      </div>
 
-        <div class="campo-right campo-info">
-            <p><strong>Indirizzo :</strong> via del mare 101, Marino RM</p>
-            <p><strong>Costo :</strong> <span id="price">5</span>€</p>
-            <p><strong>Categoria :</strong> Calcio a 5</p>
-            <p><strong>Contatti :</strong> 06 87654321<br>+39 3715437156</p>
-        </div>
-
-        </div>
-
-        <h3 class="fasce">fasce orarie disponibili:</h3>
-
-        <div class="orari">
-            <button class="orario-btn" onclick="handleClick('pagamento-trova-partita')">18:00 - 19:00</button>
-            <button class="orario-btn" onclick="handleClick('pagamento-trova-partita')">19:00 - 20:00</button>
-            <button class="orario-btn" onclick="handleClick('pagamento-trova-partita')">20:00 - 21:00</button>
-        </div>
-
-        <div class="giocatori">
-            <p>numero giocatori: <span id="count">1</span></p>
-            <button class="minus-btn" onclick="handleClick('riduci-giocatori')">-</button>
-            <button class="plus-btn" onclick="handleClick('aggiungi-giocatori')">+</button>
-        </div>
+      <div class="campo-right campo-info" aria-live="polite">
+        <p><strong>Indirizzo :</strong> via del mare 101, Marino RM</p>
+        <p><strong>Costo :</strong> <span id="price">5</span>€</p>
+        <p><strong>Categoria :</strong> Calcio a 5</p>
+        <p><strong>Contatti :</strong> 06 87654321<br>+39 3715437156</p>
+      </div>
 
     </div>
 
-    <script src="script.js"></script>
+    <h3 class="fasce">fasce orarie disponibili:</h3>
+
+    <div class="orari">
+      <button type="button" class="orario-btn" onclick="handleClick('pagamento-trova-partita')">18:00 - 19:00</button>
+      <button type="button" class="orario-btn" onclick="handleClick('pagamento-trova-partita')">19:00 - 20:00</button>
+      <button type="button" class="orario-btn" onclick="handleClick('pagamento-trova-partita')">20:00 - 21:00</button>
+    </div>
+
+    <div class="giocatori" aria-live="polite">
+      <p>numero giocatori: <span id="count">1</span></p>
+      <button type="button" class="minus-btn" aria-label="Riduci numero giocatori"
+              onclick="handleClick('riduci-giocatori')">-</button>
+      <button type="button" class="plus-btn" aria-label="Aggiungi un giocatore"
+              onclick="handleClick('aggiungi-giocatori')">+</button>
+    </div>
+
+  </main>
+
+  <nav class="bottom-nav" aria-label="Navigazione principale">
+    <a href="home_page.html" class="bottom-nav__item is-active" aria-current="page">
+      <span aria-hidden="true">🏠</span>
+      <span>Home</span>
+    </a>
+    <a href="pagina_trova_partita.html" class="bottom-nav__item">
+      <span aria-hidden="true">🔍</span>
+      <span>Trova</span>
+    </a>
+    <a href="pagina_club.html" class="bottom-nav__item">
+      <span aria-hidden="true">👥</span>
+      <span>Club</span>
+    </a>
+    <a href="pagina_profilo.html" class="bottom-nav__item">
+      <span aria-hidden="true">👤</span>
+      <span>Profilo</span>
+    </a>
+  </nav>
+
+  <script src="js_script/scripts.js"></script>
 
 </body>
 </html>

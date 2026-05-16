@@ -2,66 +2,84 @@
 <html lang="it">
 <head>
   <meta charset="UTF-8">
-  <title>Partita</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Goal To Go — Dettaglio partita</title>
   <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script>window.__AUTH_REQUIRES__ = { role: 'giocatore' };</script>
+  <script src="js_script/auth_guard.js"></script>
 </head>
 
 <body>
-<div class="header">
-  <h1>GOAL &nbsp; TO &nbsp; GO</h1>
-  <div class="header-right">
-    <button class="home-btn" onclick="location.href='home_page.html'">
-      🏠 HOME
-    </button>
-    <div class="profile-icon"></div>
-  </div>
-</div>
+  <a href="#trova-seconda-page" class="skip-link sr-only">Salta al contenuto</a>
 
+  <header class="header">
+    <h1>GOAL &nbsp; TO &nbsp; GO</h1>
+    <div class="header-right">
+      <a class="home-btn" href="home_page.html" aria-label="Torna alla home">
+        <span aria-hidden="true">🏠</span> HOME
+      </a>
+      <div class="profile-icon" aria-hidden="true"></div>
+    </div>
+  </header>
 
-  <div class="container container--center">
+  <main id="trova-seconda-page" class="container container--center" data-page="trova-seconda">
 
-    <div class="card" style="background:none; padding:0; margin-bottom:15px;">
-      <h3 class="titolo">
-        Informatici vs automatici
-      </h3>
-
-      <div class="campo-right">
-        <strong><span id="count-player" class="text-white"></span>/10</strong>
+    <header class="card" style="background:none; padding:0; margin-bottom: var(--s-4);">
+      <div>
+        <h2 id="partitaNome" class="titolo">…</h2>
+        <span id="partitaStato" class="pill" aria-live="polite">…</span>
       </div>
-    </div>
-    <script>
-      const count = localStorage.getItem("count-player");
+      <div class="campo-right">
+        <strong>
+          <span id="count-player" class="titolo">0</span>/<span id="count-max">10</span>
+        </strong>
+      </div>
+    </header>
 
-    if (count !== null) {
-      document.getElementById("count-player").textContent = count;
-    }
-    </script>
+    <section class="form-grid" aria-label="Squadre">
+      <div class="form-left">
+        <h3 class="play">Squadra A</h3>
+        <ul id="teamA" class="club-list" aria-live="polite" data-team="A">
+          <li class="skeleton" style="height: 48px; border-radius: var(--r-md);"></li>
+        </ul>
+      </div>
+      <div class="form-right">
+        <h3 class="play">Squadra B</h3>
+        <ul id="teamB" class="club-list" aria-live="polite" data-team="B">
+          <li class="skeleton" style="height: 48px; border-radius: var(--r-md);"></li>
+        </ul>
+      </div>
+    </section>
 
-    <div class="campo">
-      <img src="campo-alto.jpg" alt="campo da calcio">
-
-      <div class="player p1" onclick="handleClick('pagamento-trova-partita-2')">+</div>
-      <div class="player p2" onclick="handleClick('pagamento-trova-partita-2')">+</div>
-      <div class="player p3" onclick="handleClick('pagamento-trova-partita-2')">+</div>
-      <div class="player p4" onclick="handleClick('pagamento-trova-partita-2')">+</div>
-      <div class="player p5" onclick="handleClick('pagamento-trova-partita-2')">+</div>
-      <div class="player p6" onclick="handleClick('pagamento-trova-partita-2')">+</div>
-      <div class="player p7" onclick="handleClick('pagamento-trova-partita-2')">+</div>
-      <div class="player p8" onclick="handleClick('pagamento-trova-partita-2')">+</div>
-      <div class="player p9" onclick="handleClick('pagamento-trova-partita-2')">+</div>
-      <div class="player p10" onclick="handleClick('pagamento-trova-partita-2')">+</div>
-    </div>
-
-    <div class="campo-info">
-      <p><strong>Campo :</strong> Balduina Sporting Club</p>
-      <p><strong>Indirizzo :</strong> Via del mare 104, Marino</p>
-      <p><strong>Orario :</strong> 19:00-20:30</p>
-      <p><strong>Prezzo :</strong><span id="price">5</span>$</p>
+    <div class="campo-info" id="partitaInfo" style="margin-top: var(--s-5);">
+      <p><strong>Campo:</strong> <span id="partitaCampo">…</span></p>
+      <p><strong>Orario:</strong> <span id="partitaOrario">…</span></p>
+      <p><strong>Prezzo:</strong> €<span id="partitaPrezzo">…</span> / ora</p>
     </div>
 
-  </div>
+  </main>
 
-  <script src="script.js"></script>
+  <nav class="bottom-nav" aria-label="Navigazione principale">
+    <a href="home_page.html" class="bottom-nav__item">
+      <span aria-hidden="true">🏠</span>
+      <span>Home</span>
+    </a>
+    <a href="pagina_trova_partita.html" class="bottom-nav__item is-active" aria-current="page">
+      <span aria-hidden="true">🔍</span>
+      <span>Trova</span>
+    </a>
+    <a href="pagina_club.html" class="bottom-nav__item">
+      <span aria-hidden="true">👥</span>
+      <span>Club</span>
+    </a>
+    <a href="pagina_profilo.html" class="bottom-nav__item">
+      <span aria-hidden="true">👤</span>
+      <span>Profilo</span>
+    </a>
+  </nav>
+
+  <script src="js_script/scripts.js"></script>
 
 </body>
 </html>

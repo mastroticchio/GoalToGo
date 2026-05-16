@@ -2,103 +2,62 @@
 <html lang="it">
 <head>
   <meta charset="UTF-8">
-  <title>Goal To Go - Dettaglio Club</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Goal To Go — Dettaglio club</title>
   <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script>window.__AUTH_REQUIRES__ = { role: 'giocatore' };</script>
+  <script src="js_script/auth_guard.js"></script>
 </head>
 <body>
+  <a href="#main" class="skip-link sr-only">Salta al contenuto</a>
 
-  <div class="header">
+  <header class="header">
     <h1>GOAL &nbsp; TO &nbsp; GO</h1>
     <div class="header-right">
-      <button class="home-btn" onclick="location.href='home_page.html'">
-        🏠 HOME
-      </button>
-      <div class="profile-icon"></div>
+      <a class="home-btn" href="home_page.html" aria-label="Torna alla home">
+        <span aria-hidden="true">🏠</span> HOME
+      </a>
+      <div class="profile-icon" aria-hidden="true"></div>
     </div>
-  </div>
-<div class="container container--center container--club"></div>
-  <div class="club-banner">
-  <div class="club-logo-placeholder">🏆</div>
-  <div>
-    <div class="club-banner-nome">FC MARCO POLO</div>
-    <div class="club-banner-info">
-      <div class="club-banner-rating">6 online</div>
-      <div class="club-banner-membri">12 membri</div>
-    </div>
-  </div>
-</div>
-    <div class="giocatori-list" id="giocatori-list">
+  </header>
 
-      <div class="giocatore-row">
-        <div class="giocatore-dot" style="background:#e53935;"></div>
-        <div class="giocatore-avatar">👤</div>
-        <div class="giocatore-nome">Mario Tiriticco</div>
-        <div class="giocatore-stelle">★★★★★</div>
-        <div class="giocatore-ruolo ruolo--att">ATT</div>
-      </div>
+  <main id="main" class="container container--center container--club">
 
-      <div class="giocatore-row">
-        <div class="giocatore-dot" style="background:#4caf50;"></div>
-        <div class="giocatore-avatar">👤</div>
-        <div class="giocatore-nome">Mario Tiriticco</div>
-        <div class="giocatore-stelle">★★★★☆</div>
-        <div class="giocatore-badge-cap">✪</div>
-        <div class="giocatore-ruolo ruolo--cen">CEN</div>
-      </div>
+    <section class="club-banner" id="clubBanner" aria-live="polite">
+      <div class="skeleton" style="height: 80px; border-radius: var(--r-md);"></div>
+    </section>
 
-      <div class="giocatore-row">
-        <div class="giocatore-dot" style="background:#2196f3;"></div>
-        <div class="giocatore-avatar">👤</div>
-        <div class="giocatore-nome">Mario Tiriticco</div>
-        <div class="giocatore-stelle">★★★★☆</div>
-        <div class="giocatore-ruolo ruolo--def">DEF</div>
-      </div>
+    <div id="clubActions" class="actions" style="margin: var(--s-4) 0;" hidden></div>
 
-      <div class="giocatore-row">
-        <div class="giocatore-dot" style="background:#ff9800;"></div>
-        <div class="giocatore-avatar">👤</div>
-        <div class="giocatore-nome">Mario Tiriticco</div>
-        <div class="giocatore-stelle">★★★★☆</div>
-        <div class="giocatore-ruolo ruolo--por">POR</div>
-      </div>
-
-      <div class="giocatore-row">
-        <div class="giocatore-dot" style="background:#e53935;"></div>
-        <div class="giocatore-avatar">👤</div>
-        <div class="giocatore-nome">Mario Tiriticco</div>
-        <div class="giocatore-stelle">★★★★☆</div>
-        <div class="giocatore-ruolo ruolo--att">ATT</div>
-      </div>
-
-      <div class="giocatore-row">
-        <div class="giocatore-dot" style="background:#4caf50;"></div>
-        <div class="giocatore-avatar">👤</div>
-        <div class="giocatore-nome">Mario Tiriticco</div>
-        <div class="giocatore-stelle">★★★★☆</div>
-        <div class="giocatore-badge-cap">✪</div>
-        <div class="giocatore-ruolo ruolo--cen">CEN</div>
-      </div>
-
-      <div class="giocatore-row">
-        <div class="giocatore-dot" style="background:#2196f3;"></div>
-        <div class="giocatore-avatar">👤</div>
-        <div class="giocatore-nome">Mario Tiriticco</div>
-        <div class="giocatore-stelle">★★★★☆</div>
-        <div class="giocatore-ruolo ruolo--def">DEF</div>
-      </div>
-
-      <div class="giocatore-row">
-        <div class="giocatore-dot" style="background:#ff9800;"></div>
-        <div class="giocatore-avatar">👤</div>
-        <div class="giocatore-nome">Mario Tiriticco</div>
-        <div class="giocatore-stelle">★★★★☆</div>
-        <div class="giocatore-ruolo ruolo--por">POR</div>
-      </div>
-
+    <div id="giocatori-list" role="list" aria-label="Roster del club" aria-live="polite">
+      <div class="skeleton" style="height: 48px; border-radius: var(--r-md); margin-bottom: var(--s-2);"></div>
+      <div class="skeleton" style="height: 48px; border-radius: var(--r-md); margin-bottom: var(--s-2);"></div>
+      <div class="skeleton" style="height: 48px; border-radius: var(--r-md); margin-bottom: var(--s-2);"></div>
+      <div class="skeleton" style="height: 48px; border-radius: var(--r-md);"></div>
     </div>
 
-  </div>
+  </main>
 
-  <script src="script.js"></script>
+  <nav class="bottom-nav" aria-label="Navigazione principale">
+    <a href="home_page.html" class="bottom-nav__item">
+      <span aria-hidden="true">🏠</span>
+      <span>Home</span>
+    </a>
+    <a href="pagina_trova_partita.html" class="bottom-nav__item">
+      <span aria-hidden="true">🔍</span>
+      <span>Trova</span>
+    </a>
+    <a href="pagina_club.html" class="bottom-nav__item is-active" aria-current="page">
+      <span aria-hidden="true">👥</span>
+      <span>Club</span>
+    </a>
+    <a href="pagina_profilo.html" class="bottom-nav__item">
+      <span aria-hidden="true">👤</span>
+      <span>Profilo</span>
+    </a>
+  </nav>
+
+  <script src="js_script/scripts.js"></script>
 </body>
 </html>

@@ -2,88 +2,189 @@
 <html lang="it">
 <head>
   <meta charset="UTF-8" />
-  <title>Prenota Campo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Goal To Go — Pagamento</title>
   <link rel="stylesheet" href="styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script>window.__AUTH_REQUIRES__ = { role: 'giocatore' };</script>
+  <script src="js_script/auth_guard.js"></script>
 </head>
 
+<body>
+  <a href="#main" class="skip-link sr-only">Salta al contenuto</a>
 
-  <body>
-    <div class="header">
-  <h1>GOAL &nbsp; TO &nbsp; GO</h1>
-  <div class="header-right">
-    <button class="home-btn" onclick="location.href='home_page.html'">
-      🏠 HOME
-    </button>
-    <div class="profile-icon"></div>
-  </div>
-</div>
-    <div class="container container--center">
-      <h2 class="titolo-grande welcome--center">Prenotazione campo</h2>
+  <header class="header">
+    <h1>GOAL &nbsp; TO &nbsp; GO</h1>
+    <div class="header-right">
+      <a class="home-btn" href="home_page.html" aria-label="Torna alla home">
+        <span aria-hidden="true">🏠</span> HOME
+      </a>
+      <div class="profile-icon" aria-hidden="true"></div>
+    </div>
+  </header>
 
-      <div class="riepilogo card riepilogo--vertical">
-        <h4 class="text-white">RIEPILOGO PRENOTAZIONE</h4>
+  <main id="main" class="container container--center">
+    <h2 id="paymentTitle" class="titolo-grande welcome--center">Riepilogo</h2>
 
-        <div class="riepilogo-row">
-          <p>Campo</p>
-          <p>Sporting Balduina</p>
-        </div>
+    <div class="riepilogo card riepilogo--vertical" aria-label="Riepilogo">
+      <h3 class="text-white" id="paymentKind">RIEPILOGO</h3>
 
-        <div class="riepilogo-row">
-          <p>Data</p>
-          <p>22 marzo 2026</p>
-        </div>
-
-        <div class="riepilogo-row">
-          <p>Orario</p>
-          <p>18:00-19:00</p>
-        </div>
-
-        <div class="riepilogo-row">
-          <p>Giocatori</p>
-          <p>5 vs 5</p>
-        </div>
-
-        <div class="riepilogo-total">
-          <strong>Totale</strong>
-          <strong id="total-price"></strong>
-        </div>
+      <div class="riepilogo-row">
+        <p id="rowKey1">Campo</p>
+        <p id="rowVal1">…</p>
       </div>
 
-      <div class="progress-container">
-        <span id="progress-text"></span>
+      <div class="riepilogo-row">
+        <p>Data</p>
+        <p id="rowDate">…</p>
+      </div>
 
+      <div class="riepilogo-row">
+        <p>Orario</p>
+        <p id="rowOrario">…</p>
+      </div>
+
+      <div class="riepilogo-row" id="rowExtraWrap" hidden>
+        <p id="rowKey2">Squadre</p>
+        <p id="rowVal2">…</p>
+      </div>
+
+      <div class="riepilogo-total">
+        <strong>Totale</strong>
+        <strong id="total-price">…</strong>
+      </div>
+    </div>
+
+    <!-- Progress bar: visibile solo per il flusso "iscriviti a partita" -->
+    <div id="progressWrap" hidden>
+      <div class="progress-container"
+           role="progressbar"
+           aria-valuenow="0" aria-valuemin="0" aria-valuemax="10"
+           aria-label="Giocatori iscritti">
+        <span id="progress-text"></span>
         <div class="progress-bar">
           <div class="progress-fill"></div>
         </div>
       </div>
-
-      <script>
-        const count = localStorage.getItem("count");
-
-        if (count !== null) {
-          const players = parseInt(count);
-
-        document.getElementById("progress-text").textContent = players + "/10";
-
-        const percent = (players / 10) * 100;
-
-        document.querySelector(".progress-fill").style.width = percent + "%";
-        }
-</script>
-
-      <p class="progress-text">
-        quando la barra sarà completa il campo sarà confermato
+      <p class="progress-text" id="matchStato">
+        Quando la barra sara' piena la partita sara' confermata.
       </p>
-
-      <button class="inizia-btn paga-btn">Paga <span id="button-price"></span></button>
-      <script>
-        const price = localStorage.getItem("price");
-
-        if (price !== null) {
-          document.getElementById("total-price").textContent = price + "€";
-          document.getElementById("button-price").textContent = price + "€";
-        }
-      </script>
     </div>
-  </body>
+
+    <form id="formPagamento" novalidate>
+      <button type="submit" class="inizia-btn paga-btn">Paga ora — €<span id="button-price">…</span></button>
+    </form>
+
+    <script>
+      // Riepilogo dinamico in base al flusso (campo vs partita).
+      (function () {
+        const idPartita     = parseInt(localStorage.getItem("idPartita") || 0, 10);
+        const idCampoOrari  = parseInt(localStorage.getItem("idCampoOrari") || 0, 10);
+        const isFlussoCampo = idCampoOrari > 0 && !idPartita;
+
+        const titleEl   = document.getElementById("paymentTitle");
+        const kindEl    = document.getElementById("paymentKind");
+        const key1El    = document.getElementById("rowKey1");
+        const val1El    = document.getElementById("rowVal1");
+        const dateEl    = document.getElementById("rowDate");
+        const orarioEl  = document.getElementById("rowOrario");
+        const extraWrap = document.getElementById("rowExtraWrap");
+        const key2El    = document.getElementById("rowKey2");
+        const val2El    = document.getElementById("rowVal2");
+        const totalEl   = document.getElementById("total-price");
+        const buttonEl  = document.getElementById("button-price");
+        const progress  = document.getElementById("progressWrap");
+
+        function fmtToday() {
+          const t = new Date();
+          return t.toLocaleDateString("it-IT", { weekday: "long", day: "numeric", month: "long", year: "numeric" });
+        }
+        function escapeHtml(s) {
+          return String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]));
+        }
+
+        if (isFlussoCampo) {
+          // FLUSSO PRENOTA CAMPO: niente progress bar
+          titleEl.textContent = "Prenotazione campo";
+          kindEl.textContent  = "RIEPILOGO PRENOTAZIONE CAMPO";
+          key1El.textContent  = "Campo";
+          val1El.textContent  = localStorage.getItem("nomeCampo") || "Campo";
+          dateEl.textContent  = fmtToday();
+          orarioEl.textContent = localStorage.getItem("orarioSelezionato") || "—";
+          if (extraWrap) extraWrap.hidden = true;
+          if (progress)  progress.hidden  = true;
+          const prezzo = parseFloat(localStorage.getItem("prezzoCampo") || 0);
+          totalEl.textContent  = "€" + prezzo.toFixed(2);
+          buttonEl.textContent = prezzo.toFixed(2);
+          return;
+        }
+
+        // FLUSSO ISCRIVITI A PARTITA: progress bar visibile + dati partita
+        titleEl.textContent = "Iscrizione partita";
+        kindEl.textContent  = "RIEPILOGO PARTITA";
+        if (progress) progress.hidden = false;
+
+        if (idPartita) {
+          fetch("/GoalToGo/api/api_get_partita.php?id=" + idPartita, { credentials: "include" })
+            .then(r => r.json())
+            .then(d => {
+              if (d.status !== "success" || !d.partita) return;
+              const p = d.partita;
+              const max = d.max_giocatori || 10;
+              key1El.textContent  = "Partita";
+              val1El.textContent  = p.NOME ?? "";
+              dateEl.textContent  = fmtToday();
+              orarioEl.textContent = (p.ORARIO || "").replace("T", " ");
+              if (extraWrap) {
+                extraWrap.hidden = false;
+                key2El.textContent = "Squadre";
+                val2El.textContent = `${max/2} vs ${max/2}`;
+              }
+              const prezzo = parseFloat(p.PREZZO || 0);
+              totalEl.textContent  = "€" + prezzo.toFixed(2);
+              buttonEl.textContent = prezzo.toFixed(2);
+
+              // progress
+              const players = p.NUM_GIOCATORI || 0;
+              document.getElementById("progress-text").textContent = players + "/" + max;
+              document.querySelector(".progress-fill").style.width = Math.min(100, (players / max) * 100) + "%";
+              const bar = document.querySelector(".progress-container");
+              if (bar) { bar.setAttribute("aria-valuenow", players); bar.setAttribute("aria-valuemax", max); }
+              const stato = document.getElementById("matchStato");
+              if (stato) {
+                if (players >= max) {
+                  stato.textContent = "✓ Partita confermata!";
+                  stato.style.color = "var(--success)";
+                } else {
+                  stato.textContent = "Quando la barra sara' piena la partita sara' confermata (" + (max - players) + " posti rimasti).";
+                  stato.style.color = "var(--text-2)";
+                }
+              }
+            });
+        }
+      })();
+    </script>
+  </main>
+
+  <nav class="bottom-nav" aria-label="Navigazione principale">
+    <a href="home_page.html" class="bottom-nav__item">
+      <span aria-hidden="true">🏠</span>
+      <span>Home</span>
+    </a>
+    <a href="pagina_trova_partita.html" class="bottom-nav__item is-active" aria-current="page">
+      <span aria-hidden="true">🔍</span>
+      <span>Trova</span>
+    </a>
+    <a href="pagina_club.html" class="bottom-nav__item">
+      <span aria-hidden="true">👥</span>
+      <span>Club</span>
+    </a>
+    <a href="pagina_profilo.html" class="bottom-nav__item">
+      <span aria-hidden="true">👤</span>
+      <span>Profilo</span>
+    </a>
+  </nav>
+
+  <script src="js_script/scripts.js"></script>
+</body>
 </html>
