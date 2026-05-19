@@ -1093,3 +1093,248 @@ button.card:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px
 }
 .modale-box button[type="submit"]:hover { opacity: .85; }
 .modale-box button[type="submit"]:disabled { opacity: .45; cursor: not-allowed; }
+
+/* ===== CAMPO CARD TOP ACTIONS ===== */
+
+.campo-card-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.campo-title-wrap {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  min-width: 0;
+  flex: 1;
+}
+
+.campo-info {
+  min-width: 0;
+}
+
+.campo-nome {
+  display: block;
+  font-weight: 800;
+  line-height: 1.15;
+}
+
+.campo-meta {
+  margin: 5px 0 0;
+  font-size: 13px;
+  opacity: 0.75;
+  line-height: 1.35;
+}
+
+.campo-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.campo-btn {
+  appearance: none;
+  -webkit-appearance: none;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+
+  min-height: 36px;
+  padding: 8px 12px;
+
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.24);
+
+  background: rgba(255, 255, 255, 0.10);
+  color: var(--text);
+
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 800;
+  line-height: 1;
+  white-space: nowrap;
+
+  cursor: pointer;
+
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    0 8px 16px rgba(0, 0, 0, 0.18);
+
+  transition:
+    transform 0.16s ease,
+    background 0.16s ease,
+    border-color 0.16s ease,
+    box-shadow 0.16s ease;
+}
+
+.campo-btn:hover {
+  transform: translateY(-1px);
+  background: rgba(255, 255, 255, 0.16);
+  border-color: rgba(255, 255, 255, 0.36);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    0 12px 22px rgba(0, 0, 0, 0.24);
+}
+
+.campo-btn:active {
+  transform: translateY(0) scale(0.98);
+}
+
+.campo-btn--edit {
+  color: var(--brand);
+  border-color: rgba(163, 230, 53, 0.45);
+  background: rgba(163, 230, 53, 0.12);
+}
+
+.campo-btn--edit:hover {
+  border-color: rgba(163, 230, 53, 0.70);
+  background: rgba(163, 230, 53, 0.18);
+}
+
+.campo-btn--delete {
+  color: #ff8b8b;
+  border-color: rgba(239, 68, 68, 0.45);
+  background: rgba(239, 68, 68, 0.12);
+}
+
+.campo-btn--delete:hover {
+  border-color: rgba(239, 68, 68, 0.70);
+  background: rgba(239, 68, 68, 0.18);
+}
+
+@media (max-width: 640px) {
+  .campo-card-top {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .campo-actions {
+    width: 100%;
+  }
+
+  .campo-btn {
+    flex: 1;
+    min-height: 42px;
+  }
+}
+
+
+/* ===== FIX BOTTONI MODIFICA / ELIMINA CAMPO ===== */
+
+.campo-card .campo-card-top {
+  display: flex !important;
+  align-items: flex-start !important;
+  justify-content: space-between !important;
+  gap: 16px !important;
+  width: 100% !important;
+  margin-bottom: 16px !important;
+}
+
+.campo-card .campo-title-wrap {
+  display: flex !important;
+  align-items: flex-start !important;
+  gap: 12px !important;
+  min-width: 0 !important;
+  flex: 1 1 auto !important;
+}
+
+.campo-card .campo-info-text {
+  min-width: 0 !important;
+}
+
+.campo-card .campo-actions {
+  margin-left: auto !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+  gap: 8px !important;
+  flex: 0 0 auto !important;
+}
+
+.campo-card .campo-btn {
+  appearance: none !important;
+  -webkit-appearance: none !important;
+
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 6px !important;
+
+  min-height: 38px !important;
+  padding: 9px 14px !important;
+
+  border-radius: 12px !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.28) !important;
+
+  background: rgba(255, 255, 255, 0.12) !important;
+  color: var(--text) !important;
+
+  font-family: var(--font-sans) !important;
+  font-size: 12px !important;
+  font-weight: 800 !important;
+  line-height: 1 !important;
+  white-space: nowrap !important;
+
+  cursor: pointer !important;
+
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.16),
+    0 8px 18px rgba(0, 0, 0, 0.22) !important;
+
+  transition:
+    transform 0.16s ease,
+    background 0.16s ease,
+    border-color 0.16s ease,
+    box-shadow 0.16s ease !important;
+}
+
+.campo-card .campo-btn:hover {
+  transform: translateY(-2px) !important;
+  background: rgba(255, 255, 255, 0.18) !important;
+  border-color: rgba(255, 255, 255, 0.40) !important;
+}
+
+.campo-card .campo-btn--edit {
+  color: var(--brand) !important;
+  border-color: rgba(206, 255, 0, 0.55) !important;
+  background: rgba(206, 255, 0, 0.12) !important;
+}
+
+.campo-card .campo-btn--edit:hover {
+  border-color: rgba(206, 255, 0, 0.85) !important;
+  background: rgba(206, 255, 0, 0.20) !important;
+}
+
+.campo-card .campo-btn--delete {
+  color: #ff8b8b !important;
+  border-color: rgba(239, 68, 68, 0.55) !important;
+  background: rgba(239, 68, 68, 0.13) !important;
+}
+
+.campo-card .campo-btn--delete:hover {
+  border-color: rgba(239, 68, 68, 0.85) !important;
+  background: rgba(239, 68, 68, 0.22) !important;
+}
+
+@media (max-width: 640px) {
+  .campo-card .campo-card-top {
+    flex-direction: column !important;
+    align-items: stretch !important;
+  }
+
+  .campo-card .campo-actions {
+    width: 100% !important;
+    margin-left: 0 !important;
+  }
+
+  .campo-card .campo-btn {
+    flex: 1 !important;
+    min-height: 42px !important;
+  }
+}

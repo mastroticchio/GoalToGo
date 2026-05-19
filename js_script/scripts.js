@@ -180,6 +180,53 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
+    function aggiornaStatisticheGestore(campi) {
+    const numCampiEl = document.getElementById('numCampi');
+    const numSlotEl = document.getElementById('numSlot');
+    const numDisponibiliEl = document.getElementById('numDisponibili');
+    const percentOccupazioneEl = document.getElementById('percentOccupazione');
+
+    if (!Array.isArray(campi)) return;
+
+    let totaleCampi = campi.length;
+    let totaleSlot = 0;
+    let slotDisponibili = 0;
+
+    campi.forEach(campo => {
+        const orari = Array.isArray(campo.orari) ? campo.orari : [];
+
+        totaleSlot += orari.length;
+
+        orari.forEach(orario => {
+            const disponibile =
+                orario.disponibile === true ||
+                orario.disponibile === 1 ||
+                orario.disponibile === '1' ||
+                orario.DISPONIBILE === true ||
+                orario.DISPONIBILE === 1 ||
+                orario.DISPONIBILE === '1';
+
+            if (disponibile) {
+                slotDisponibili++;
+            }
+        });
+    });
+
+    const slotOccupati = totaleSlot - slotDisponibili;
+
+    const occupazione = totaleSlot > 0
+        ? Math.round((slotOccupati / totaleSlot) * 100)
+        : 0;
+
+    if (numCampiEl) animateCount(numCampiEl, totaleCampi);
+    if (numSlotEl) animateCount(numSlotEl, totaleSlot);
+    if (numDisponibiliEl) animateCount(numDisponibiliEl, slotDisponibili);
+
+    if (percentOccupazioneEl) {
+        percentOccupazioneEl.textContent = occupazione + '%';
+    }
+}
+
     // ===================== LISTA CAMPI GESTORE =====================
 
     const listaCampiContainer = document.getElementById('listaCampi');
@@ -208,22 +255,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (data.status === 'success') {
                 const campi = data.campi;
 
-                const numCampiEl = document.getElementById('numCampi');
-                if (numCampiEl) {
-                    animateCount(numCampiEl, campi.length);
-                }
-
-                let totaleSlot = 0;
-                campi.forEach(campo => {
-                    if (campo.orari && Array.isArray(campo.orari)) {
-                        totaleSlot += campo.orari.length;
-                    }
-                });
-
-                const numSlotEl = document.getElementById('numSlot');
-                if (numSlotEl) {
-                    animateCount(numSlotEl, totaleSlot);
-                }
+                aggiornaStatisticheGestore(campi);
 
                 if (!campi || campi.length === 0) {
                     listaCampiContainer.innerHTML = `
@@ -266,9 +298,36 @@ if (!campo.orari || campo.orari.length === 0) {
 }
 
 cardDiv.innerHTML = `
-    <div class="campo-card-header">
-        <div class="campo-icon">⚽</div>
-        <span class="campo-nome">${escapeHtml(campo.NOME)}</span>
+    <div class="campo-card-top">
+        <div class="campo-title-wrap">
+            <div class="campo-icon">⚽</div>
+
+            <div class="campo-info-text">
+                <span class="campo-nome">${escapeHtml(campo.NOME)}</span>
+                <p class="campo-meta">
+                    ${escapeHtml(campo.INDIRIZZO ?? '')} ·
+                    ${escapeHtml(campo.CITTA ?? '')} ·
+                    €${parseFloat(campo.PREZZO ?? 0).toFixed(2)} / ora
+                </p>
+            </div>
+        </div>
+
+        <div class="campo-actions">
+            <button
+                type="button"
+                class="campo-btn campo-btn--edit campo-edit-btn"
+                data-campo-id="${escapeHtml(campo.ID)}">
+                ✏️ Modifica
+            </button>
+
+            <button
+                type="button"
+                class="campo-btn campo-btn--delete campo-delete-btn"
+                data-campo-id="${escapeHtml(campo.ID)}"
+                data-campo-nome="${escapeHtml(campo.NOME)}">
+                🗑️ Elimina
+            </button>
+        </div>
     </div>
 
     <div class="legenda">
@@ -286,6 +345,195 @@ cardDiv.innerHTML = `
         ${orariHTML}
     </div>
 `;
+
+const deleteBtn = cardDiv.querySelector('.campo-delete-btn');
+
+if (deleteBtn) {
+    deleteBtn.addEventListener('click', function (e) {
+        e.stopPropagation();
+
+        const campoId = this.dataset.campoId;
+        const campoNome = this.dataset.campoNome || 'questo campo';
+
+        Swal.fire({
+            title: 'Eliminare il campo?',
+            text: `Stai per eliminare "${campoNome}" e tutti i suoi orari. Questa azione non può essere annullata.`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Sì, elimina',
+            cancelButtonText: 'Annulla',
+            confirmButtonColor: '#e53935',
+            cancelButtonColor: '#505050'
+        }).then(result => {
+            if (!result.isConfirmed) return;
+
+            fetch('/GoalToGo/api/api_elimina_campo.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'include',
+                body: JSON.stringify({
+                    id: parseInt(campoId, 10)
+                })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    cardDiv.remove();
+
+                    if (typeof aggiornaStatisticheDaBottoni === 'function') {
+                        aggiornaStatisticheDaBottoni();
+                    }
+
+                    Swal.fire({
+                        title: 'Campo eliminato',
+                        icon: 'success',
+                        timer: 1200,
+                        showConfirmButton: false
+                    });
+                } else {
+                    Swal.fire({
+                        title: 'Errore',
+                        text: data.message || 'Impossibile eliminare il campo',
+                        icon: 'error'
+                    });
+                }
+            })
+            .catch(err => {
+                console.error(err);
+                Swal.fire({
+                    title: 'Errore',
+                    text: 'Errore di comunicazione con il server',
+                    icon: 'error'
+                });
+            });
+        });
+    });
+}
+
+const editBtn = cardDiv.querySelector('.campo-edit-btn');
+
+if (editBtn) {
+    editBtn.addEventListener('click', function (e) {
+        e.stopPropagation();
+
+        Swal.fire({
+            title: 'Modifica campo',
+            html: `
+                <input 
+                    id="editNome" 
+                    class="swal2-input" 
+                    placeholder="Nome campo" 
+                    value="${escapeHtml(campo.NOME ?? '')}"
+                >
+
+                <input 
+                    id="editIndirizzo" 
+                    class="swal2-input" 
+                    placeholder="Indirizzo" 
+                    value="${escapeHtml(campo.INDIRIZZO ?? '')}"
+                >
+
+                <input 
+                    id="editCitta" 
+                    class="swal2-input" 
+                    placeholder="Città" 
+                    value="${escapeHtml(campo.CITTA ?? '')}"
+                >
+
+                <input 
+                    id="editPrezzo" 
+                    class="swal2-input" 
+                    type="number" 
+                    min="0" 
+                    step="0.01" 
+                    placeholder="Prezzo" 
+                    value="${escapeHtml(campo.PREZZO ?? '')}"
+                >
+            `,
+            showCancelButton: true,
+            confirmButtonText: 'Salva modifiche',
+            cancelButtonText: 'Annulla',
+            focusConfirm: false,
+
+            preConfirm: () => {
+                const nome = document.getElementById('editNome').value.trim();
+                const indirizzo = document.getElementById('editIndirizzo').value.trim();
+                const citta = document.getElementById('editCitta').value.trim();
+                const prezzo = document.getElementById('editPrezzo').value.trim();
+
+                if (!nome || !indirizzo || !citta || !prezzo) {
+                    Swal.showValidationMessage('Compila tutti i campi');
+                    return false;
+                }
+
+                if (Number(prezzo) < 0) {
+                    Swal.showValidationMessage('Il prezzo non può essere negativo');
+                    return false;
+                }
+
+                return {
+                    id: parseInt(campo.ID, 10),
+                    nome: nome,
+                    indirizzo: indirizzo,
+                    citta: citta,
+                    prezzo: parseFloat(prezzo)
+                };
+            }
+        }).then(result => {
+            if (!result.isConfirmed) return;
+
+            fetch('/GoalToGo/api/api_modifica_campo.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'include',
+                body: JSON.stringify(result.value)
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    campo.NOME = result.value.nome;
+                    campo.INDIRIZZO = result.value.indirizzo;
+                    campo.CITTA = result.value.citta;
+                    campo.PREZZO = result.value.prezzo;
+
+                    const nomeEl = cardDiv.querySelector('.campo-nome');
+                    const metaEl = cardDiv.querySelector('.campo-meta');
+
+                    if (nomeEl) {
+                        nomeEl.textContent = result.value.nome;
+                    }
+
+                    if (metaEl) {
+                        metaEl.textContent =
+                            `${result.value.indirizzo} · ${result.value.citta} · €${Number(result.value.prezzo).toFixed(2)} / ora`;
+                    }
+
+                    Swal.fire({
+                        title: 'Campo aggiornato',
+                        icon: 'success',
+                        timer: 1200,
+                        showConfirmButton: false
+                    });
+                } else {
+                    Swal.fire({
+                        title: 'Errore',
+                        text: data.message || 'Impossibile modificare il campo',
+                        icon: 'error'
+                    });
+                }
+            })
+            .catch(err => {
+                console.error(err);
+
+                Swal.fire({
+                    title: 'Errore',
+                    text: 'Errore di comunicazione con il server',
+                    icon: 'error'
+                });
+            });
+        });
+    });
+}
 
 cardDiv.querySelectorAll('.fascia-btn[data-orario-id]').forEach(btn => {
     btn.addEventListener('click', function (e) {

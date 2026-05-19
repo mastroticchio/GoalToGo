@@ -504,13 +504,8 @@ function getCampiByGestore($conn, $id)
     return $campi;
 }
 function getOrariByCampoId($conn, $campo_id)
-    {
-    // Ritorna SEMPRE i 12 slot standard 10-22. La disponibilita' e' calcolata
-    // live: uno slot e' OCCUPATO solo se esiste una prenotazione paid per OGGI
-    // su quel campo+slot. Niente residui dai giorni precedenti.
-
-    // Carico gli slot del campo (campo_orari e' la lista canonica per questo campo)
-    $sql = "SELECT co.ID, co.ORARIO_INIZIO, co.ORARIO_FINE,
+{
+    $sql = "SELECT co.ID, co.ORARIO_INIZIO, co.ORARIO_FINE, co.DISPONIBILE,
                    (SELECT COUNT(*)
                     FROM PRENOTAZIONE p
                     WHERE p.FK_CAMPO_ORARI = co.ID
@@ -519,6 +514,7 @@ function getOrariByCampoId($conn, $campo_id)
             FROM CAMPO_ORARI co
             WHERE co.CAMPO_ID = ?
             ORDER BY co.ORARIO_INIZIO";
+
     $stmt = mysqli_prepare($conn, $sql);
     mysqli_stmt_bind_param($stmt, "i", $campo_id);
     mysqli_stmt_execute($stmt);
@@ -526,17 +522,19 @@ function getOrariByCampoId($conn, $campo_id)
 
     $orari = [];
     while ($row = mysqli_fetch_assoc($result)) {
+        // occupato se: prenotazione paid oggi OPPURE gestore ha settato manualmente DISPONIBILE=0
+        $prenotato   = ((int) $row['prenotato_oggi']) > 0;
+        $flagOccupato = ((int) $row['DISPONIBILE']) === 0;
+
         $orari[] = [
             'id'          => (int) $row['ID'],
             'inizio'      => $row['ORARIO_INIZIO'],
             'fine'        => $row['ORARIO_FINE'],
-            // disponibile = TRUE se non c'e' una prenotazione paid OGGI
-            'disponibile' => ((int) $row['prenotato_oggi']) === 0,
+            'disponibile' => !$prenotato && !$flagOccupato,
         ];
     }
     return $orari;
-    }
-
+}
 // ================================================================
 // CHAT CLUB — PROPOSTE AVANZATE
 // ================================================================
