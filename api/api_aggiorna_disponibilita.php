@@ -1,4 +1,8 @@
 <?php
+require_once __DIR__ . '/../lib/auth.php';
+auth_init();
+auth_require('gestore');
+
 require_once '../config/db_connection.php';
 
 header('Content-Type: application/json');
