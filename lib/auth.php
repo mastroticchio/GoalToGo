@@ -32,7 +32,7 @@ function auth_logout() {
         setcookie(session_name(), '', time() - 42000,
             $p["path"], $p["domain"], $p["secure"], $p["httponly"]);
     }
-    session_destroy();
+    session_destroy();    
 }
 
 function auth_user() {

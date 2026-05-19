@@ -247,18 +247,22 @@ if (!campo.orari || campo.orari.length === 0) {
     orariHTML = '<p>Nessun orario disponibile</p>';
 } else {
     campo.orari.forEach(orario => {
-        const inizio      = orario.inizio.slice(0, 5);
-        const fine        = orario.fine.slice(0, 5);
-        const disponibile = orario.disponibile == 1;
-        const colore      = disponibile ? 'fascia--verde' : 'fascia--rosso';
-        const stato       = disponibile ? 'disponibile' : 'occupato';
+    const inizio      = orario.inizio.slice(0, 5);
+    const fine        = orario.fine.slice(0, 5);
+    const disponibile = orario.disponibile == 1;
+    const colore      = disponibile ? 'fascia--verde' : 'fascia--rosso';
+    const stato       = disponibile ? 'disponibile' : 'occupato';
 
-        orariHTML += `
-            <button class="fascia-btn ${colore}" type="button" aria-label="${inizio}-${fine}, ${stato}">
-                ${inizio}-${fine}
-            </button>
-        `;
-    });
+    orariHTML += `
+        <button class="fascia-btn ${colore}"
+                type="button"
+                data-orario-id="${orario.id}"
+                data-disponibile="${disponibile ? '1' : '0'}"
+                aria-label="${inizio}-${fine}, ${stato}">
+            ${inizio}-${fine}
+        </button>
+    `;
+});
 }
 
 cardDiv.innerHTML = `
@@ -282,6 +286,65 @@ cardDiv.innerHTML = `
         ${orariHTML}
     </div>
 `;
+
+cardDiv.querySelectorAll('.fascia-btn[data-orario-id]').forEach(btn => {
+    btn.addEventListener('click', function (e) {
+        e.stopPropagation(); // non aprire pagina_gestione_campo.html
+
+        const orarioId    = this.dataset.orarioId;
+        const attuale     = this.dataset.disponibile === '1';
+        const nuovoStato  = !attuale;
+        const testoConferma = nuovoStato
+            ? `Vuoi segnare ${this.textContent.trim()} come disponibile?`
+            : `Vuoi segnare ${this.textContent.trim()} come occupato?\n(prenotazione telefonica)`;
+
+        Swal.fire({
+            title: nuovoStato ? 'Segna disponibile' : 'Segna occupato',
+            text: testoConferma,
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: nuovoStato ? '#4caf50' : '#e53935',
+            cancelButtonColor: '#505050',
+            confirmButtonText: 'Conferma',
+            cancelButtonText: 'Annulla'
+        }).then(result => {
+            if (!result.isConfirmed) return;
+
+            fetch('/GoalToGo/api/api_aggiorna_disponibilita.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    orari: [{ id: parseInt(orarioId), disponibile: nuovoStato }]
+                }),
+                credentials: 'include'
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    // aggiorna il bottone visivamente senza ricaricare la pagina
+                    this.dataset.disponibile = nuovoStato ? '1' : '0';
+                    this.classList.remove('fascia--verde', 'fascia--rosso');
+                    this.classList.add(nuovoStato ? 'fascia--verde' : 'fascia--rosso');
+                    this.setAttribute('aria-label',
+                        this.textContent.trim() + ', ' + (nuovoStato ? 'disponibile' : 'occupato'));
+
+                    Swal.fire({
+                        title: nuovoStato ? 'Slot liberato' : 'Slot occupato',
+                        icon: 'success',
+                        timer: 1200,
+                        showConfirmButton: false
+                    });
+                } else {
+                    Swal.fire({ title: 'Errore', text: data.message, icon: 'error' });
+                }
+            })
+            .catch(err => {
+                console.error(err);
+                Swal.fire({ title: 'Errore', text: 'Errore di comunicazione', icon: 'error' });
+            });
+        });
+    });
+});
 
                     listaCampiContainer.appendChild(cardDiv);
                 });
