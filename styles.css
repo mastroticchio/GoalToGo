@@ -91,13 +91,84 @@ strong { color: var(--text); font-weight: 600; }
   letter-spacing: 0.08em; transition: all var(--dur-fast) var(--ease-out);
 }
 .home-btn:hover { background-color: var(--brand-soft); transform: translateY(-1px); }
-
 .profile-icon {
-  width: 36px; height: 36px; border-radius: var(--r-pill);
-  background-color: var(--brand); box-shadow: var(--shadow-sm); cursor: pointer;
-  transition: box-shadow var(--dur-fast) var(--ease-out);
+  position: relative;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--brand), #b9df2b);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.18);
+  border: 1.5px solid rgba(255, 255, 255, 0.16);
+  cursor: pointer;
+  overflow: hidden;
+  flex-shrink: 0;
+  transition:
+    transform var(--dur-fast) var(--ease-out),
+    box-shadow var(--dur-fast) var(--ease-out),
+    filter var(--dur-fast) var(--ease-out);
 }
-.profile-icon:hover { box-shadow: var(--shadow-glow); }
+
+/* testina */
+.profile-icon::before {
+  content: "";
+  position: absolute;
+  top: 9px;
+  left: 50%;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: #111827;
+  transform: translateX(-50%);
+}
+
+/* busto/spalle */
+.profile-icon::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 7px;
+  width: 22px;
+  height: 14px;
+  background: #111827;
+  border-radius: 14px 14px 10px 10px;
+  transform: translateX(-50%);
+}
+
+.profile-icon:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.24);
+  filter: brightness(1.03);
+}
+
+.profile-icon:active {
+  transform: translateY(0) scale(0.98);
+}
+
+.profile-icon:focus-visible {
+  outline: 2px solid rgba(206, 255, 0, 0.65);
+  outline-offset: 3px;
+}
+
+.profile-icon span {
+  position: absolute;
+  right: -2px;
+  bottom: -2px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: white;
+  border: 1px solid rgba(0,0,0,0.12);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.16);
+}
+
+.profile-icon span::before {
+  content: "⚽";
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-size: 9px;
+}
 
 .container {
   width: 100%; max-width: var(--container-max); color: var(--text);

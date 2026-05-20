@@ -1,11 +1,9 @@
 document.addEventListener('DOMContentLoaded', function () {
 
-    // ===================== UTIL: ESCAPE HTML =====================
     function escapeHtml(s) {
         return String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
     }
 
-    // ===================== REGISTRAZIONE =====================
 
     const formReg = document.getElementById('formRegistrazione');
 
@@ -61,7 +59,6 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // ===================== LOGIN =====================
 
     const formLog = document.getElementById('formLogin');
 
@@ -109,7 +106,6 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // ===================== FORM CAMPO =====================
 
     const formCampo = document.getElementById('formCampo');
     let orariSelezionati = [];
@@ -132,7 +128,7 @@ document.addEventListener('DOMContentLoaded', function () {
         formCampo.addEventListener('submit', function (e) {
             e.preventDefault();
 
-            // Slot orari sono fissi (10-22, 12 slot da 1h): il backend li genera in automatico.
+           
             const payload = {
                 nome:       document.getElementById('nome').value,
                 indirizzo:  document.getElementById('indirizzo').value,
@@ -227,7 +223,6 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 }
 
-    // ===================== LISTA CAMPI GESTORE =====================
 
     const listaCampiContainer = document.getElementById('listaCampi');
 
@@ -607,8 +602,6 @@ cardDiv.querySelectorAll('.fascia-btn[data-orario-id]').forEach(btn => {
             listaCampiContainer.innerHTML = '<p>Errore di comunicazione col server</p>';
         });
     }
-    // ===================== CERCA PARTITA =====================
-
     let partitaSearchPerformed = false;
 
     function buildSearchUrl() {
@@ -653,7 +646,7 @@ cardDiv.querySelectorAll('.fascia-btn[data-orario-id]').forEach(btn => {
         eseguiRicercaPartita();
     }
 
-    // ===================== LE MIE PARTITE (sezione in pagina trova) =====================
+    
     const miePartiteEl = document.getElementById('miePartiteList');
     if (miePartiteEl) {
         fetch('/GoalToGo/api/api_mie_partite.php', { credentials: 'include' })
@@ -737,7 +730,6 @@ cardDiv.querySelectorAll('.fascia-btn[data-orario-id]').forEach(btn => {
         });
     }
 
-    // ===================== DATA OGGI =====================
 
     const dataOggi = document.getElementById('data-oggi');
 
@@ -752,7 +744,6 @@ cardDiv.querySelectorAll('.fascia-btn[data-orario-id]').forEach(btn => {
         dataOggiLega.textContent = new Date().toLocaleDateString('it-IT', opts);
     }
 
-    // ===================== FORM CREA CLUB =====================
 
     const formCreaClub = document.getElementById('formCreaClub');
 
@@ -797,7 +788,6 @@ cardDiv.querySelectorAll('.fascia-btn[data-orario-id]').forEach(btn => {
         });
     }
 
-    // ===================== STAT-CARD COUNT-UP =====================
 
     function animateCount(el, target, duration = 800) {
         if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
@@ -815,7 +805,6 @@ cardDiv.querySelectorAll('.fascia-btn[data-orario-id]').forEach(btn => {
         requestAnimationFrame(tick);
     }
 
-    // ===================== BOTTOM NAV ACTIVE STATE =====================
 
     const navItems = document.querySelectorAll('.bottom-nav__item');
     if (navItems.length && !document.querySelector('.bottom-nav__item.is-active')) {
@@ -829,7 +818,6 @@ cardDiv.querySelectorAll('.fascia-btn[data-orario-id]').forEach(btn => {
         });
     }
 
-    // ===================== CLUB ITEM NAVIGATION =====================
 
     const clubItems = document.querySelectorAll('.club-item');
     if (clubItems.length) {
@@ -849,7 +837,6 @@ cardDiv.querySelectorAll('.fascia-btn[data-orario-id]').forEach(btn => {
         });
     }
 
-    // ===================== PAGINA CLUB - IL MIO CLUB =====================
 
     const mioClubEl = document.getElementById('mioClubSection');
     if (mioClubEl) {
@@ -930,7 +917,6 @@ cardDiv.querySelectorAll('.fascia-btn[data-orario-id]').forEach(btn => {
             .catch(err => console.error('Errore fetch mio club:', err));
     }
 
-    // ===================== PAGINA CLUB - LISTA CLUB =====================
 
     const clubListEl = document.getElementById('clubList');
     if (clubListEl) {
@@ -996,7 +982,6 @@ cardDiv.querySelectorAll('.fascia-btn[data-orario-id]').forEach(btn => {
         }
     }
 
-    // ===================== PAGINA DETTAGLIO CLUB =====================
 
     const clubBannerEl = document.getElementById('clubBanner');
     const giocatoriListEl = document.getElementById('giocatori-list');
@@ -1125,8 +1110,6 @@ cardDiv.querySelectorAll('.fascia-btn[data-orario-id]').forEach(btn => {
         }
     }
 
-    // ===================== PAGINA PRENOTA - MIE PRENOTAZIONI =====================
-
     const miePrenotazioniEl = document.getElementById('miePrenotazioniList');
     if (miePrenotazioniEl) {
         fetch('/GoalToGo/api/api_mie_prenotazioni.php', { credentials: 'include' })
@@ -1159,7 +1142,6 @@ cardDiv.querySelectorAll('.fascia-btn[data-orario-id]').forEach(btn => {
             .catch(err => console.error('Errore fetch mie prenotazioni:', err));
     }
 
-    // ===================== PAGINA PRENOTA - LISTA CAMPI =====================
 
     const listaCampiPrenotaEl = document.getElementById('lista-campi-prenota');
     if (listaCampiPrenotaEl) {
@@ -1191,8 +1173,6 @@ cardDiv.querySelectorAll('.fascia-btn[data-orario-id]').forEach(btn => {
             })
             .catch(err => console.error('Errore fetch campi prenota:', err));
     }
-
-    // ===================== PAGINA PRENOTA SECONDA (CAMPO + ORARI) =====================
 
     const detailPageWrapper = document.getElementById('campoDettaglio');
     if (detailPageWrapper) {
@@ -1277,8 +1257,6 @@ cardDiv.querySelectorAll('.fascia-btn[data-orario-id]').forEach(btn => {
                 .catch(err => console.error('Errore fetch campo dettaglio:', err));
         }
     }
-
-    // ===================== PAGINA PAGAMENTO =====================
 
     const formPagamento = document.getElementById('formPagamento');
     if (formPagamento) {
@@ -1381,8 +1359,6 @@ cardDiv.querySelectorAll('.fascia-btn[data-orario-id]').forEach(btn => {
             });
     }
 
-    // ===================== PAGINA CHAT CLUB - PROPOSTE =====================
-
     function refreshProposte() {
         const list = document.getElementById('proposte-list');
         if (!list) return;
@@ -1444,8 +1420,6 @@ cardDiv.querySelectorAll('.fascia-btn[data-orario-id]').forEach(btn => {
             .catch(err => Swal.fire({ title: 'Errore', text: err.message, icon: 'error' }));
     };
 
-    // ===================== PAGINA PROFILO =====================
-
     const formProfilo = document.getElementById('formProfilo');
     if (formProfilo) {
         fetch('/GoalToGo/api/api_profilo.php', { credentials: 'include' })
@@ -1479,8 +1453,6 @@ cardDiv.querySelectorAll('.fascia-btn[data-orario-id]').forEach(btn => {
                 .catch(err => Swal.fire({ title: 'Errore', text: err.message, icon: 'error' }));
         });
     }
-
-    // ===================== PROFILO GIOCATORE - SEZIONI RIASSUNTIVE =====================
 
     const profiloClubBox     = document.getElementById('profiloClubBox');
     const profiloPartiteList = document.getElementById('profiloPartiteList');
@@ -1589,8 +1561,6 @@ cardDiv.querySelectorAll('.fascia-btn[data-orario-id]').forEach(btn => {
                 .catch(err => console.error('Errore profilo prenotazioni:', err));
         }
     }
-
-    // ===================== PAGINA TROVA PARTITA SECONDA =====================
 
     const trovaSecondaPage = document.getElementById('trova-seconda-page');
     if (trovaSecondaPage) {
@@ -1707,8 +1677,6 @@ cardDiv.querySelectorAll('.fascia-btn[data-orario-id]').forEach(btn => {
         }
     }
 
-    // ===================== CHIP FILTER TOGGLE =====================
-
     const chipRows = document.querySelectorAll('.chip-row');
     if (chipRows.length) {
         chipRows.forEach(row => {
@@ -1731,15 +1699,11 @@ cardDiv.querySelectorAll('.fascia-btn[data-orario-id]').forEach(btn => {
         });
     }
 
-    // ===================== CIAO USER (HOME) =====================
-
     const ciaoUserEl = document.getElementById('ciao_user');
     if (ciaoUserEl) {
         const nome = localStorage.getItem('nomeUtente');
         ciaoUserEl.textContent = nome ? `Ciao, ${nome}` : 'Ciao!';
     }
-
-    // ===================== FORM CREA PARTITA =====================
 
     const formCreaPartita = document.getElementById('formCreaPartita');
     if (formCreaPartita) {
@@ -1851,8 +1815,6 @@ cardDiv.querySelectorAll('.fascia-btn[data-orario-id]').forEach(btn => {
                 });
         });
     }
-
-    // ===================== KEYBOARD ACTIVATION FOR ROLE=BUTTON =====================
     // Elements with role="button" tabindex="0" must respond to Enter/Space.
     document.addEventListener('keydown', e => {
         if (e.key !== 'Enter' && e.key !== ' ') return;
@@ -1866,8 +1828,6 @@ cardDiv.querySelectorAll('.fascia-btn[data-orario-id]').forEach(btn => {
     });
 
 });
-
-// ===================== NAVIGAZIONE =====================
 
 function handleClick(action, el) {
     switch (action) {
@@ -1936,8 +1896,6 @@ function handleClick(action, el) {
     }
 }
 
-// ===================== VISIBILITÀ CLUB =====================
-
 function setVisibility(button) {
     const buttons = document.querySelectorAll('.visibility-btn');
 
@@ -1948,8 +1906,6 @@ function setVisibility(button) {
     const value = button.textContent.trim();
     localStorage.setItem('clubVisibility', value);
 }
-
-// ===================== SWITCH MODALITÀ REGISTRAZIONE =====================
 
 function switchMode(mode) {
     const giocatore = document.getElementById('form-giocatore');
@@ -1984,8 +1940,6 @@ function switchMode(mode) {
     }
 }
 
-// ===================== CONTATORE GIOCATORI =====================
-
 function aggiungiGiocatore() {
     let giocatori = parseInt(document.getElementById('count').textContent) || 1;
     let prezzo    = parseInt(document.getElementById('price').textContent) || 0;
@@ -2015,8 +1969,6 @@ function riduciGiocatore() {
     localStorage.setItem('count', giocatori);
     localStorage.setItem('price', prezzo);
 }
-
-// ===================== CONTATORE GIOCATORI CLUB =====================
 
 // Limite max componenti club: vincolo di prodotto.
 const CLUB_MAX_COMPONENTI = 40;
@@ -2049,8 +2001,6 @@ function riduciGiocatoreClub() {
     localStorage.setItem('clubCount', giocatori_club);
 }
 
-// ===================== TOGGLE UI =====================
-
 function toggleGiorno(btn) {
     btn.classList.toggle('active');
 }
@@ -2058,8 +2008,6 @@ function toggleGiorno(btn) {
 function toggleOrario(btn) {
     btn.classList.toggle('active');
 }
-
-// ===================== UPLOAD IMMAGINE CAMPO =====================
 
 function aggiungiImmagine() {
     const input = document.createElement('input');
@@ -2085,8 +2033,6 @@ function aggiungiImmagine() {
 
     input.click();
 }
-
-// ===================== MODALE PROPONI PARTITA =====================
 
 function apriModale() {
     const overlay = document.querySelector('.modale-overlay');
@@ -2137,8 +2083,6 @@ function inviaProposta(event) {
         return;
     }
 
-    // TODO: when /GoalToGo/api/api_crea_proposta.php exists, fetch it.
-    // For now we acknowledge and close the modal so the UX feels intentional.
     Swal.fire({
         title: 'Proposta inviata!',
         text: 'I tuoi compagni di club riceveranno una notifica.',
@@ -2166,8 +2110,6 @@ function accettaPartita() {
         showConfirmButton: false
     });
 }
-
-// ===================== LOGOUT =====================
 window.logout = function () {
     fetch('/GoalToGo/api/api_logout.php', { method: 'POST', credentials: 'include' })
         .catch(function () { /* swallow network errors — local cleanup must still happen */ })
@@ -2176,16 +2118,6 @@ window.logout = function () {
             window.location.replace('pagina_accedi.html');
         });
 };
-// ================================================================
-
-// ================================================================
-// PAGINA CHAT CLUB — LOGICA PROPOSTA UNICA
-// Regole:
-//  1. Una sola proposta attiva per volta nel club (30 min di lock)
-//  2. Chiunque può accettare (aderire) durante i 30 min
-//  3. Se si raggiunge il MAX_GIOCATORI → proposta confermata → vai al pagamento
-//  4. Dopo i 30 min senza raggiungere il quorum → scaduta → chiunque può fare una nuova proposta
-// ================================================================
 
 (function () {
     'use strict';
@@ -2218,9 +2150,6 @@ window.logout = function () {
             { day:'numeric', month:'long', year:'numeric' }).toUpperCase();
     }
 
-    // ================================================================
-    // CARICA BANNER E SIDEBAR
-    // ================================================================
     function caricaBannerClub() {
         const idClub = localStorage.getItem('idClub');
         if (!idClub) return;
@@ -2259,9 +2188,6 @@ window.logout = function () {
         }).join('');
     }
 
-    // ================================================================
-    // COUNTDOWN GLOBALE (banner in cima al feed)
-    // ================================================================
     function avviaTimerGlobale(secondiRimanenti) {
         if (_globalTimer) clearInterval(_globalTimer);
 
@@ -2297,9 +2223,6 @@ window.logout = function () {
         if (bannerEl) bannerEl.style.display = 'none';
     }
 
-    // ================================================================
-    // BOTTONE PROPONI — lock/unlock
-    // ================================================================
     function abilitaProponi(abilitato) {
         const btn = document.getElementById('btn-proponi-principale');
         if (!btn) return;
@@ -2313,9 +2236,6 @@ window.logout = function () {
         }
     }
 
-    // ================================================================
-    // RENDER PROPOSTE
-    // ================================================================
     function renderProposte(proposte) {
         const list = document.getElementById('proposte-list');
         if (!list) return;
@@ -2429,9 +2349,6 @@ window.logout = function () {
         </div>`;
     }
 
-    // ================================================================
-    // FETCH PROPOSTE (polling)
-    // ================================================================
     function refreshProposteChat() {
         fetch('/GoalToGo/api/api_get_proposte_chat.php', { credentials: 'include' })
             .then(r => r.text())
@@ -2447,9 +2364,6 @@ window.logout = function () {
     }
     window.refreshProposteChat = refreshProposteChat;
 
-    // ================================================================
-    // ACCETTA
-    // ================================================================
     window.accettaProposta = function (propostaId) {
         fetch('/GoalToGo/api/api_adesione_proposta.php', {
             method: 'POST',
@@ -2492,16 +2406,10 @@ window.logout = function () {
         .catch(err => Swal.fire({ title: 'Errore', text: err.message, icon: 'error' }));
     };
 
-    // ================================================================
-    // BOTTONE FOOTER "Accetta e gioca !"
-    // ================================================================
     window.accettaPropostaPrincipale = function () {
         if (_propAttivaId) accettaProposta(_propAttivaId);
     };
 
-    // ================================================================
-    // RIFIUTA / ESCI
-    // ================================================================
     window.rifiutaProposta = function (propostaId) {
         fetch('/GoalToGo/api/api_adesione_proposta.php', {
             method: 'POST',
@@ -2520,9 +2428,6 @@ window.logout = function () {
         .catch(err => Swal.fire({ title: 'Errore', text: err.message, icon: 'error' }));
     };
 
-    // ================================================================
-    // MODALE PROPOSTA
-    // ================================================================
     window.apriModaleProposta = function () {
         const btn = document.getElementById('btn-proponi-principale');
         if (btn && btn.disabled) {
@@ -2548,9 +2453,6 @@ window.logout = function () {
         if (e.target === modaleEl) chiudiModaleProposta();
     });
 
-    // ================================================================
-    // INVIA PROPOSTA
-    // ================================================================
     window.inviaPropostaChat = function (event) {
         event?.preventDefault();
         const form = document.getElementById('form-proposta');
@@ -2606,9 +2508,6 @@ window.logout = function () {
         });
     };
 
-    // ================================================================
-    // CSS INLINE per i nuovi elementi
-    // ================================================================
     const style = document.createElement('style');
     style.textContent = `
         /* Badge stato */
@@ -2653,9 +2552,6 @@ window.logout = function () {
     `;
     document.head.appendChild(style);
 
-    // ================================================================
-    // INIT
-    // ================================================================
     caricaBannerClub();
     refreshProposteChat();
 
