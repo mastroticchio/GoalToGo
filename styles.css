@@ -996,14 +996,15 @@ button.card:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px
 
 /* ===== Search row (input + bottone affiancati) ===== */
 .search-row {
-  display: flex; gap: var(--s-3); align-items: center;
+  display: flex; gap: var(--s-3); align-items: stretch;
   margin-bottom: var(--s-4); width: 100%;
 }
 .search-row .search-input { flex: 1 1 auto; min-width: 0; width: auto; }
 .search-row .create-btn  {
-  flex: 0 0 auto; white-space: nowrap;
+  flex: 0 0 auto; width: auto; white-space: nowrap;
   padding: var(--s-3) var(--s-4);
   border-radius: var(--r-md);
+  min-height: 0;
 }
 
 /* ===== 21. Tablet (>= 768px) ===== */
